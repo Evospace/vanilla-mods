@@ -5,6 +5,6 @@
     ],
     [
         "StackTransfersDescription",
-        "- Shift + Left-click: Transfers a single stack\n- Shift + Right-click: Transfers a half of stack\n- Control + Left-click: Transfers all stacks of the given type\n- Control + Right-click: Transfers half of items of the given type\n- Control + Left-click on empty slot: transfer the whole inventory\n- Control + Right-click on empty slot: transfer a half of whole inventory"
+        "- Shift + Left-click: Transfers a single stack\n- Shift + Right-click: Transfers a half of stack\n\n- Control + Left-click: Transfers all stacks of the given type\n- Control + Right-click: Transfers half of items of the given type\n\n- Control + Left-click on empty slot: transfer the whole inventory\n- Control + Right-click on empty slot: transfer a half of whole inventory\n\n- Alt + Left-click: transfer five items\n- Alt + Right-click: transfer one item"
     ]
 ]
