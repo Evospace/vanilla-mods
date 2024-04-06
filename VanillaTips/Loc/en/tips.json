@@ -1,10 +1,50 @@
 [
     [
         "StackTransfers",
-        "Stack Transfers"
+        "Stack transfers"
     ],
     [
         "StackTransfersDescription",
-        "- Shift + Left-click: Transfers a single stack\n- Shift + Right-click: Transfers a half of stack\n\n- Control + Left-click: Transfers all stacks of the given type\n- Control + Right-click: Transfers half of items of the given type\n\n- Control + Left-click on empty slot: transfer the whole inventory\n- Control + Right-click on empty slot: transfer a half of whole inventory\n\n- Alt + Left-click: transfer five items\n- Alt + Right-click: transfer one item"
+        "<blue>Shift + Left-click</>: Transfers a single stack\n<blue>Shift + Right-click</>: Transfers a half of stack\n\n<blue>Control + Left-click</>: Transfers all stacks of the given type\n<blue>Control + Right-click</>: Transfers half of items of the given type\n\n<blue>Control + Left-click on empty slot</>: transfer the whole inventory\n<blue>Control + Right-click on empty slot</>: transfer a half of whole inventory\n\n<blue>Alt + Left-click</>: transfer five items\n<blue>Alt + Right-click</>: transfer one item"
+    ],
+    [
+        "ChestLimiting",
+        "Chest limiting"
+    ],
+    [
+        "ChestLimitingDescription",
+        ""
+    ],
+    [
+        "Screwdriver",
+        "Screwdriver"
+    ],
+    [
+        "ScrewdriverDescription",
+        "Press <blue>Left Mouse Button</> while holding a <blue>Screwdriver</> and drag to one of arrow directions then release button to rotate block. At the moment only single cell blocks can be rotatared with this method.\n\nRotation depends on the plane you are hovering over.\nAfter releasing the button, the plane will rotate in such a way that it replaces the plane indicated by the selected arrow"
+    ],
+    [
+        "RotationWhileBuilding",
+        "Rotation while building"
+    ],
+    [
+        "RotationWhileBuildingDescription",
+        "Press <blue>R</> to rotate the block around vertical axis.\nYou can change this axis by holding <blue>Shift</> or <blue>Alt</> key.\nActive axis will be shown with green arrow and axis like in piclure above.\n\nWhile holding some buildable item you can hold <blue>Right Mouse Button</> and drag to one of arrow directions then release button to rotate block. This method allows rotation of blocks with any size."
+    ],
+    [
+        "Accessors1",
+        "Accessors I"
+    ],
+    [
+        "Accessors1Description",
+        "Most blocks have inputs and/or outputs, called Accessors. Accessors are color-coded:\nyellow for <yellow>Kinetic</>, blue for <blue>Electricity</>, red for <red>Heat</>.\n\nThere is no specific marking on the blocks to indicate whether it's an input or output, but it's usually not hard to guess based on the block's functions. This is also directly mentioned in the item's description.\n\nDuring the construction of blocks, you can see the Accessors as shown in the image above. To transfer energy from one block to another, it's necessary to arrange them so that Accessors of the same type connect. Also, there are specific conduits for each type of Accessor: Cables for electricity, Heat Pipes for heat, and Flywheels for kinetic energy."
+    ],
+    [
+        "BlockPipette",
+        "Block pipette"
+    ],
+    [
+        "BlockPipetteDescription",
+        "Press <blue>Q</> to copy hovered block with its rotation. Press <blue>Q</> again to clear selection.\nIt is always working in Creative mode and only when you have same item in inventory in Normal mode\n\nPress <blue>Ctrl+C</> to copy settings from hovered block\nPress <blue>Ctrl+V</> to paste setting from clipboard to hovered block\n\nBlock settings availible not for all blocks. All block settings is just a text."
     ]
 ]
