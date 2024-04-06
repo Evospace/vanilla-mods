@@ -6,7 +6,7 @@ function VanillaTipsMod.init()
         name = "Accessors1",
         label = {"Accessors1", "tips"},
         description = {"Accessors1Description", "tips"},
-        image = "Accessors1.png",
+        image = "Textures/Accessors1.png",
         context = {items = {"CopperStirlingEngineStaticItem", "CopperConnectorStaticItem", "CopperHeatPipeStaticItem", "SteelFlywheelStaticItem", "ElectricityStaticItem", "KineticStaticItem", "HeatStaticItem"}}
     })
 
@@ -15,7 +15,7 @@ function VanillaTipsMod.init()
         name = "Screwdriver",
         label = {"Screwdriver", "tips"},
         description = {"ScrewdriverDescription", "tips"},
-        image = "Screwdriver.png",
+        image = "Textures/Screwdriver.png",
         context = {items = {"ScrewdriverStaticItem"}}
     })
 
@@ -24,7 +24,7 @@ function VanillaTipsMod.init()
         name = "RotationWhileBuilding",
         label = {"RotationWhileBuilding", "tips"},
         description = {"RotationWhileBuildingDescription", "tips"},
-        image = "Rotation.png"
+        image = "Textures/Rotation.png"
     })
 
     db:from_table({
@@ -32,7 +32,7 @@ function VanillaTipsMod.init()
         name = "BlockPipette",
         label = {"BlockPipette", "tips"},
         description = {"BlockPipetteDescription", "tips"},
-        image = "Pipette.png"
+        image = "Textures/Pipette.png"
     })
 
     db:from_table({
@@ -40,7 +40,7 @@ function VanillaTipsMod.init()
         name = "StackTransfers",
         label = {"StackTransfers", "tips"},
         description = {"StackTransfersDescription", "tips"},
-        image = "StackTransfers.png"
+        image = "Textures/StackTransfers.png"
     })
 end
 
