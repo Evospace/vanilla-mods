@@ -46,5 +46,13 @@
     [
         "BlockPipetteDescription",
         "Press <blue>Q</> to copy hovered block with its rotation. Press <blue>Q</> again to clear selection.\nIt is always working in Creative mode and only when you have same item in inventory in Normal mode\n\nPress <blue>Ctrl+C</> to copy settings from hovered block\nPress <blue>Ctrl+V</> to paste setting from clipboard to hovered block\n\nBlock settings availible not for all blocks. All block settings is just a text."
+    ],
+    [
+        "FirstSteps",
+        "First steps"
+    ],
+    [
+        "FirstStepsDescription",
+        "Finding and Smelting Copper Ore\n\n1. First, locate copper ore. Areas where ore is visible on the ground usually have more deposits nearby or just below the surface.\n2. Gather the copper ore.\n3. Use basic blocks from your inventory to create a platform for convenience.\n4. Craft a furnace and a smelter. Place the smelter above the furnace.\n5. Put fuel in the furnace and place the copper ore in the smelter.\n6. Once the smelting process is complete, collect the copper ingots.\n\nBuilding Essential Machinery\n\n1. Create another furnace, a Stirling engine, a compact generator, and a computer.\n2. Arrange these components according to their inputs and outputs.\n3. Once the computer is operational, you can start researching new technologies."
     ]
 ]

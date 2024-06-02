@@ -3,11 +3,20 @@ local VanillaTipsMod = {}
 function VanillaTipsMod.init()
     db:from_table({
         class = "StaticTip",
+        name = "FirstSteps",
+        label = {"FirstSteps", "tips"},
+        description = {"FirstStepsDescription", "tips"},
+        image = "Textures/FirstSteps.png",
+        context = {items = {"CopperOre", "BasicPlatform", "StoneSmelter", "StoneFurnace", "CopperStirlingEngine", "CopperCompactGenerator", "CopperComputer"}}
+    })
+
+    db:from_table({
+        class = "StaticTip",
         name = "Accessors1",
         label = {"Accessors1", "tips"},
         description = {"Accessors1Description", "tips"},
         image = "Textures/Accessors1.png",
-        context = {items = {"CopperStirlingEngineStaticItem", "CopperConnectorStaticItem", "CopperHeatPipeStaticItem", "SteelFlywheelStaticItem", "ElectricityStaticItem", "KineticStaticItem", "HeatStaticItem"}}
+        context = {items = {"CopperStirlingEngine", "CopperConnector", "CopperHeatPipe", "SteelFlywheel", "Electricity", "Kinetic", "Heat"}}
     })
 
     db:from_table({
@@ -16,7 +25,7 @@ function VanillaTipsMod.init()
         label = {"Screwdriver", "tips"},
         description = {"ScrewdriverDescription", "tips"},
         image = "Textures/Screwdriver.png",
-        context = {items = {"ScrewdriverStaticItem"}}
+        context = {items = {"Screwdriver"}}
     })
 
     db:from_table({
