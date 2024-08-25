@@ -16,11 +16,6 @@ function dump(o)
 
 function VanillaMod.init()
     local es = EventSystem.get_instance()
-
-    local wg = ScriptableWorldGenerator.new("EXBIO_ForestGenerator")
-    local bf = BiomeFamily.new("EXBIO_Forest")
-    bf.sub_biomes = { Biome.find("ForestBiome") }
-    wg.biome_family = bf
 end
 
 function VanillaMod.pre_init()
