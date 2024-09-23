@@ -15,11 +15,16 @@ function dump(o)
  end
 
 function VanillaMod.init()
-    local es = EventSystem.get_instance()
+   local es = EventSystem.get_instance()
 
-    es:sub(defines.events.on_player_at_sector, function(context) print("On sector "..tostring(context.pos * cs.sector_size)) end)
+   es:sub(defines.events.on_player_at_sector, function(context) 
+      local pos = context.pos * cs.sector_size + Vec3i.new(0,0,23)
+      print("On sector "..tostring(pos)) 
+      local block = StaticBlock.find("CopperMacerator")
+      dim:spawn_block_identity(pos, block)
+   end)
 
-    local resources = {
+   local resources = {
       
       {"CopperOre", 1.0},
       {"CoalOre", 1.5},
@@ -29,14 +34,14 @@ function VanillaMod.init()
       {"UraniumOre", 0.125},
       {"MineralWater", 1.0},
       {"RawOil", 0.5},
-    }
+   }
 
-    for key, value in ipairs(resources) do
+   for key, value in ipairs(resources) do
       local ed = ExtractionData.new()
       ed.item = StaticItem.find(value[1])
       ed.speed = value[2]
       deposits:add_resource(ed)
-    end
+   end
 end
 
 function VanillaMod.pre_init()
