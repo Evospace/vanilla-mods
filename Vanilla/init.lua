@@ -17,10 +17,14 @@ function dump(o)
 function VanillaMod.init()
     local es = EventSystem.get_instance()
 
+    es:sub(defines.events.on_player_at_sector, function(context) print("On sector "..tostring(context.pos * cs.sector_size)) end)
+
     local resources = {
+      
       {"CopperOre", 1.0},
-      {"IronOre", 0.5},
       {"CoalOre", 1.5},
+
+      {"IronOre", 0.5},
       {"AluminiumOre", 0.25},
       {"UraniumOre", 0.125},
       {"MineralWater", 1.0},
