@@ -22,6 +22,8 @@ function VanillaMod.init()
       print("On sector "..tostring(pos)) 
       local block = StaticBlock.find("CopperMacerator")
       dim:spawn_block_identity(pos, block)
+      local grid_pos = DeepDeposits.world_block_to_grid(pos)
+      deposits:scan_sector(grid_pos)
    end)
 
    local resources = {
