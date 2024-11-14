@@ -1,4 +1,9 @@
-local VanillaMod = {}
+local vanilla_mod = {
+   config = {
+      test_value = 2,
+      bool_value = true
+   }
+}
 
 function dump(o)
     if type(o) == 'table' then
@@ -14,8 +19,11 @@ function dump(o)
     end
  end
 
-function VanillaMod.init()
+function vanilla_mod.init(mod_table)
    local es = EventSystem.get_instance()
+
+   print("11111111")
+   print(dump(mod_table))
 
    es:sub(defines.events.on_player_at_sector, function(context) 
       --local pos = context.pos * cs.sector_size + Vec3i.new(0,0,23)
@@ -59,10 +67,10 @@ function VanillaMod.init()
    db:reg(ss)
 end
 
-function VanillaMod.pre_init()
+function vanilla_mod.pre_init(mod_table)
 end
 
-function VanillaMod.post_init()
+function vanilla_mod.post_init(mod_table)
 end
 
-db:mod(VanillaMod)
+db:mod(vanilla_mod)
