@@ -73,28 +73,36 @@ function register_settings()
       category = "Controls",
       type = "Key",
       string_value = "ActionPrimary",
-      key = "LeftMouseButton",
+      label = "ActionPrimary",
+      name = "ActionPrimary",
+      default_key = "LeftMouseButton",
    })
    db:from_table({
       class = "Setting",
       category = "Controls",
       type = "Key",
       string_value = "ActionRotate",
-      key = "R",
+      label = "ActionRotate",
+      name = "ActionRotate",
+      default_key = "R",
    })
    db:from_table({
       class = "Setting",
       category = "Controls",
       type = "Key",
       string_value = "ActionSecondary",
-      key = "RightMouseButton",
+      label = "ActionSecondary",
+      name = "ActionSecondary",
+      default_key = "RightMouseButton",
    })
    db:from_table({
       class = "Setting",
       category = "Controls",
       type = "Key",
       string_value = "ActionTertiary",
-      key = "MiddleMouseButton",
+      label = "ActionTertiary",
+      name = "ActionTertiary",
+      default_key = "MiddleMouseButton",
    })
    local nums = {"Zero","One","Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"}
    for i=0,9 do
@@ -103,7 +111,9 @@ function register_settings()
          category = "Controls",
          type = "Key",
          string_value = "ActiveSlot_"..i,
-         key = nums[i],
+         label = "ActiveSlot_"..i,
+         name = "ActiveSlot_"..i,
+         default_key = nums[i+1],
       })
    end
    db:from_table({
@@ -111,140 +121,171 @@ function register_settings()
       category = "Controls",
       type = "Key",
       string_value = "ChangeMovementMode",
-      key = "F",
+      label = "ChangeMovementMode",
+      name = "ChangeMovementMode",
+      default_key = "F",
    })
    db:from_table({
       class = "Setting",
       category = "Controls",
       type = "Key",
       string_value = "Crouch",
-      key = "C",
+      label = "Crouch",
+      name = "Crouch",
+      default_key = "C",
    })
    db:from_table({
       class = "Setting",
       category = "Controls",
       type = "Key",
       string_value = "EmptyHand",
-      key = "None",
+      label = "EmptyHand",
+      name = "EmptyHand",
+      default_key = "None",
    })
    db:from_table({
       class = "Setting",
       category = "Controls",
       type = "Key",
       string_value = "Ecs",
-      key = "Escape",
-   })
-   db:from_table({
-      class = "Setting",
-      category = "Controls",
-      type = "Key",
-      string_value = "Inventory",
-      key = "I",
+      label = "Escape",
+      name = "Escape",
+      default_key = "Escape",
    })
    db:from_table({
       class = "Setting",
       category = "Controls",
       type = "Key",
       string_value = "Journal",
-      key = "J",
+      label = "Researches",
+      name = "Journal",
+      default_key = "J",
    })
    db:from_table({
       class = "Setting",
       category = "Controls",
       type = "Key",
       string_value = "Jump",
-      key = "SpaceBar",
+      label = "Jump",
+      name = "Jump",
+      default_key = "SpaceBar",
    })
    db:from_table({
       class = "Setting",
       category = "Controls",
       type = "Key",
       string_value = "LoadSettings",
-      key = "Ctrl+V",
+      label = "LoadSettings",
+      name = "LoadSettings",
+      default_key = "Ctrl+V",
    })
    db:from_table({
       class = "Setting",
       category = "Controls",
       type = "Key",
       string_value = "NeiLeft",
-      key = "Delete",
+      label = "NeiLeft",
+      name = "NeiLeft",
+      default_key = "Backspace",
    })
    db:from_table({
       class = "Setting",
       category = "Controls",
       type = "Key",
       string_value = "NeiRight",
-      key = "Alt+Delete",
+      label = "NeiRight",
+      name = "NeiRight",
+      default_key = "Alt+Backspace",
    })
    db:from_table({
       class = "Setting",
       category = "Controls",
       type = "Key",
       string_value = "PickBlock",
-      key = "Q",
+      label = "PickBlock",
+      name = "PickBlock",
+      default_key = "Q",
    })
    db:from_table({
       class = "Setting",
       category = "Controls",
       type = "Key",
       string_value = "Recipe",
-      key = "R",
+      label = "Recipe",
+      name = "Recipe",
+      default_key = "R",
    })
    db:from_table({
       class = "Setting",
       category = "Controls",
       type = "Key",
       string_value = "SaveSettings",
-      key = "Ctrl+C",
+      label = "SaveSettings",
+      name = "SaveSettings",
+      default_key = "Ctrl+C",
    })
    db:from_table({
       class = "Setting",
       category = "Controls",
       type = "Key",
       string_value = "Sprint",
-      key = "LeftShift",
+      label = "Sprint",
+      name = "Sprint",
+      default_key = "LeftShift",
    })
    db:from_table({
       class = "Setting",
       category = "Controls",
       type = "Key",
       string_value = "SwitchCreativeMode",
-      key = "T",
+      label = "SwitchCreativeMode",
+      name = "SwitchCreativeMode",
+      default_key = "T",
    })
    db:from_table({
       class = "Setting",
       category = "Controls",
       type = "Key",
       string_value = "ThrowItem",
-      key = "G",
+      label = "ThrowItem",
+      name = "ThrowItem",
+      default_key = "G",
    })
    db:from_table({
       class = "Setting",
       category = "Controls",
       type = "Key",
       string_value = "ToggleInventory",
-      key = "E",
+      label = "ToggleInventory",
+      name = "ToggleInventory",
+      default_key = "E",
    })
    db:from_table({
       class = "Setting",
       category = "Controls",
       type = "Key",
       string_value = "ToggleMap",
-      key = "M",
+      label = "ToggleMap",
+      name = "ToggleMap",
+      default_key = "M",
    })
    db:from_table({
       class = "Setting",
       category = "Controls",
       type = "Key",
       string_value = "ToggleReplaceMode",
-      key = "Y",
+      label = "ToggleReplaceMode",
+      name = "ToggleReplaceMode",
+      default_key = "Y",
    })
    db:from_table({
       class = "Setting",
       category = "Controls",
       type = "Key",
       string_value = "ToggleSideIcons",
-      key = "X",
+      label = "ToggleSideIcons",
+      name = "ToggleSideIcons",
+      default_key = "X",
    })
    ---
    db:from_table({
