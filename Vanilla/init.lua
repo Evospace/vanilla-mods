@@ -15,11 +15,11 @@ function dump(o)
 end
 
 
-function vanilla_mod.pre_init(mod_table)
+function vanilla_mod.pre_init()
    register_settings()
 end
 
-function vanilla_mod.init(mod_table)
+function vanilla_mod.init()
    local es = EventSystem.get_instance()
 
    print("11111111")
@@ -61,7 +61,7 @@ function vanilla_mod.init(mod_table)
       regions:add_resource(ed)
    end
 
-   local ss = StaticStructure.new("StartPlatform")
+   local ss = StaticStructure.reg("StartPlatform")
    ss.generate = function(context) print("11111111111") end
    ss.size = Vec2i.new(10, 10);
    db:reg(ss)
@@ -147,7 +147,7 @@ function register_settings()
       class = "Setting",
       category = "Controls",
       type = "Key",
-      string_value = "Ecs",
+      string_value = "Esc",
       label = "Escape",
       name = "Escape",
       default_key = "Escape",
@@ -318,7 +318,7 @@ function register_settings()
    })
 end
 
-function vanilla_mod.post_init(mod_table)
+function vanilla_mod.post_init()
 end
 
 db:mod(vanilla_mod)
