@@ -20,9 +20,6 @@ end
 
 
 function vanilla_mod.pre_init()
-   register_controls()
-   register_graphics()
-   register_game_settings();
 end
 
 function vanilla_mod.init()

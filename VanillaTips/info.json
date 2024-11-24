@@ -1,9 +1,9 @@
 {
     "name": "VanillaTips",
-    "version": "0.1",
+    "version": "0.20",
     "title": "Vanilla Tips and Tricks",
     "author": "evospace",
-    "evospace_version": "0.19",
-    "dependencies": ["Vanilla >= 0.19"],
+    "evospace_version": "0.20",
+    "dependencies": ["Vanilla >= 0.20"],
     "description": "Tips and Tricks for vanilla content"
 }

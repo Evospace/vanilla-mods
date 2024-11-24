@@ -1,0 +1,19 @@
+[
+    ["ActiveSlot_0", "Hotbar 0"],
+    ["ActiveSlot_1", "Hotbar 1"],
+    ["ActiveSlot_2", "Hotbar 2"],
+    ["ActiveSlot_3", "Hotbar 4"],
+    ["ActiveSlot_4", "Hotbar 4"],
+    ["ActiveSlot_5", "Hotbar 5"],
+    ["ActiveSlot_6", "Hotbar 6"],
+    ["ActiveSlot_7", "Hotbar 7"],
+    ["ActiveSlot_8", "Hotbar 8"],
+    ["ActiveSlot_9", "Hotbar 9"],
+    ["ActionPrimary", "Use item"],
+    ["ActionSecondary", "Use block"],
+    ["ActionTernary", "Hovered object info"],
+    ["ChangeMovementMode", "Sprint"],
+    ["Crouch", "Crouch"],
+    ["EmptyHand", "Empty hand"],
+    ["Researches", "Researches"]
+]

@@ -22,7 +22,6 @@ function format_number(num)
 end
 
 function register_block_tooltip()
-
     db:from_table({
         class = "Script",
         name = "GetCrafterTooltip",
