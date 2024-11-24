@@ -1,5 +1,6 @@
-require "controls"
-require "graphics"
+require 'controls'
+require 'graphics'
+require 'game_settings'
 
 local vanilla_mod = {}
 
@@ -21,13 +22,11 @@ end
 function vanilla_mod.pre_init()
    register_controls()
    register_graphics()
+   register_game_settings();
 end
 
 function vanilla_mod.init()
    local es = EventSystem.get_instance()
-
-   print("11111111")
-   print(dump(mod_table))
 
    es:sub(defines.events.on_player_at_sector, function(context) 
       --local pos = context.pos * cs.sector_size + Vec3i.new(0,0,23)
