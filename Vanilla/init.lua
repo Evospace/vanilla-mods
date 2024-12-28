@@ -1,6 +1,7 @@
 require 'controls'
 require 'graphics'
 require 'game_settings'
+require 'Blocks/common'
 
 local vanilla_mod = {}
 
@@ -43,7 +44,6 @@ function vanilla_mod.init()
    end)
 
    local resources = {
-      
       {"CopperOre", 1.0},
       {"CoalOre", 1.5},
 
@@ -61,7 +61,16 @@ function vanilla_mod.init()
       regions:add_resource(ed)
    end
 
-   local ss = StaticStructure.reg("StartPlatform")
+   for index, proto in pairs(db:objects()) do
+      block = StaticBlock.cast(proto)
+      if block ~= nil then
+         block.lua = { actor_init = common_actor_init }
+      end
+   end
+
+   require('Blocks/all')
+
+   local ss = StaticStructure.new("StartPlatform")
    ss.generate = function(context) print("11111111111") end
    ss.size = Vec2i.new(10, 10);
    db:reg(ss)
