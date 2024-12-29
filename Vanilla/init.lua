@@ -5,7 +5,7 @@ require 'Blocks/common'
 
 local vanilla_mod = {}
 
-function dump(o)
+local function dump(o)
    if type(o) == 'table' then
       local s = '('
       for k,v in pairs(o) do
@@ -54,15 +54,15 @@ function vanilla_mod.init()
       {"RawOil", 0.5},
    }
 
-   for key, value in ipairs(resources) do
+   for _, value in ipairs(resources) do
       local ed = ExtractionData.new()
       ed.item = StaticItem.find(value[1])
       ed.speed = value[2]
       regions:add_resource(ed)
    end
 
-   for index, proto in pairs(db:objects()) do
-      block = StaticBlock.cast(proto)
+   for _, proto in pairs(db:objects()) do
+      local block = StaticBlock.cast(proto)
       if block ~= nil then
          block.lua = { actor_init = common_actor_init }
       end
@@ -71,7 +71,7 @@ function vanilla_mod.init()
    require('Blocks/all')
 
    local ss = StaticStructure.new("StartPlatform")
-   ss.generate = function(context) print("11111111111") end
+   ss.generate = function(_) print("11111111111") end
    ss.size = Vec2i.new(10, 10);
    db:reg(ss)
 end

@@ -9,7 +9,9 @@ local tier_material = {
 	"Neutronium"
 }
 
-function fill_block(name, table)
+--- @param name string
+--- @param table table
+function FillBlock(name, table)
     for index, tier in pairs(tier_material) do
         local block = StaticBlock.find(tier..name)
         if block ~= nil then
