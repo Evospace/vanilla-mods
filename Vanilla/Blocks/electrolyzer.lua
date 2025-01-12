@@ -2,18 +2,19 @@ require('Blocks/common')
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
-    crafter.recipes = RecipeDictionary.find("FermenterRecipeDictionary")
+    crafter.recipes = RecipeDictionary.find("ElectrolyzerRecipeDictionary")
     crafter.speed = (crafter.static_block.level + 1)*100
-
+            
     local inv = ResourceInventory.new(crafter, "InputInv")
     inv.item = StaticItem.find("Electricity")
-    inv.capacity = 20
+    inv.capacity = 80
     crafter.energy_input_inventory = inv
     
-    local acc = ResourceAccessor.new(crafter, "Input")
-    acc.side = Vec3i.back
-    acc.pos = Vec3i.zero
-    acc.inventory = input
+    local acc = ResourceAccessor.new(crafter, "Input1")
+    acc.side, acc.pos = Vec3i.back, Vec3i.zero
+    acc.inventory = inv
+    acc.is_input = true
+    acc.channel = "Electricity"
     acc.cover = StaticCover.find("ElectricityInput")
 end
 

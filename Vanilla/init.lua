@@ -45,7 +45,7 @@ function vanilla_mod.init()
 
    local resources = {
       {"CopperOre", 1.0},
-      {"CoalOre", 1.5},
+      {"Coal", 1.5},
 
       {"IronOre", 0.5},
       {"AluminiumOre", 0.25},
@@ -64,7 +64,7 @@ function vanilla_mod.init()
    for _, proto in pairs(db:objects()) do
       local block = StaticBlock.cast(proto)
       if block ~= nil then
-         block.lua = { actor_init = common_actor_init }
+         block.lua = { actor_init = CommonActorInit, tooltip = CommonActorTooltip }
       end
    end
 

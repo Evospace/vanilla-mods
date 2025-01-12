@@ -24,7 +24,7 @@ function FillBlock(name, table)
     end
 end
 
-common_actor_init = function(self)
+CommonActorInit = function(self)
     local tier_material = {
         "Stone",
         "Copper",
@@ -38,4 +38,21 @@ common_actor_init = function(self)
 
     local mat = Material.load("/Game/Materials/"..tier_material[self.logic.static_block.tier + 1])
     Legacy.this:set_field_object("HullMaterial", mat)
+end
+
+CommonActorTooltip = function(self)
+    local a = AbstractCrafter.cast(self)
+    if a ~= nil then
+        local usage = a.ticks_passed / math.max(a.real_ticks_passed, 1.0) * 100
+        local t = "Speed: x"..(a.speed/100.0).."\nUsage: "..string.format("%.0f%%", usage)
+        if a.energy_input_inventory ~= nil then
+            t = t.."\nConsumption: "..Loc.gui_number(a.energy_input_inventory.capacity*20)
+        end
+        if a.energy_output_inventory ~= nil then
+            t = t.."\nProduction: "..Loc.gui_number(a.energy_output_inventory.capacity*20)
+        end
+        return t
+    end
+
+    return "hello from lua"
 end
