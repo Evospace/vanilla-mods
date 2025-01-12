@@ -4,5 +4,6 @@
     ],
     "Lua.diagnostics.disable": [
         "inject-field"
-    ]
+    ],
+    "Lua.runtime.version": "LuaJIT"
 }

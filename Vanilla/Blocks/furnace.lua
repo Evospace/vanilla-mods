@@ -1,13 +1,21 @@
 require('Blocks/common')
 
+local get_production = function(crafter)
+    return math.pow(2.0, crafter.static_block.level) * 243
+end
+
+local get_speed = function(crafter)
+    return math.pow(2.0, crafter.static_block.level) * 100
+end
+
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("FurnaceRecipeDictionary")
-    crafter.speed = (crafter.static_block.level + 1)*100
+    crafter.speed = get_speed(crafter)
             
     local inv = ResourceInventory.new(crafter, "OutputInv")
     inv.item = StaticItem.find("Heat")
-    inv.capacity = 20 * (crafter.static_block.level + 1)
+    inv.capacity = get_production(crafter)
     crafter.energy_output_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "Output")
