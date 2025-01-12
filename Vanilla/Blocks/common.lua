@@ -46,10 +46,10 @@ CommonActorTooltip = function(self)
         local usage = a.ticks_passed / math.max(a.real_ticks_passed, 1.0) * 100
         local t = "Speed: x"..(a.speed/100.0).."\nUsage: "..string.format("%.0f%%", usage)
         if a.energy_input_inventory ~= nil then
-            t = t.."\nConsumption: "..Loc.gui_number(a.energy_input_inventory.capacity*20)
+            t = t.."\nConsumption: "..Loc.gui_number(a.energy_input_inventory.capacity*20).."W"
         end
         if a.energy_output_inventory ~= nil then
-            t = t.."\nProduction: "..Loc.gui_number(a.energy_output_inventory.capacity*20)
+            t = t.."\nProduction: "..Loc.gui_number(a.energy_output_inventory.capacity*20).."W"
         end
         return t
     end
