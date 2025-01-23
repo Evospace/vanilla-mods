@@ -24,6 +24,7 @@ function FillBlock(name, table)
     end
 end
 
+--- @param self BlockActor
 CommonActorInit = function(self)
     local tier_material = {
         "Stone",
@@ -40,6 +41,18 @@ CommonActorInit = function(self)
     Legacy.this:set_field_object("HullMaterial", mat)
 end
 
+--- @param crafter AbstractCrafter
+--- @param value integer
+VanillaConsumptionF = function(crafter, value)
+    return math.pow(2.0, crafter.static_block.level) * value
+end
+
+--- @param crafter AbstractCrafter
+VanillaSpeedF = function(crafter)
+    return math.pow(1.5, crafter.static_block.level) * 100
+end
+
+--- @param self BlockLogic
 CommonActorTooltip = function(self)
     local a = AbstractCrafter.cast(self)
     if a ~= nil then
