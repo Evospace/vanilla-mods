@@ -50,7 +50,6 @@ function vanilla_mod.init()
       {"IronOre", 0.5},
       {"AluminiumOre", 0.25},
       {"UraniumOre", 0.125},
-      {"MineralWater", 1.0},
       {"RawOil", 0.5},
    }
 
