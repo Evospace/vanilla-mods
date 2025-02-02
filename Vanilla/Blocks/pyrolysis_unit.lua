@@ -27,6 +27,7 @@ local logic = function(self)
     acc.inventory = inv
     acc.cover = StaticCover.find("HeatInput")
     acc.channel = "Heat"
+    acc.is_input = true
 end
 
 return { logic_init = logic }
