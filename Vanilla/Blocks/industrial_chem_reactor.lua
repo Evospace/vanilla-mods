@@ -30,6 +30,12 @@ local logic = function(self)
     acc.is_input = true
     acc.channel = "Electricity"
     acc.cover = StaticCover.find("ElectricityInput")
+
+    local acc = ResourceAccessor.new(crafter, "Fluid1OutputAccessor")
+    acc.side, acc.pos = Vec3i.back, Vec3i.new(-1,1,0)
+    acc.is_output = true
+    acc.channel = "Fluid"
+    acc.cover = StaticCover.find("FluidOutput")
 end
 
 return { logic_init = logic }

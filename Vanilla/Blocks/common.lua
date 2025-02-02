@@ -5,8 +5,8 @@ local tier_material = {
 	"Aluminium",
 	"StainlessSteel",
 	"Titanium",
-	"HardMetal",
-	"Neutronium"
+	"Advanced",
+	"Ultimate"
 }
 
 --- @param name string
