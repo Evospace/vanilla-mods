@@ -2,7 +2,8 @@ require('Blocks/common')
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
-    crafter.recipes = RecipeDictionary.find("CompactGeneratorRecipeDictionary")
+    crafter.recipes = RecipeDictionary.find("GeneratorRecipeDictionary")
+    crafter.stable_supply = false
         
     local inv = ResourceInventory.new(crafter, "InputInv")
     inv.item = StaticItem.find("Heat")

@@ -3,11 +3,11 @@ require('Blocks/common')
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("CuttingMachineRecipeDictionary")
-    crafter.speed = (crafter.static_block.level + 1)*100
+    crafter.speed = VanillaSpeedF(crafter)
         
     local inv = ResourceInventory.new(crafter, "InputInv")
     inv.item = StaticItem.find("Kinetic")
-    inv.capacity = 20
+    inv.capacity = VanillaConsumptionF(crafter, 20)
     crafter.energy_input_inventory = inv
     
     --- @class ResourceAccessor

@@ -24,6 +24,21 @@ function FillBlock(name, table)
     end
 end
 
+--- @param name string
+--- @param table table
+function FillBlockCustom(name, table, custom_table)
+    for index, tier in pairs(custom_table) do
+        local block = StaticBlock.find(tier..name)
+        if block ~= nil then
+            print(tier.." "..name.." found, registering lua table")
+
+			for key, value in pairs(table) do
+				block.lua[key] = value
+			end
+        end
+    end
+end
+
 --- @param self BlockActor
 CommonActorInit = function(self)
     local tier_material = {
@@ -49,7 +64,7 @@ end
 
 --- @param crafter AbstractCrafter
 VanillaSpeedF = function(crafter)
-    return math.pow(1.5, crafter.static_block.level) * 100
+    return math.pow(2.0, crafter.static_block.level) * 100
 end
 
 --- @param self BlockLogic
@@ -58,6 +73,7 @@ CommonActorTooltip = function(self)
     if a ~= nil then
         local usage = a.ticks_passed / math.max(a.real_ticks_passed, 1.0) * 100
         local t = "Speed: x"..(a.speed/100.0).."\nUsage: "..string.format("%.0f%%", usage)
+        --local t = "Usage: "..string.format("%.0f%%", usage)
         if a.energy_input_inventory ~= nil then
             t = t.."\nConsumption: "..Loc.gui_number(a.energy_input_inventory.capacity*20).."W"
         end

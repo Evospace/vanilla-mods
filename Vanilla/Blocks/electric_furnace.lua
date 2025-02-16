@@ -6,7 +6,8 @@ end
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
-    crafter.recipes = RecipeDictionary.find("ElectricFurnaceRecipeDictionary")
+    crafter.recipes = RecipeDictionary.find("GeneratorRecipeDictionary")
+    crafter.stable_supply = false
             
     local inv = ResourceInventory.new(crafter, "OutputInv")
     inv.item = StaticItem.find("Heat")
