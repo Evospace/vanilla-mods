@@ -5,7 +5,7 @@ local logic = function(self)
     crafter.recipes = RecipeDictionary.find("OvenRecipeDictionary")
     crafter.speed = VanillaSpeedF(crafter)
             
-    local inv = ResourceInventory.new(crafter, "InputInv")
+    local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("Heat")
     inv.capacity = VanillaConsumptionF(crafter, 100)
     crafter.energy_input_inventory = inv
@@ -17,7 +17,7 @@ local logic = function(self)
     acc.channel = "Heat"
     acc.cover = StaticCover.find("HeatInput")
 
-    local inv = ResourceInventory.new(crafter, "OutputInv")
+    local inv = ResourceInventory.new(crafter, "rio")
     inv.capacity = 1000
 
     local acc = ResourceAccessor.new(crafter, "Output")

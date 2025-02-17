@@ -10,8 +10,8 @@ local logic = function(self)
     crafter.speed = 100
     crafter.stable_supply = false
         
-    local inv = ResourceInventory.new(crafter, "InputInv")
-    inv.item = StaticItem.find("Electricity")
+    local inv = ResourceInventory.new(crafter, "rii")
+    inv.item = StaticItem.find("LV")
     inv.capacity = get_production(crafter)
     crafter.energy_input_inventory = inv
     
@@ -19,17 +19,17 @@ local logic = function(self)
     acc.side, acc.pos = Vec3i.back, Vec3i.zero
     acc.inventory = inv
     acc.is_input = true
-    acc.channel = "Electricity"
+    acc.channel = "LV"
     acc.cover = StaticCover.find("ElectricityInput")
     
     local acc = ResourceAccessor.new(crafter, "Input2")
     acc.side, acc.pos = Vec3i.down, Vec3i.zero
     acc.inventory = inv
     acc.is_input = true
-    acc.channel = "Electricity"
+    acc.channel = "LV"
     acc.cover = StaticCover.find("ElectricityInput")
     
-    local inv = ResourceInventory.new(crafter, "OutputInv")
+    local inv = ResourceInventory.new(crafter, "rio")
     inv.item = StaticItem.find("Kinetic")
     inv.capacity = get_production(crafter)
     crafter.energy_output_inventory = inv

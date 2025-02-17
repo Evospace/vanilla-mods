@@ -5,8 +5,8 @@ local logic = function(self)
     crafter.recipes = RecipeDictionary.find("FermenterRecipeDictionary")
     crafter.speed = VanillaSpeedF(crafter)
 
-    local inv = ResourceInventory.new(crafter, "InputInv")
-    inv.item = StaticItem.find("Electricity")
+    local inv = ResourceInventory.new(crafter, "rii")
+    inv.item = StaticItem.find("LV")
     inv.capacity = VanillaConsumptionF(crafter, 20)
     crafter.energy_input_inventory = inv
     
@@ -14,7 +14,7 @@ local logic = function(self)
     acc.side, acc.pos = Vec3i.back, Vec3i.zero
     acc.inventory = inv
     acc.cover = StaticCover.find("ElectricityInput")
-    acc.channel = "Electricity"
+    acc.channel = "LV"
 end
 
 return { logic_init = logic }

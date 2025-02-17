@@ -5,8 +5,8 @@ local logic = function(self)
     crafter.recipes = RecipeDictionary.find("ArcSmelterRecipeDictionary")
     crafter.speed = VanillaSpeedF(crafter)
             
-    local inv = ResourceInventory.new(crafter, "InputInv")
-    inv.item = StaticItem.find("Electricity")
+    local inv = ResourceInventory.new(crafter, "rii")
+    inv.item = StaticItem.find("LV")
     inv.capacity = VanillaConsumptionF(crafter, 100)
     crafter.energy_input_inventory = inv
     
@@ -14,7 +14,7 @@ local logic = function(self)
     acc.side, acc.pos = Vec3i.back, Vec3i.new( -1, 1, 0 )
     acc.inventory = inv
     acc.is_input = true
-    acc.channel = "Electricity"
+    acc.channel = "LV"
     acc.cover = StaticCover.find("ElectricityInput")
 end
 

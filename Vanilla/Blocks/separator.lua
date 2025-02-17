@@ -5,7 +5,7 @@ local logic = function(self)
     crafter.recipes = RecipeDictionary.find("SeparatorRecipeDictionary")
     crafter.speed = VanillaSpeedF(crafter)
             
-    local inv = ResourceInventory.new(crafter, "InputInv")
+    local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("Kinetic")
     inv.capacity = VanillaConsumptionF(crafter, 80)
     crafter.energy_input_inventory = inv

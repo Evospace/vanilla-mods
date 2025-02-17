@@ -5,7 +5,7 @@ local logic = function(self)
     crafter.recipes = RecipeDictionary.find("GeneratorRecipeDictionary")
     crafter.stable_supply = false
         
-    local inv = ResourceInventory.new(crafter, "InputInv")
+    local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("Heat")
     inv.capacity = VanillaConsumptionF(crafter, 20)
     crafter.energy_input_inventory = inv
@@ -17,7 +17,7 @@ local logic = function(self)
     acc.channel = "Heat"
     acc.cover = StaticCover.find("HeatInput")
     
-    local inv = ResourceInventory.new(crafter, "OutputInv")
+    local inv = ResourceInventory.new(crafter, "rio")
     inv.item = StaticItem.find("Kinetic")
     inv.capacity = VanillaConsumptionF(crafter, 20)
     crafter.energy_output_inventory = inv

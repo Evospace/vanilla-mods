@@ -14,19 +14,41 @@ local logic = function(self)
         "ABCCOCable",
     }
 
-    local rubberMap = {
-        "CableCenterLV",
-        "CableCenterLV",
-        "CableCenterMV",
-        "CableCenterMV",
-        "CableCenterMV",
-        "CableCenterHV",
-        "CableCenterHV",
-        "CableCenterHV",
+    local channelMap = {
+        1000, 1000, 1001, 1001, 1001, 1002, 1002, 1002
     }
 
-    conductor.side_cover = StaticCover.find(metalMap[conductor.static_block.tier])
-    conductor.center_cover = StaticCover.find(rubberMap[conductor.static_block.tier])
+    local resistanceMap = {
+        100, 80, 75, 50, 0, 100, 50, 0
+    }
+
+    local tierMap = {
+        "LV", "LV", "MV", "MV", "MV", "HV", "HV", "HV"
+    }
+
+    local voltageMap = {
+        1000, 1000, 10000, 10000, 10000, 100000, 100000, 100000
+    }
+
+    local sides = {
+        Vec3i.back, Vec3i.front, Vec3i.right, Vec3i.left, Vec3i.down, Vec3i.up
+    }
+
+    local t = conductor.static_block.tier
+
+    for index, side in pairs(sides) do
+        local acc = ResourceAccessor.new(conductor, "Wire"..tierMap[t]..index)
+        acc.side, acc.pos = side, Vec3i.zero
+        acc.channel = tierMap[t]
+        conductor:add_wire(acc)
+    end
+
+    conductor.side_cover = StaticCover.find(metalMap[t])
+    conductor.center_cover = StaticCover.find("CableCenter"..tierMap[t])
+    conductor.resistance = resistanceMap[t]
+    conductor.conductor_channel = channelMap[t]
+    conductor.channel = tierMap[t]
+    conductor.voltage = voltageMap[t]
 end
 
 return { logic_init = logic }

@@ -23,7 +23,7 @@ function VanillaTipsMod.init()
     i_acc:add(StaticItem.find("CopperConnector"), 10)
     i_acc:add(StaticItem.find("CopperHeatPipe"), 1)
     i_acc:add(StaticItem.find("SteelFlywheel"), 1)
-    i_acc:add(StaticItem.find("Electricity"), 1)
+    i_acc:add(StaticItem.find("LV"), 1)
     i_acc:add(StaticItem.find("Kinetic"), 1)
     i_acc:add(StaticItem.find("Heat"), 1)
     db:from_table({
