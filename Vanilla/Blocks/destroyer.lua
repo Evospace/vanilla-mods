@@ -5,7 +5,7 @@ local logic = function(self)
     -- crafter.recipes = RecipeDictionary.find("DestroyerRecipeDictionary")
     -- crafter.speed = (crafter.static_block.level + 1)*100
             
-    -- local inv = ResourceInventory.new(crafter, "InputInv")
+    -- local inv = ResourceInventory.new(crafter, "rii")
     -- inv.capacity = 20
     -- crafter.energy_input_inventory = inv
     

@@ -3,12 +3,14 @@ require('Blocks/common')
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("GeneratorRecipeDictionary")
-    crafter.speed = (crafter.static_block.level + 1)*100
+    crafter.speed = 100
     crafter.stable_supply = false
+
+    local energy = 20
         
-    local inv = ResourceInventory.new(crafter, "InputInv")
+    local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("Kinetic")
-    inv.capacity = 20
+    inv.capacity = VanillaConsumptionF(crafter, energy)
     crafter.energy_input_inventory = inv
 
     local acc = ResourceAccessor.new(crafter, "Input2")
@@ -18,16 +20,16 @@ local logic = function(self)
     acc.channel = "Kinetic"
     acc.cover = StaticCover.find("KineticInput")
 
-    local inv = ResourceInventory.new(crafter, "OutputInv")
-    inv.item = StaticItem.find("Electricity")
-    inv.capacity = 20
+    local inv = ResourceInventory.new(crafter, "rio")
+    inv.item = StaticItem.find("LV")
+    inv.capacity = VanillaConsumptionF(crafter, energy)
     crafter.energy_output_inventory = inv
 
     local acc = ResourceAccessor.new(crafter, "Output")
     acc.side, acc.pos = Vec3i.back, Vec3i.zero
     acc.inventory = inv
     acc.is_output = true
-    acc.channel = "Electricity"
+    acc.channel = "LV"
     acc.cover = StaticCover.find("ElectricityOutput")
 end
 

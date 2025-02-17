@@ -10,7 +10,7 @@ local logic = function(self)
     crafter.speed = 100
     crafter.stable_supply = false
         
-    local inv = ResourceInventory.new(crafter, "OutputInv")
+    local inv = ResourceInventory.new(crafter, "rio")
     inv.item = StaticItem.find("Kinetic")
     inv.capacity = get_production(crafter)
     crafter.energy_output_inventory = inv
@@ -22,7 +22,7 @@ local logic = function(self)
     acc.cover = StaticCover.find("KineticOutput")
     acc.is_output = true
     
-    local inv = ResourceInventory.new(crafter, "InputInv")
+    local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("Steam")
     inv.capacity = get_production(crafter)
     crafter.energy_input_inventory = inv
