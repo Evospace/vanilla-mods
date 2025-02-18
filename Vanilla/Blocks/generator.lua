@@ -9,15 +9,15 @@ local logic = function(self)
     local energy = 240
         
     local inv = ResourceInventory.new(crafter, "rio")
-    inv.item = StaticItem.find("LV")
+    inv.item = StaticItem.find("MV")
     inv.capacity = VanillaConsumptionF(crafter, energy)
     crafter.energy_output_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "Output")
     acc.side, acc.pos = Vec3i.front, Vec3i.zero
     acc.inventory = inv
-    acc.channel = "LV"
-    acc.cover = StaticCover.find("ElectricityOutput")
+    acc.channel = "MV"
+    acc.cover = StaticCover.find("MVOutput")
     acc.is_output = true
     
     local inv = ResourceInventory.new(crafter, "rii")
