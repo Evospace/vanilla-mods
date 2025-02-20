@@ -1,7 +1,7 @@
 require('Blocks/common')
 
 local get_production = function(crafter)
-    return math.pow(2.0, crafter.static_block.level) * 60
+    return math.pow(2.0, crafter.static_block.level) * 100
 end
 
 local logic = function(self)
