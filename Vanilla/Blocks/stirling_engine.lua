@@ -7,7 +7,7 @@ local logic = function(self)
         
     local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("Heat")
-    inv.capacity = VanillaConsumptionF(crafter, 20)
+    inv.capacity = VanillaConsumptionF(crafter, 50)
     crafter.energy_input_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "Input1")
@@ -19,7 +19,7 @@ local logic = function(self)
     
     local inv = ResourceInventory.new(crafter, "rio")
     inv.item = StaticItem.find("Kinetic")
-    inv.capacity = VanillaConsumptionF(crafter, 20)
+    inv.capacity = VanillaConsumptionF(crafter, 50)
     crafter.energy_output_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "Output")
