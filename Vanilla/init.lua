@@ -73,6 +73,12 @@ function vanilla_mod.init()
    ss.generate = function(_) print("11111111111") end
    ss.size = Vec2i.new(10, 10);
    db:reg(ss)
+
+
+   local a = StaticProp.find("Pine")
+   a.on_destroy = function (pos, attach)
+       print("66666666666666666666666666666666")
+   end
 end
 
 function vanilla_mod.post_init()
