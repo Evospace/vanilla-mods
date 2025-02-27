@@ -47,7 +47,7 @@ function vanilla_mod.init()
    -- end)
 
    local resources = {
-      {"CopperOre", 1.0},
+      {"ChalcopyriteOre", 1.0},
       {"Coal", 1.5},
 
       {"IronOre", 0.5},
@@ -73,20 +73,33 @@ function vanilla_mod.init()
    require('Blocks/all')
 
    local ss = StaticStructure.new("StartPlatform")
-   ss.generate = function(_) print("11111111111") end
+   --ss.generate = function(_) print("11111111111") end TODO: lua ref leak
    ss.size = Vec2i.new(10, 10)
 
-   local sulphur = StaticProp.find("SulfurCluster")
-   es:sub(defines.events.on_entity_died, function(context)
-      if context.prop == sulphur then
-         local spos = RegionMap.world_block_to_grid(context.pos)
-         local region = regions:get_region(spos)
-         local sd = SourceData.new(region, "test1")
-         sd.item = StaticItem.find("Sulphur")
-         sd.offset = Vec2i.new(context.pos.x, context.pos.y)
-         region:add_source(sd)
+   local ores = {"Cinnabar", "Malachite", "Pyrite", "Chalcopyrite", "Bauxite"}
+   local oreGeneratorCounter = 1
+
+   for _, ore_name in pairs(ores) do
+      local ore = StaticProp.find(ore_name.."Cluster")
+      if ore then 
+         print("Registering "..ore_name.."Cluster".." on_entity_died subscription")
+      else
+         print(ore_name.."Cluster not found, skipping")
       end
-   end)
+      es:sub(defines.events.on_entity_died, function(context)
+         print(dump(ore))
+         print(dump(context.prop))
+         if context.prop == ore then
+            local spos = RegionMap.world_block_to_grid(context.pos)
+            local region = regions:get_region(spos)
+            local sd = SourceData.new(region, "OreCluster"..oreGeneratorCounter)
+            oreGeneratorCounter = oreGeneratorCounter + 1
+            sd.item = StaticItem.find(ore_name.."Ore")
+            sd.offset = Vec2i.new(context.pos.x, context.pos.y)
+            region:add_source(sd)
+         end
+      end)
+   end
 end
 
 function vanilla_mod.post_init()
