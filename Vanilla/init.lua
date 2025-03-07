@@ -5,23 +5,6 @@ require 'Blocks/common'
 
 local vanilla_mod = {}
 
-local function dump(o)
-   if type(o) == 'table' then
-      local s = '('
-      for k,v in pairs(o) do
-         if type(k) ~= 'userdata' then
-            s = s .. k ..' = ' .. dump(v) .. ','
-         end
-         
-      end
-      return s .. ')'
-   elseif type(o) == 'userdata' then
-      return tostring(o)
-   else
-      return tostring(o)
-   end
-end
-
 
 function vanilla_mod.pre_init()
 end
@@ -40,26 +23,27 @@ function vanilla_mod.init()
 
    --       local ms = MapStructure.new()
    --       ms.structure = ss
-   --       ms.offset = Vec2i.zero()
+   --       ms.position = Vec2i.zero()
 
    --       region:add_structure(ms)
    --    end
    -- end)
 
    local resources = {
-      {"ChalcopyriteOre", 1.0},
-      {"Coal", 1.5},
-
-      {"IronOre", 0.5},
-      {"AluminiumOre", 0.25},
-      {"UraniumOre", 0.125},
-      {"RawOil", 0.5},
+      {"Chalcopyrite", 1.0},
+      {"Pyrite", 1.0},
+      {"Malachite", 1.0},
+      {"Magnetite", 1.0},
+      {"Cinnabar", 1.0},
+      {"Ruby", 1.0},
+      {"Emerald", 1.0},
    }
 
    for _, value in ipairs(resources) do
       local ed = ExtractionData.new()
-      ed.item = StaticItem.find(value[1])
-      ed.speed = value[2]
+      ed.item = StaticItem.find(value[1].."Ore")
+      ed.speed = 100
+      ed.prop = StaticProp.find(value[1].."Cluster")
       regions:add_resource(ed)
    end
 
@@ -76,7 +60,7 @@ function vanilla_mod.init()
    --ss.generate = function(_) print("11111111111") end TODO: lua ref leak
    ss.size = Vec2i.new(10, 10)
 
-   local ores = {"Cinnabar", "Malachite", "Pyrite", "Chalcopyrite", "Bauxite"}
+   local ores = {"Cinnabar", "Malachite", "Pyrite", "Chalcopyrite", "Bauxite", "Ruby", "Emerald", "Magnetite", "Thorianite", "Clay", "Coal"}
    local oreGeneratorCounter = 1
 
    for _, ore_name in pairs(ores) do
@@ -86,16 +70,24 @@ function vanilla_mod.init()
       else
          print(ore_name.."Cluster not found, skipping")
       end
-      es:sub(defines.events.on_entity_died, function(context)
-         print(dump(ore))
-         print(dump(context.prop))
+      es:sub(defines.events.on_entity_spawn, function(context)
+         --print(dump(ore))
+         --print(dump(context.prop))
          if context.prop == ore then
             local spos = RegionMap.world_block_to_grid(context.pos)
+            local position = Vec2i.new(context.pos.x, context.pos.y)
+            local old_reg = regions:find_source(context.pos)
+            if old_reg ~= nil and old_reg.position == position then
+               Vlib.verbose("same "..tostring(ore.item))
+               return
+            else
+               Vlib.verbose("new "..tostring(ore.item))
+            end
             local region = regions:get_region(spos)
-            local sd = SourceData.new(region, "OreCluster"..oreGeneratorCounter)
+            local sd = SourceData.new_simple()
             oreGeneratorCounter = oreGeneratorCounter + 1
             sd.item = StaticItem.find(ore_name.."Ore")
-            sd.offset = Vec2i.new(context.pos.x, context.pos.y)
+            sd.position = position
             region:add_source(sd)
          end
       end)
