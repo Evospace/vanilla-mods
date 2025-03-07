@@ -37,7 +37,7 @@ function register_graphics()
             end,
             label = name,
             name = name,
-         })
+        })
     end
 
     generate_setting("ShadowQuality", "sg.ShadowQuality")
@@ -60,7 +60,7 @@ function register_graphics()
             end,
             label = name,
             name = name,
-         })
+        })
     end
     generate_reflection("GlobalIllumination", "r.DynamicGlobalIlluminationMethod")
     generate_reflection("Reflection", "r.ReflectionMethod")
@@ -82,9 +82,9 @@ function register_graphics()
         end,
         label = "ScreenPersentage",
         name = "ScreenPersentage",
-     })
+    })
 
-     db:from_table({
+    db:from_table({
         class = "Setting",
         category = "Graphics",
         type = "String",
@@ -99,7 +99,7 @@ function register_graphics()
         end,
         label = "AntiAliasingMethod",
         name = "AntiAliasingMethod",
-     })
+    })
 
      
 

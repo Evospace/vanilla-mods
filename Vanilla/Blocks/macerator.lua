@@ -4,6 +4,9 @@ local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("MaceratorRecipeDictionary")
     crafter.speed = VanillaSpeedF(crafter)
+
+    Vlib.add_single_slot_invs(crafter.crafter_input_container, crafter, "Inv", 1)
+    Vlib.add_single_slot_invs(crafter.crafter_output_container, crafter, "Inv", 2)
         
     local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("Kinetic")
