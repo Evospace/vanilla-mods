@@ -10,8 +10,6 @@ function VanillaLib.post_init()
 end
 
 Vlib = {
-    inv_counter = 1,
-
     ---Create count inventories
     ---@param parent Object
     ---@param name string
@@ -20,8 +18,7 @@ Vlib = {
     single_slot_invs = function(parent, name, count)
         local inventories = {}
         for i = 1, count do
-            local inv = SingleSlotInventory.new(parent, name..Vlib.inv_counter)
-            Vlib.inv_counter = Vlib.inv_counter + 1
+            local inv = SingleSlotInventory.new(parent, name..i)
             Vlib.verbose("Creating "..tostring(inv))
             inventories[i] = inv
         end
@@ -37,8 +34,7 @@ Vlib = {
     add_single_slot_invs = function(inventory_container, parent, name, count)
         local inventories = {}
         for i = 1, count do
-            local inv = SingleSlotInventory.new(parent, name..Vlib.inv_counter)
-            Vlib.inv_counter = Vlib.inv_counter + 1
+            local inv = SingleSlotInventory.new(parent, name..i)
             Vlib.verbose("Binding "..tostring(inv).." to "..tostring(inventory_container))
             inventories[i] = inv
             inventory_container:bind(inv)

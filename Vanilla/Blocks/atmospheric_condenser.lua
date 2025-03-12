@@ -5,7 +5,7 @@ local logic = function(self)
     crafter.recipes = RecipeDictionary.find("AtmosphericCondenserRecipeDictionary")
     crafter.speed = VanillaSpeedF(crafter)
     
-    local acc = ResourceAccessor.new(crafter, "CraftOutput")
+    local acc = ResourceAccessor.new(crafter, "rao")
     acc.side, acc.pos = Vec3i.front, Vec3i.zero
     acc.channel = "Fluid"
     acc.is_output = true

@@ -10,27 +10,27 @@ local logic = function(self)
     input.capacity = VanillaConsumptionF(crafter, 1000)
     crafter.energy_input_inventory = input
     
-    local acc = ResourceAccessor.new(crafter, "InputH1")
+    local acc = ResourceAccessor.new(crafter, "rai")
     acc.side, acc.pos = Vec3i.up, Vec3i.new(0,0,0)
     acc.inventory = input
     acc.is_input = true
     acc.channel = "Heat"
     acc.cover = StaticCover.find("HeatInput")
 
-    local acc = ResourceAccessor.new(crafter, "InputH2")
+    local acc = ResourceAccessor.new(crafter, "rai_")
     acc.side, acc.pos = Vec3i.up, Vec3i.new(-2,0,0)
     acc.inventory = input
     acc.is_input = true
     acc.channel = "Heat"
     acc.cover = StaticCover.find("HeatInput")
 
-    local acc = ResourceAccessor.new(crafter, "FluidInput")
+    local acc = ResourceAccessor.new(crafter, "rai_w")
     acc.side, acc.pos = Vec3i.back, Vec3i.new(-2,0,2)
     acc.is_input = true
     acc.channel = "Fluid"
     acc.cover = StaticCover.find("FluidInput")
 
-    local acc = ResourceAccessor.new(crafter, "FluidOutput")
+    local acc = ResourceAccessor.new(crafter, "rao")
     acc.side, acc.pos = Vec3i.back, Vec3i.new(-2,0,0)
     acc.is_output = true
     acc.channel = "Fluid"

@@ -1,9 +1,5 @@
 require('Blocks/common')
 
-local get_production = function(crafter)
-    return math.pow(2.0, crafter.static_block.level) * 100
-end
-
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("BoilerRecipeDictionary")
@@ -11,16 +7,22 @@ local logic = function(self)
         
     local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("Heat")
-    inv.capacity = get_production(crafter)
+    inv.capacity = VanillaConsumptionF(crafter, 100)
     crafter.energy_input_inventory = inv
 
-    local acc = ResourceAccessor.new(crafter, "WaterInputAccessor")
+    local inv = ResourceInventory.new(crafter, "rii_")
+    inv.item = StaticItem.find("Water")
+    inv.capacity = VanillaConsumptionF(crafter, 100)
+    crafter.crafter_input_container:bind(inv)
+
+    local acc = ResourceAccessor.new(crafter, "rai")
     acc.side, acc.pos = Vec3i.back, Vec3i.zero
     acc.is_input = true
     acc.channel = "Fluid"
+    acc.inventory = inv
     acc.cover = StaticCover.find("FluidInput")
 
-    local acc = ResourceAccessor.new(crafter, "HeatInputAccessor")
+    local acc = ResourceAccessor.new(crafter, "rai_")
     acc.side, acc.pos = Vec3i.down, Vec3i.zero
     acc.inventory = inv
     acc.is_input = true
@@ -29,10 +31,10 @@ local logic = function(self)
 
     local inv = ResourceInventory.new(crafter, "rio")
     inv.item = StaticItem.find("Steam")
-    inv.capacity = get_production(crafter)
+    inv.capacity = VanillaConsumptionF(crafter, 100)
     crafter.energy_output_inventory = inv
 
-    local acc = ResourceAccessor.new(crafter, "Output")
+    local acc = ResourceAccessor.new(crafter, "rao")
     acc.side, acc.pos = Vec3i.up, Vec3i.zero
     acc.inventory = inv
     acc.is_output = true

@@ -11,7 +11,7 @@ local logic = function(self)
     crafter.energy_input_inventory = inv
     
     --- @class ResourceAccessor
-    local acc = ResourceAccessor.new(crafter, "Input1")
+    local acc = ResourceAccessor.new(crafter, "rai")
     acc.side, acc.pos = Vec3i.back, Vec3i.zero
     acc.inventory = inv
     acc.is_input = true

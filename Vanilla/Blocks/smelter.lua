@@ -5,8 +5,8 @@ local logic = function(self)
     crafter.recipes = RecipeDictionary.find("SmelterRecipeDictionary")
     crafter.speed = VanillaSpeedF(crafter)
 
-    Vlib.add_single_slot_invs(crafter.crafter_input_container, crafter, "Inv", 1)
-    Vlib.add_single_slot_invs(crafter.crafter_output_container, crafter, "Inv", 2)
+    Vlib.add_single_slot_invs(crafter.crafter_input_container, crafter, "ii", 1)
+    Vlib.add_single_slot_invs(crafter.crafter_output_container, crafter, "io", 2)
         
     local input = ResourceInventory.new(crafter, "rii")
     input.item = StaticItem.find("Heat")

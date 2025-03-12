@@ -10,7 +10,7 @@ local logic = function(self)
     inv.capacity = 40 * (crafter.static_block.level + 1)
     crafter.energy_input_inventory = inv
     
-    local acc = ResourceAccessor.new(crafter, "Input")
+    local acc = ResourceAccessor.new(crafter, "rai")
     acc.side, acc.pos = Vec3i.front, Vec3i.zero
     acc.inventory = inv
     acc.is_input = true

@@ -10,13 +10,13 @@ local logic = function(self)
     inv.capacity = VanillaConsumptionF(crafter, 20)
     crafter.energy_input_inventory = inv
 
-    local acc = ResourceAccessor.new(crafter, "Fluid1OutputAccessor")
+    local acc = ResourceAccessor.new(crafter, "rao")
     acc.side, acc.pos = Vec3i.left, Vec3i.new(0,2,0)
     acc.is_output = true
     acc.channel = "Fluid"
     acc.cover = StaticCover.find("FluidOutput")
 
-    local acc = ResourceAccessor.new(crafter, "Fluid1InputAccessor")
+    local acc = ResourceAccessor.new(crafter, "rao_")
     acc.side, acc.pos = Vec3i.front, Vec3i.new(0,2,0)
     acc.is_input = true
     acc.channel = "Fluid"
