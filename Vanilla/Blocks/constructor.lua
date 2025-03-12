@@ -7,10 +7,10 @@ local logic = function(self)
 
     local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("LV")
-    inv.capacity = VanillaConsumptionF(crafter, 40)
+    inv.capacity = VanillaConsumptionF(crafter, 20)
     crafter.energy_input_inventory = inv
     
-    local acc = ResourceAccessor.new(crafter, "Input1")
+    local acc = ResourceAccessor.new(crafter, "rai")
     acc.side, acc.pos = Vec3i.front, Vec3i.zero
     acc.inventory = inv
     acc.is_input = true

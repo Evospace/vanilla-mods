@@ -14,7 +14,7 @@ local logic = function(self)
     inv.capacity = get_production(crafter)
     crafter.energy_output_inventory = inv
     
-    local acc = ResourceAccessor.new(crafter, "Output")
+    local acc = ResourceAccessor.new(crafter, "rao")
     acc.side, acc.pos = Vec3i.up, Vec3i.zero
     acc.inventory = inv
     acc.is_output = true
@@ -26,7 +26,7 @@ local logic = function(self)
     inv.capacity = get_production(crafter)
     crafter.energy_input_inventory = inv
     
-    local acc = ResourceAccessor.new(crafter, "Input1")
+    local acc = ResourceAccessor.new(crafter, "rai")
     acc.side, acc.pos = Vec3i.back, Vec3i.zero
     acc.inventory = inv
     acc.is_input = true

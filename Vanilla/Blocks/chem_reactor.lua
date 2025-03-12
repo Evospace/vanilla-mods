@@ -12,14 +12,14 @@ local logic = function(self)
     inv.capacity = VanillaConsumptionF(crafter, base_consumption)
     crafter.energy_input_inventory = inv
     
-    local acc = ResourceAccessor.new(crafter, "Input1")
+    local acc = ResourceAccessor.new(crafter, "rai")
     acc.side, acc.pos = Vec3i.back, Vec3i.zero
     acc.inventory = inv
     acc.is_input = true
     acc.channel = "LV"
     acc.cover = StaticCover.find("ElectricityInput")
 
-    local acc = ResourceAccessor.new(crafter, "Input2")
+    local acc = ResourceAccessor.new(crafter, "rai_")
     acc.side, acc.pos = Vec3i.front, Vec3i.zero
     acc.is_input = true
     acc.channel = "Fluid"

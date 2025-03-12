@@ -13,7 +13,7 @@ local logic = function(self)
     inv.capacity = VanillaConsumptionF(crafter, energy)
     crafter.energy_output_inventory = inv
     
-    local acc = ResourceAccessor.new(crafter, "Output")
+    local acc = ResourceAccessor.new(crafter, "rao")
     acc.side, acc.pos = Vec3i.front, Vec3i.zero
     acc.inventory = inv
     acc.channel = "MV"
@@ -25,7 +25,7 @@ local logic = function(self)
     inv.capacity = VanillaConsumptionF(crafter, energy)
     crafter.energy_input_inventory = inv
     
-    local acc = ResourceAccessor.new(crafter, "Input")
+    local acc = ResourceAccessor.new(crafter, "rai")
     acc.side, acc.pos = Vec3i.back, Vec3i.new(-1, 1, 0)
     acc.inventory = inv
     acc.channel = "Kinetic"

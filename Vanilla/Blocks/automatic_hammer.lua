@@ -10,8 +10,8 @@ local logic = function(self)
     inv.capacity = VanillaConsumptionF(crafter, 20)
     crafter.energy_input_inventory = inv
 
-    Vlib.add_single_slot_invs(crafter.crafter_input_container, crafter, "Inv", 1)
-    Vlib.add_single_slot_invs(crafter.crafter_output_container, crafter, "Inv", 2)
+    Vlib.add_single_slot_invs(crafter.crafter_input_container, crafter, "ii", 1)
+    Vlib.add_single_slot_invs(crafter.crafter_output_container, crafter, "io", 2)
     
     local acc = ResourceAccessor.new(crafter, "Input")
     acc.side, acc.pos = Vec3i.back, Vec3i.zero
