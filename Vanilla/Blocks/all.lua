@@ -32,6 +32,8 @@ FillBlock("IndustrialChemReactor", require('Blocks/industrial_chem_reactor'))
 FillBlock("Mixer", require('Blocks/mixer'))
 FillBlock("PyrolysisUnit", require('Blocks/pyrolysis_unit'))
 FillBlock("Constructor", require('Blocks/constructor'))
+FillBlock("Computer", require('Blocks/computer'))
+
 
 FillBlockCustom("Connector", require('Blocks/cable'), {"Copper"})
 local cable_material = {
