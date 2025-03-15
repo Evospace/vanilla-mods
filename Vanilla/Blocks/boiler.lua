@@ -4,11 +4,6 @@ local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("BoilerRecipeDictionary")
     crafter.speed = 100
-        
-    local inv = ResourceInventory.new(crafter, "rii")
-    inv.item = StaticItem.find("Heat")
-    inv.capacity = VanillaConsumptionF(crafter, 100)
-    crafter.energy_input_inventory = inv
 
     local inv = ResourceInventory.new(crafter, "rii_")
     inv.item = StaticItem.find("Water")
@@ -21,6 +16,11 @@ local logic = function(self)
     acc.channel = "Fluid"
     acc.inventory = inv
     acc.cover = StaticCover.find("FluidInput")
+
+    local inv = ResourceInventory.new(crafter, "rii")
+    inv.item = StaticItem.find("Heat")
+    inv.capacity = VanillaConsumptionF(crafter, 100)
+    crafter.energy_input_inventory = inv
 
     local acc = ResourceAccessor.new(crafter, "rai_")
     acc.side, acc.pos = Vec3i.down, Vec3i.zero
