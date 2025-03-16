@@ -6,7 +6,7 @@ local logic = function(self)
     crafter.speed = 100
     crafter.stable_supply = false
 
-    local energy = 20
+    local energy = 50
         
     local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("Kinetic")
