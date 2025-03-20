@@ -1,0 +1,25 @@
+require('Blocks/common')
+
+local logic = function(self)
+    local conductor = ConductorBlockLogic.cast(self)
+
+    local sides = {
+        Vec3i.back, Vec3i.front, Vec3i.right, Vec3i.left, Vec3i.down, Vec3i.up
+    }
+
+    local t = conductor.static_block.tier
+
+    for index, side in pairs(sides) do
+        local acc = ResourceAccessor.new(conductor, "WireLV"..index)
+        acc.side, acc.pos = side, Vec3i.zero
+        acc.channel = "LV"
+        conductor:add_wire(acc)
+    end
+
+    conductor.resistance = 500
+    conductor.conductor_channel = 1000
+    conductor.channel = "LV"
+    conductor.voltage = 1000
+end
+
+return { logic_init = logic }
