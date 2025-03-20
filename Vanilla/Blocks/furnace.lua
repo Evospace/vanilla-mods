@@ -3,6 +3,7 @@ require('Blocks/common')
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("FurnaceRecipeDictionary")
+    crafter.recipes.start_tier = 0
     crafter.speed = VanillaSpeedF(crafter)
 
     Vlib.add_single_slot_invs(crafter.crafter_input_container, crafter, "ii", 1)

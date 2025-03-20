@@ -33,6 +33,7 @@ FillBlock("Mixer", require('Blocks/mixer'))
 FillBlock("PyrolysisUnit", require('Blocks/pyrolysis_unit'))
 FillBlock("Constructor", require('Blocks/constructor'))
 FillBlock("Computer", require('Blocks/computer'))
+FillBlock("BatteryBox", require('Blocks/battery_box'))
 
 
 FillBlockCustom("Connector", require('Blocks/cable'), {"Copper"})

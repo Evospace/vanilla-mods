@@ -5,8 +5,8 @@ local tier_material = {
 	"Aluminium",
 	"StainlessSteel",
 	"Titanium",
-	"Advanced",
-	"Ultimate"
+	"Composite",
+	"Neutronium"
 }
 
 --- @param name string
@@ -15,7 +15,7 @@ function FillBlock(name, table)
     for index, tier in pairs(tier_material) do
         local block = StaticBlock.find(tier..name)
         if block ~= nil then
-            print(tier.." "..name.." found, registering lua table")
+            print(tier..name.." found, registering lua table")
 
 			for key, value in pairs(table) do
 				block.lua[key] = value
@@ -56,7 +56,7 @@ CommonActorInit = function(self)
     Legacy.this:set_field_object("HullMaterial", mat)
 end
 
---- @param crafter AbstractCrafter
+--- @param crafter BlockLogic
 --- @param value integer
 VanillaConsumptionF = function(crafter, value)
     return math.pow(2.0, crafter.static_block.level) * value
