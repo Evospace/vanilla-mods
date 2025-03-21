@@ -3,14 +3,13 @@ require('Blocks/common')
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("FluidFurnaceRecipeDictionary")
-    crafter.recipes.start_tier = 1
     crafter.speed = VanillaSpeedF(crafter)
 
     Vlib.add_single_slot_invs(crafter.crafter_input_container, crafter, "ii", 1)
             
     local inv = ResourceInventory.new(crafter, "rio")
     inv.item = StaticItem.find("Heat")
-    inv.capacity = VanillaConsumptionF(crafter, 30)
+    inv.capacity = VanillaConsumptionF(crafter, 200)
     crafter.energy_output_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "rao")

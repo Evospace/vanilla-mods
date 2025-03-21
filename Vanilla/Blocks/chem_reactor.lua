@@ -5,7 +5,6 @@ local base_consumption = 20
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("ChemReactorRecipeDictionary")
-    crafter.recipes.start_tier = 2
     crafter.speed = VanillaSpeedF(crafter)
         
     local inv = ResourceInventory.new(crafter, "rii")
