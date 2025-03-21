@@ -4,7 +4,6 @@ local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("IndustrialSmelterRecipeDictionary")
     crafter.speed = VanillaSpeedF(crafter)
-    crafter.recipes.start_tier = 4
         
     local input = ResourceInventory.new(crafter, "rii")
     input.item = StaticItem.find("Heat")
