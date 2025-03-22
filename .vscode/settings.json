@@ -1,6 +1,6 @@
 {
     "Lua.workspace.library": [
-        "~/Evospace 5.4/Source/Evospace/Shared/api.lua"
+        "~/Evospace 5.4/Source/Evospace/Shared/api/api.lua"
     ],
     "Lua.diagnostics.disable": [
         "inject-field"
