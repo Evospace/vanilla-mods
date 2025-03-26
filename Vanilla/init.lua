@@ -1,7 +1,6 @@
 require 'controls'
 require 'graphics'
 require 'game_settings'
-require 'Blocks/common'
 
 local vanilla_mod = {}
 
@@ -50,7 +49,7 @@ function vanilla_mod.init()
    for _, proto in pairs(db:objects()) do
       local block = StaticBlock.cast(proto)
       if block ~= nil then
-         block.lua = { actor_init = CommonActorInit, tooltip = CommonActorTooltip }
+         block.lua = { actor_init = Vlib.CommonActorInit, tooltip = Vlib.CommonActorTooltip }
       end
    end
 

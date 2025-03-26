@@ -1,4 +1,4 @@
-require('Blocks/common')
+
 
 local logic = function(self)
     -- local crafter = AbstractCrafter.cast(self)

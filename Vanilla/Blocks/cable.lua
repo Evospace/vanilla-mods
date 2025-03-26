@@ -1,4 +1,4 @@
-require('Blocks/common')
+
 
 local logic = function(self)
     local conductor = ConductorBlockLogic.cast(self)
@@ -30,13 +30,9 @@ local logic = function(self)
         1000, 1000, 10000, 10000, 10000, 100000, 100000, 100000
     }
 
-    local sides = {
-        Vec3i.back, Vec3i.front, Vec3i.right, Vec3i.left, Vec3i.down, Vec3i.up
-    }
-
     local t = conductor.static_block.tier
 
-    for index, side in pairs(sides) do
+    for index, side in pairs(Vlib.sides) do
         local acc = ResourceAccessor.new(conductor, "Wire"..tierMap[t]..index)
         acc.side, acc.pos = side, Vec3i.zero
         acc.channel = tierMap[t]

@@ -1,13 +1,13 @@
-require('Blocks/common')
+
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("ElectrolyzerRecipeDictionary")
-    crafter.speed = VanillaSpeedF(crafter)
+    crafter.speed = Vlib.get_speed(crafter)
             
     local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("LV")
-    inv.capacity = VanillaConsumptionF(crafter, 80)
+    inv.capacity = Vlib.get_consumption(crafter, 80)
     crafter.energy_input_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "rai")
@@ -18,10 +18,16 @@ local logic = function(self)
     acc.cover = StaticCover.find("ElectricityInput")
 
     local acc = ResourceAccessor.new(crafter, "rao")
-    acc.side, acc.pos = Vec3i.front, Vec3i.zero
+    acc.side, acc.pos = Vec3i.right, Vec3i.zero
     acc.is_output = true
     acc.channel = "Fluid"
     acc.cover = StaticCover.find("FluidOutput")
+
+    local acc = ResourceAccessor.new(crafter, "rai_")
+    acc.side, acc.pos = Vec3i.left, Vec3i.zero
+    acc.is_input = true
+    acc.channel = "Fluid"
+    acc.cover = StaticCover.find("FluidInput")
 end
 
 return { logic_init = logic }

@@ -1,14 +1,14 @@
-require('Blocks/common')
+
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("PyrolysisUnitRecipeDictionary")
     crafter.recipes.start_tier = 3
-    crafter.speed = VanillaSpeedF(crafter)
+    crafter.speed = Vlib.get_speed(crafter)
 
     local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("Heat")
-    inv.capacity = VanillaConsumptionF(crafter, 20)
+    inv.capacity = Vlib.get_consumption(crafter, 20)
     crafter.energy_input_inventory = inv
 
     local acc = ResourceAccessor.new(crafter, "rao")

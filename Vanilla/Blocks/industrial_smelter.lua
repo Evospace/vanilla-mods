@@ -1,13 +1,13 @@
-require('Blocks/common')
+
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("IndustrialSmelterRecipeDictionary")
-    crafter.speed = VanillaSpeedF(crafter)
+    crafter.speed = Vlib.get_speed(crafter)
         
     local input = ResourceInventory.new(crafter, "rii")
     input.item = StaticItem.find("Heat")
-    input.capacity = VanillaConsumptionF(crafter, 1000)
+    input.capacity = Vlib.get_consumption(crafter, 1000)
     crafter.energy_input_inventory = input
     
     local acc = ResourceAccessor.new(crafter, "rai")

@@ -1,9 +1,9 @@
-require('Blocks/common')
+
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("AssemblerRecipeDictionary")
-    crafter.speed = VanillaSpeedF(crafter)
+    crafter.speed = Vlib.get_speed(crafter)
             
     local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("LV")
