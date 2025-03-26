@@ -61,6 +61,98 @@ Vlib = {
      
     verbose = function (str)
         if LuaLogFlag then print(str) end
+    end,
+
+    --- @param self BlockLogic
+    CommonActorTooltip = function(self)
+        local a = AbstractCrafter.cast(self)
+        if a ~= nil then
+            local usage = a.ticks_passed / math.max(a.real_ticks_passed, 1.0) * 100
+            local t = "Speed: x"..(a.speed/100.0).."\nUsage: "..string.format("%.0f%%", usage)
+            --local t = "Usage: "..string.format("%.0f%%", usage)
+            if a.energy_input_inventory ~= nil then
+                t = t.."\nConsumption: "..Loc.gui_number(a.energy_input_inventory.capacity*20).."W"
+            end
+            if a.energy_output_inventory ~= nil then
+                t = t.."\nProduction: "..Loc.gui_number(a.energy_output_inventory.capacity*20).."W"
+            end
+            return t
+        end
+
+        return "hello from lua"
+    end,
+
+    tier_material = {
+        "Stone",
+        "Copper",
+        "Steel",
+        "Aluminium",
+        "StainlessSteel",
+        "Titanium",
+        "Composite",
+        "Neutronium"
+    },
+
+    sides = {
+        Vec3i.back, Vec3i.front, Vec3i.right, Vec3i.left, Vec3i.down, Vec3i.up
+    },
+
+    --- @param name string
+    --- @param table table
+    FillBlockCustom = function(name, table, custom_table)
+        for index, tier in pairs(custom_table) do
+            local block = StaticBlock.find(tier..name)
+            if block ~= nil then
+                print(tier.." "..name.." found, registering lua table")
+
+                for key, value in pairs(table) do
+                    block.lua[key] = value
+                end
+            end
+        end
+    end,
+
+    --- @param name string
+    --- @param table table
+    FillBlock = function(name, table)
+        for index, tier in pairs(Vlib.tier_material) do
+            local block = StaticBlock.find(tier..name)
+            if block ~= nil then
+                print(tier..name.." found, registering lua table")
+
+                for key, value in pairs(table) do
+                    block.lua[key] = value
+                end
+            end
+        end
+    end,
+
+    --- @param self BlockActor
+    CommonActorInit = function(self)
+        local tier_material = {
+            "Stone",
+            "Copper",
+            "Steel",
+            "Aluminium",
+            "StainlessSteel",
+            "Titanium",
+            "HardMetal",
+            "Neutronium"
+        }
+
+        local mat = Material.load("/Game/Materials/"..tier_material[self.logic.static_block.tier + 1])
+        Legacy.this:set_field_object("HullMaterial", mat)
+    end,
+
+    --- @param crafter BlockLogic
+    --- @param value integer
+    get_consumption = function(crafter, value)
+        return math.pow(2.0, crafter.static_block.level) * value
+    end,
+
+    --- @param crafter AbstractCrafter
+    get_speed = function(crafter)
+        return math.pow(2.0, crafter.static_block.level) * 100
     end
 }
 

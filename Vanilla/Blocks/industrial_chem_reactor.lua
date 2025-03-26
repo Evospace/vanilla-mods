@@ -1,15 +1,15 @@
-require('Blocks/common')
 
-local base_consumption = 100
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("IndustrialChemReactorRecipeDictionary")
-    crafter.speed = VanillaSpeedF(crafter)
+    crafter.speed = Vlib.get_speed(crafter)
+
+    local base_consumption = 100
         
     local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("LV")
-    inv.capacity = VanillaConsumptionF(crafter, base_consumption)
+    inv.capacity = Vlib.get_consumption(crafter, base_consumption)
     crafter.energy_input_inventory = inv
 
     local acc = ResourceAccessor.new(crafter, "rai")

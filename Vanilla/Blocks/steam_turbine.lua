@@ -1,4 +1,4 @@
-require('Blocks/common')
+
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
@@ -8,7 +8,7 @@ local logic = function(self)
         
     local inv = ResourceInventory.new(crafter, "rio")
     inv.item = StaticItem.find("Kinetic")
-    inv.capacity = VanillaConsumptionF(crafter, 400)
+    inv.capacity = Vlib.get_consumption(crafter, 400)
     crafter.energy_output_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "Output")
@@ -20,7 +20,7 @@ local logic = function(self)
     
     local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("Steam")
-    inv.capacity = VanillaConsumptionF(crafter, 400)
+    inv.capacity = Vlib.get_consumption(crafter, 400)
     crafter.energy_input_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "Input")
