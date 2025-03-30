@@ -16,13 +16,13 @@ local logic = function(self)
     acc.side, acc.pos = Vec3i.left, Vec3i.new(-1,1,1)
     acc.is_input = true
     acc.channel = "Fluid"
-    acc.cover = StaticCover.find("FluidInput")
+    acc.cover = StaticCover.find("FluidInput1")
 
     local acc = ResourceAccessor.new(crafter, "rai_")
     acc.side, acc.pos = Vec3i.left, Vec3i.new(0,1,0)
     acc.is_input = true
     acc.channel = "Fluid"
-    acc.cover = StaticCover.find("FluidInput")
+    acc.cover = StaticCover.find("FluidInput2")
 
     local acc = ResourceAccessor.new(crafter, "rai_1")
     acc.side, acc.pos = Vec3i.front, Vec3i.zero
