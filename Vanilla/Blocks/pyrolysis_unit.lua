@@ -18,7 +18,7 @@ local logic = function(self)
     acc.cover = StaticCover.find("FluidOutput")
 
     local acc = ResourceAccessor.new(crafter, "rao_")
-    acc.side, acc.pos = Vec3i.front, Vec3i.new(0,2,0)
+    acc.side, acc.pos = Vec3i.front, Vec3i.zero
     acc.is_input = true
     acc.channel = "Fluid"
     acc.cover = StaticCover.find("FluidInput")
