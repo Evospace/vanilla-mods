@@ -28,15 +28,15 @@ function vanilla_mod.init()
    --    end
    -- end)
 
-   local resources = {
-      {"Chalcopyrite", 1.0},
-      {"Pyrite", 1.0},
-      {"Malachite", 1.0},
-      {"Magnetite", 1.0},
-      {"Cinnabar", 1.0},
-      {"Ruby", 1.0},
-      {"Emerald", 1.0},
-   }
+   local oreProps = StaticPropList.find("OreProps")
+
+   local resources = {}
+   for _, value in ipairs(oreProps.data[1].props) do
+      -- assuming value is a string like "RubyCluster"
+      local base = value.name:gsub("Cluster$", "") -- remove "Cluster" from the end
+      table.insert(resources, {base, 1})
+      print("Ore "..base.." preparation")
+   end
 
    for _, value in ipairs(resources) do
       local ed = ExtractionData.new()
@@ -59,13 +59,13 @@ function vanilla_mod.init()
    --ss.generate = function(_) print("11111111111") end TODO: lua ref leak
    ss.size = Vec2i.new(10, 10)
 
-   local ores = {"Cinnabar", "Malachite", "Pyrite", "Chalcopyrite", "Bauxite", "Ruby", "Emerald", "Magnetite", "Thorianite", "Clay", "Coal"}
    local oreGeneratorCounter = 1
 
-   for _, ore_name in pairs(ores) do
+   for _, ore in ipairs(resources) do
+      local ore_name = ore[1]
       local ore = StaticProp.find(ore_name.."Cluster")
       if ore then 
-         print("Registering "..ore_name.."Cluster".." on_entity_died subscription")
+         print("Registering "..ore_name.."Cluster".." on_entity_spawn subscription")
       else
          print(ore_name.."Cluster not found, skipping")
       end
