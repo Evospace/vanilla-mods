@@ -5,9 +5,11 @@ local logic = function(self)
     crafter.recipes = RecipeDictionary.find("BoilerRecipeDictionary")
     crafter.speed = 100
 
+    local energy = 100
+
     local inv = ResourceInventory.new(crafter, "rii_")
     inv.item = StaticItem.find("Water")
-    inv.capacity = Vlib.get_consumption(crafter, 100)
+    inv.capacity = 1000
     crafter.crafter_input_container:bind(inv)
 
     local acc = ResourceAccessor.new(crafter, "rai")
@@ -19,7 +21,7 @@ local logic = function(self)
 
     local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("Heat")
-    inv.capacity = Vlib.get_consumption(crafter, 100)
+    inv.capacity = Vlib.get_consumption(crafter, energy)
     crafter.energy_input_inventory = inv
 
     local acc = ResourceAccessor.new(crafter, "rai_")
@@ -31,7 +33,7 @@ local logic = function(self)
 
     local inv = ResourceInventory.new(crafter, "rio")
     inv.item = StaticItem.find("Steam")
-    inv.capacity = Vlib.get_consumption(crafter, 100)
+    inv.capacity = Vlib.get_consumption(crafter, energy)
     crafter.energy_output_inventory = inv
 
     local acc = ResourceAccessor.new(crafter, "rao")
