@@ -12,6 +12,7 @@ local logic = function(self)
         container:add_wire(acc)
     end
 
+    container.capacity = 30*(t)*1000
     container.resistance = 0
     container.conductor_channel = 0
     container.channel = "Fluid"
