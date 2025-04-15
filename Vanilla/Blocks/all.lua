@@ -101,7 +101,10 @@ Vlib.FillBlock("Computer", require('Blocks/computer'))
 Vlib.FillBlock("BatteryBox", require('Blocks/battery_box'))
 
 Vlib.FillBlock("Pipe", require('Blocks/pipe'))
+
 Vlib.FillBlock("Container", require('Blocks/container'))
+
+Vlib.FillBlock("Chest", require('Blocks/chest'))
 
 
 Vlib.FillBlockCustom("Connector", require('Blocks/cable'), {"Copper"})

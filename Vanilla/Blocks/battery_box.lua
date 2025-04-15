@@ -1,5 +1,3 @@
-
-
 local logic = function(self)
     local conductor = ConductorBlockLogic.cast(self)
 
