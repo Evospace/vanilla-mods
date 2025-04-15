@@ -1,5 +1,3 @@
-
-
 local logic = function(self)
     local crafter = ComputerBlockLogic.cast(self)
 
