@@ -106,15 +106,4 @@ Vlib.FillBlock("Container", require('Blocks/container'))
 
 Vlib.FillBlock("Chest", require('Blocks/chest'))
 
-
-Vlib.FillBlockCustom("Connector", require('Blocks/cable'), {"Copper"})
-local cable_material = {
-	"OFC",
-	"G",
-	"CN",
-	"YBCO",
-	"P",
-    "TN",
-	"ABCCO"
-}
-Vlib.FillBlockCustom("Cable", require('Blocks/cable'), cable_material)
+Vlib.FillBlockCustom(Vlib.cable_array, require('Blocks/cable'))
