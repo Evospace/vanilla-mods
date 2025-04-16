@@ -93,17 +93,29 @@ Vlib = {
         "Neutronium"
     },
 
+    cable_array = {
+        "CopperConnector",
+        "OFCCable",
+        "SCable",
+        "GCable",
+        "ACable",
+        "YBCOCable",
+        "PCable",
+        "TNCable",
+        "ABCCOCable",
+    },
+
     sides = {
         Vec3i.back, Vec3i.front, Vec3i.right, Vec3i.left, Vec3i.down, Vec3i.up
     },
 
-    --- @param name string
+    --- @param names string[]
     --- @param table table
-    FillBlockCustom = function(name, table, custom_table)
-        for index, tier in pairs(custom_table) do
-            local block = StaticBlock.find(tier..name)
+    FillBlockCustom = function(names, table)
+        for index, name in pairs(names) do
+            local block = StaticBlock.find(name)
             if block ~= nil then
-                print(tier.." "..name.." found, registering lua table")
+                print(name.." found, registering lua table")
 
                 for key, value in pairs(table) do
                     block.lua[key] = value

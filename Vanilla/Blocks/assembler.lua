@@ -12,10 +12,11 @@ local logic = function(self)
     Vlib.add_single_slot_invs(crafter.crafter_output_container, crafter, "io", 2)
     
     local acc = ResourceAccessor.new(crafter, "rai")
-    acc.side, acc.pos = Vec3i.front, Vec3i.zero
+    acc.side, acc.pos = Vec3i.back, Vec3i.new(-2,0,0)
     acc.inventory = inv
     acc.is_input = true
     acc.channel = "LV"
+    acc.cover = StaticCover.find("ElectricityInput")
 end
 
 return { logic_init = logic }

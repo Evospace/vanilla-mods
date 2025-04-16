@@ -1,11 +1,9 @@
-
-
-local base_consumption = 20
-
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("ChemReactorRecipeDictionary")
     crafter.speed = Vlib.get_speed(crafter)
+
+    local base_consumption = 20
         
     local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("LV")
