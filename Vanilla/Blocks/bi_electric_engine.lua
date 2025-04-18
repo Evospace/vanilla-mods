@@ -9,13 +9,6 @@ local logic = function(self)
     inv.capacity = Vlib.get_consumption(crafter, 55)
     crafter.energy_input_inventory = inv
     
-    local acc = ResourceAccessor.new(crafter, "rai")
-    acc.side, acc.pos = Vec3i.back, Vec3i.zero
-    acc.inventory = inv
-    acc.is_input = true
-    acc.channel = "LV"
-    acc.cover = StaticCover.find("ElectricityInput")
-    
     local acc = ResourceAccessor.new(crafter, "rai_")
     acc.side, acc.pos = Vec3i.down, Vec3i.zero
     acc.inventory = inv
@@ -29,11 +22,18 @@ local logic = function(self)
     crafter.energy_output_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "rao")
-    acc.side, acc.pos = Vec3i.front, Vec3i.zero
+    acc.side, acc.pos = Vec3i.back, Vec3i.zero
     acc.inventory = inv
-    acc.is_output = true
     acc.channel = "Kinetic"
     acc.cover = StaticCover.find("KineticOutput")
+    acc.is_output = true
+
+    local acc = ResourceAccessor.new(crafter, "rao_")
+    acc.side, acc.pos = Vec3i.front, Vec3i.zero
+    acc.inventory = inv
+    acc.channel = "Kinetic"
+    acc.cover = StaticCover.find("KineticOutput")
+    acc.is_output = true
 end
 
 return { logic_init = logic }

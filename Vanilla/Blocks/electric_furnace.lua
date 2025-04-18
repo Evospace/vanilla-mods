@@ -1,7 +1,3 @@
-local get_production = function(crafter)
-    return math.pow(2.0, crafter.static_block.level) * 30
-end
-
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("GeneratorRecipeDictionary")
@@ -9,7 +5,7 @@ local logic = function(self)
             
     local inv = ResourceInventory.new(crafter, "rio")
     inv.item = StaticItem.find("Heat")
-    inv.capacity = get_production(crafter)
+    inv.capacity = Vlib.get_consumption(crafter, 55)
     crafter.energy_output_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "rao")
@@ -21,7 +17,7 @@ local logic = function(self)
 
     local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("LV")
-    inv.capacity = get_production(crafter)
+    inv.capacity = Vlib.get_consumption(crafter, 55)
     crafter.energy_input_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "rai")
