@@ -65,6 +65,7 @@ Vlib.FillBlock("SteamEngine", require('Blocks/steam_engine'))
 Vlib.FillBlock("Generator", require('Blocks/generator'))
 
 Vlib.FillBlock("ElectricEngine", require('Blocks/electric_engine'))
+Vlib.FillBlock("BiElectricEngine", require('Blocks/bi_electric_engine'))
 
 checkAndSet("Separator", 2)
 Vlib.FillBlock("Separator", require('Blocks/separator'))
@@ -101,6 +102,7 @@ Vlib.FillBlock("Computer", require('Blocks/computer'))
 Vlib.FillBlock("BatteryBox", require('Blocks/battery_box'))
 
 Vlib.FillBlock("Pipe", require('Blocks/pipe'))
+Vlib.FillBlock("LogicWire", require('Blocks/logic_wire'))
 
 Vlib.FillBlock("Container", require('Blocks/container'))
 
