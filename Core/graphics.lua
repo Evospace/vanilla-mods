@@ -1,5 +1,5 @@
 function register_graphics()
-    function option4_to_int(string_value)
+    local function option4_to_int(string_value)
         local preset = 0
         if string_value == "Medium" then preset = 1 end
         if string_value == "High" then preset = 2 end
@@ -25,7 +25,7 @@ function register_graphics()
     --     name = "ScalabilityPreset",
     --  })
 
-    function generate_setting(name, command)
+    local function generate_setting(name, command)
         db:from_table({
             class = "Setting",
             category = "Graphics",
@@ -45,7 +45,7 @@ function register_graphics()
     generate_setting("EffectsQuality", "sg.EffectsQuality")
     generate_setting("PostProcessQuality", "sg.PostProcessQuality")
 
-    function generate_reflection(name, command)
+    local function generate_reflection(name, command)
         db:from_table({
             class = "Setting",
             category = "Graphics",
