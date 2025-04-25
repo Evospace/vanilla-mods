@@ -15,17 +15,21 @@ local logic = function(self)
     acc.channel = "Kinetic"
     acc.cover = StaticCover.find("KineticInput")
 
-    local acc = ResourceAccessor.new(crafter, "Output2")
-    acc.side, acc.pos = Vec3i.left, Vec3i.new(-2,1,0)
-    acc.is_output = true
-    acc.channel = "Fluid"
-    acc.cover = StaticCover.find("FluidOutput")
+    Vlib.add_single_slot_invs(crafter.crafter_input_container, crafter, "ii", 1)
+    
+    local inv = ResourceInventory.new(crafter, "rio")
+    inv.item = StaticItem.find("Water")
+    inv.capacity = 1000
+    crafter.crafter_input_container:bind(inv)
+
+    Vlib.add_single_slot_invs(crafter.crafter_output_container, crafter, "io", 2)
 
     local acc = ResourceAccessor.new(crafter, "Input2")
     acc.side, acc.pos = Vec3i.right, Vec3i.new(-2,0,1)
     acc.is_input = true
     acc.channel = "Fluid"
     acc.cover = StaticCover.find("FluidInput")
+    acc.inventory = inv
 end
 
 return { logic_init = logic }

@@ -14,7 +14,7 @@ Vlib = {
     ---@param parent Object
     ---@param name string
     ---@param count integer
-    ---@return table
+    ---@return SingleSlotInventory[]
     single_slot_invs = function(parent, name, count)
         local inventories = {}
         for i = 1, count do
@@ -30,7 +30,7 @@ Vlib = {
     ---@param parent Object
     ---@param name string
     ---@param count integer
-    ---@return table
+    ---@return SingleSlotInventory[]
     add_single_slot_invs = function(inventory_container, parent, name, count)
         local inventories = {}
         for i = 1, count do
