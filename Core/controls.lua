@@ -115,8 +115,8 @@ function register_controls()
        category = "Controls",
        type = "Key",
        key_binding = "NeiLeft",
-       label = "NeiLeft",
-       name = "NeiLeft",
+       label = "RecipesLeft",
+       name = "RecipesLeft",
        default_key = "Backspace",
     })
     db:from_table({
@@ -124,8 +124,8 @@ function register_controls()
        category = "Controls",
        type = "Key",
        key_binding = "NeiRight",
-       label = "NeiRight",
-       name = "NeiRight",
+       label = "RecipesRight",
+       name = "RecipesRight",
        default_key = "Alt+Backspace",
     })
     db:from_table({

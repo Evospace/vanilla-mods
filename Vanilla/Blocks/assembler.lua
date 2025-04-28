@@ -5,7 +5,7 @@ local logic = function(self)
             
     local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("LV")
-    inv.capacity = 40 * (crafter.static_block.level + 1)
+    inv.capacity = Vlib.get_consumption(crafter, 80)
     crafter.energy_input_inventory = inv
 
     Vlib.add_single_slot_invs(crafter.crafter_input_container, crafter, "ii", 1)
