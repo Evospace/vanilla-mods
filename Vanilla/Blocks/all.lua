@@ -97,12 +97,14 @@ Vlib.FillBlock("PyrolysisUnit", require('Blocks/pyrolysis_unit'))
 checkAndSet("Constructor", 1)
 Vlib.FillBlock("Constructor", require('Blocks/constructor'))
 
+checkAndSet("Constructor", 3)
+Vlib.FillBlock("Sifter", require('Blocks/sifter'))
+
 Vlib.FillBlock("Computer", require('Blocks/computer'))
 
 Vlib.FillBlock("BatteryBox", require('Blocks/battery_box'))
 
 Vlib.FillBlock("Pipe", require('Blocks/pipe'))
-Vlib.FillBlock("LogicWire", require('Blocks/logic_wire'))
 
 Vlib.FillBlock("Container", require('Blocks/container'))
 

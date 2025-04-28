@@ -5,9 +5,9 @@ require 'game_settings'
 local core_mod = {}
 
 function core_mod.pre_init()
-   --register_controls() 0.20.1
-   --register_graphics()
-   --register_game_settings()
+   register_graphics()
+   register_controls()   
+   register_game_settings()
 end
 
 function core_mod.init()

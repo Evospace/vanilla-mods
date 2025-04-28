@@ -1,24 +1,59 @@
 function register_game_settings()
+    local LocalizationMap = {
+        English   = "en",
+        Russian   = "ru-RU",
+        Portugese = "pt-BR",
+        Hungarian = "hu-HU",
+        Deutch    = "de-DE",
+        Polish    = "pl-PL",
+        Japanese  = "ja-JP",
+        Korean    = "ko-KR",
+        French    = "fr-FR",
+        Spanish   = "es-ES",
+        Chinese   = "zh-CN",
+    }
+
+    local LocArray = {}
+    local index = 1
+    for name, _ in pairs(LocalizationMap) do
+        LocArray[index] = name
+        index = index + 1
+    end
+
+    local function get_select(value)
+        return LocalizationMap[value] or "en"
+    end
+    
     db:from_table({
         class = "Setting",
         category = "Game",
         type = "String",
         default_string_value = "English",
-        string_options = {"English", "Russian", "Portugese", "Spanish", "Hungarian", "Deutch", "Japanese", "Korean", "French", "Spanish", "Chinese"},
-        action = function(setting)
-            local loc = "en"
-            if setting.string_value == "Russian" then loc = "en" end
-            if setting.string_value == "Portugese" then loc = "pt-BR" end
-            if setting.string_value == "Hungarian" then loc = "hu-HU" end
-            if setting.string_value == "Deutch" then loc = "de" end
-            if setting.string_value == "Japanese" then loc = "ja" end
-            if setting.string_value == "Korean" then loc = "ko" end
-            if setting.string_value == "French" then loc = "fr" end
-            if setting.string_value == "Spanish" then loc = "es-ES" end
-            if setting.string_value == "Chinese" then loc = "zh" end
-            Game.set_localization(loc)
+        string_options = LocArray,
+        ---@param setting Setting
+        set_action = function(setting)
+            local loc = get_select(setting.string_value)
+            Setting.set_localization(loc)
         end,
         label = "Localization",
         name = "Localization",
      })
+
+    db:from_table({
+       class = "Setting",
+       category = "Game",
+       type = "Slider",
+       max_value = 200,
+       min_value = 50,
+       int_default_value = 100,
+       ---@param setting Setting
+       set_action = function(setting)
+          local value = setting.int_value / 100.0
+          game.engine_data.dpi = value
+          print("set Dpi "..value)
+          game.engine_data:apply()
+       end,
+       label = "Dpi",
+       name = "Dpi",
+   })
 end

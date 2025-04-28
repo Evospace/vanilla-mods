@@ -7,23 +7,58 @@ function register_graphics()
         return preset
     end
 
-    -- db:from_table({
-    --     class = "Setting",
-    --     category = "Graphics",
-    --     type = "String",
+    db:from_table({
+        class = "Setting",
+        category = "Graphics",
+        type = "Buttons",
 
-    --     default_string_value = "High",
-    --     string_options = {"Low", "Medium", "High", "Epic"},
+        default_string_value = "High",
+        string_options = {"Low", "Medium", "High", "Epic"},
+        ---@param setting Setting
+        set_action = function(setting)
+            local scalability = option4_to_int(setting.string_value)
 
-    --     action = function(setting)
-    --         Console.run("Scalability "..option4_to_int(setting.string_value))
-    --         local set = Setting.find("ShadowQuality")
-    --         set.string_value = setting.string_value
-    --     end,
+            local four_opts = {"ShadowQuality", "TextureQuality", "EffectsQuality", "PostProcessQuality"}
+            for _, name in ipairs(four_opts) do
+                local set = Setting.find(name)
+                set.string_value = setting.string_value
+                set:set_action()
+            end
 
-    --     label = "ScalabilityPreset",
-    --     name = "ScalabilityPreset",
-    --  })
+            local relf_values = {"Disable", "ScreenSpace", "ScreenSpace", "Lumen"}
+            local refl_opts = {"GlobalIllumination", "Reflection"}
+            for _, name in ipairs(refl_opts) do
+                local set = Setting.find(name)
+                set.string_value = relf_values[scalability + 1]
+                set:set_action()
+            end
+
+            local values = {0.3, 0.7, 1.0, 1.0}
+            local set = Setting.find("GrassRenderingRange")
+            set.int_value = math.floor(values[scalability + 1] * 100)
+            set:set_action()
+
+            values = {2, 5, 9, 10}
+            local set = Setting.find("DecorationsQuality")
+            set.int_value = math.floor(values[scalability + 1])
+            set:set_action()
+
+            local values = {"FXAA", "FXAA", "TAA", "TSR"}
+            local set = Setting.find("AntiAliasingMethod")
+            set.string_value = values[scalability + 1]
+            set:set_action()
+
+            local values = {"75%", "85%", "90%", "85%"}
+            local set = Setting.find("ScreenPersentage")
+            set.string_value = values[scalability + 1]
+            set:set_action()
+
+            Setting.update_widgets()
+        end,
+
+        label = "ScalabilityPreset",
+        name = "ScalabilityPreset",
+    })
 
     local function generate_setting(name, command)
         db:from_table({
@@ -32,7 +67,8 @@ function register_graphics()
             type = "String",
             default_string_value = "High",
             string_options = {"Low", "Medium", "High", "Epic"},
-            action = function(setting)
+            ---@param setting Setting
+            set_action = function(setting)
                 Console.run(command.." "..option4_to_int(setting.string_value))
             end,
             label = name,
@@ -50,12 +86,13 @@ function register_graphics()
             class = "Setting",
             category = "Graphics",
             type = "String",
-            default_string_value = "SSGI",
-            string_options = {"Disable", "SSGI", "Lumen"},
-            action = function(setting)
+            default_string_value = "ScreenSpace",
+            string_options = {"Disable", "ScreenSpace", "Lumen"},
+            ---@param setting Setting
+            set_action = function(setting)
                 local preset = 0
                 if setting.string_value == "Lumen" then preset = 1 end
-                if setting.string_value == "SSGI" then preset = 2 end
+                if setting.string_value == "ScreenSpace" then preset = 2 end
                 Console.run(command.." "..preset)
             end,
             label = name,
@@ -71,12 +108,14 @@ function register_graphics()
         type = "String",
         default_string_value = "90%",
         string_options = {"30%", "50%", "75%", "85%", "90%", "100%"},
-        action = function(setting)
+        ---@param setting Setting
+        set_action = function(setting)
             local preset = 90
             if setting.string_value == "30%" then preset = 30 end
             if setting.string_value == "50%" then preset = 50 end
             if setting.string_value == "75%" then preset = 75 end
             if setting.string_value == "85%" then preset = 85 end
+            if setting.string_value == "90%" then preset = 90 end
             if setting.string_value == "100%" then preset = 100 end
             Console.run("r.ScreenPercentage "..preset)
         end,
@@ -90,7 +129,7 @@ function register_graphics()
         type = "String",
         default_string_value = "TAA",
         string_options = {"None", "FXAA", "TAA", "TSR"},
-        action = function(setting)
+        set_action = function(setting)
             local preset = 2
             if setting.string_value == "None" then preset = 0 end
             if setting.string_value == "FXAA" then preset = 1 end
@@ -101,6 +140,94 @@ function register_graphics()
         name = "AntiAliasingMethod",
     })
 
+    db:from_table({
+        class = "Setting",
+        category = "Graphics",
+        type = "Slider",
+        max_value = 10,
+        min_value = 1,
+        int_default_value = 100,
+        ---@param setting Setting
+        set_action = function(setting)
+           local value = (12 - setting.int_value) / 2.0
+           game.engine_data.props_quality = value
+           print("set DecorationsQuality "..value)
+           game.engine_data:apply()
+        end,
+        label = "DecorationsQuality",
+        name = "DecorationsQuality",
+    })
+
+    local function generate_slider(name, variable)
+        db:from_table({
+            class = "Setting",
+            category = "Graphics",
+            type = "Slider",
+            max_value = 100,
+            min_value = 0,
+            int_default_value = 100,
+            ---@param setting Setting
+            set_action = function(setting)
+               local value = setting.int_value / 100.0
+               game.engine_data[variable] = value
+               print("set "..variable.." "..value)
+               game.engine_data:apply()
+            end,
+            label = name,
+            name = name,
+        })
+    end
+
+    generate_slider("GrassRenderingRange", "props_mul")
+    generate_slider("Fog", "fog")
+
+    db:from_table({
+        class = "Setting",
+        category = "Graphics",
+        type = "Slider",
+        max_value = 100,
+        min_value = 70,
+        int_default_value = 80,
+        ---@param setting Setting
+        set_action = function(setting)
+           local value = setting.int_value
+           game.engine_data.fov = value
+           print("set ".."Fov".." "..value)
+           game.engine_data:apply()
+        end,
+        label = "Fov",
+        name = "Fov",
+    })
+
+    db:from_table({
+        class = "Setting",
+        category = "Graphics",
+        type = "String",
+        default_string_value = "60",
+        string_options = {"24", "30", "60", "120"},
+        ---@param setting Setting
+        set_action = function(setting)
+           game.engine_data.fps = tonumber(setting.string_value)
+           game.engine_data:apply()
+        end,
+        label = "MaxFps",
+        name = "MaxFps",
+    })
+
+    db:from_table({
+        class = "Setting",
+        category = "Graphics",
+        type = "String",
+        default_string_value = "On",
+        string_options = {"Off", "On"},
+        ---@param setting Setting
+        set_action = function(setting)
+           local value = (setting.string_value == "On") and 1 or 0
+           Console.run("r.Vsync "..value)
+        end,
+        label = "VSync",
+        name = "VSync",
+    })
      
 
     --r.DynamicRes.OperationMode

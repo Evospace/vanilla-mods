@@ -16,7 +16,7 @@ local logic = function(self)
     acc.cover = StaticCover.find("KineticInput")
 
     Vlib.add_single_slot_invs(crafter.crafter_input_container, crafter, "ii", 1)
-    
+
     local inv = ResourceInventory.new(crafter, "rio")
     inv.item = StaticItem.find("Water")
     inv.capacity = 1000
