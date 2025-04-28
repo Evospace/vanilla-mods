@@ -81,7 +81,7 @@ function register_graphics()
     generate_setting("EffectsQuality", "sg.EffectsQuality")
     generate_setting("PostProcessQuality", "sg.PostProcessQuality")
 
-    local function generate_reflection(name, command)
+    local function generate_reflection(name, command, field)
         db:from_table({
             class = "Setting",
             category = "Graphics",
@@ -93,14 +93,19 @@ function register_graphics()
                 local preset = 0
                 if setting.string_value == "Lumen" then preset = 1 end
                 if setting.string_value == "ScreenSpace" then preset = 2 end
+
                 Console.run(command.." "..preset)
+
+                
+                game.engine_data[field] = preset
+                game.engine_data:apply()
             end,
             label = name,
             name = name,
         })
     end
-    generate_reflection("GlobalIllumination", "r.DynamicGlobalIlluminationMethod")
-    generate_reflection("Reflection", "r.ReflectionMethod")
+    generate_reflection("GlobalIllumination", "r.DynamicGlobalIlluminationMethod", "gi_preset")
+    generate_reflection("Reflection", "r.ReflectionMethod", "reflection_preset")
 
     db:from_table({
         class = "Setting",
