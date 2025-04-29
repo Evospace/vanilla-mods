@@ -25,13 +25,15 @@ function register_graphics()
                 set:set_action()
             end
 
+            local relf_values = {"Disable", "Disable", "ScreenSpace", "Lumen"}
+            local set = Setting.find("GlobalIllumination")
+            set.string_value = relf_values[scalability + 1]
+            set:set_action()
+
             local relf_values = {"Disable", "ScreenSpace", "ScreenSpace", "Lumen"}
-            local refl_opts = {"GlobalIllumination", "Reflection"}
-            for _, name in ipairs(refl_opts) do
-                local set = Setting.find(name)
-                set.string_value = relf_values[scalability + 1]
-                set:set_action()
-            end
+            local set = Setting.find("Reflection")
+            set.string_value = relf_values[scalability + 1]
+            set:set_action()
 
             local values = {0.3, 0.7, 1.0, 1.0}
             local set = Setting.find("GrassRenderingRange")
@@ -58,6 +60,27 @@ function register_graphics()
 
         label = "ScalabilityPreset",
         name = "ScalabilityPreset",
+    })
+
+    db:from_table({
+        class = "Setting",
+        category = "Graphics",
+        type = "String",
+        default_string_value = "Fullscreen",
+        string_options = {"Fullscreen", "WindowedFullscreen", "Windowed"},
+        ---@param setting Setting
+        set_action = function(setting)
+           local function option3_to_int(string_value)
+               local preset = 0
+               if string_value == "WindowedFullscreen" then preset = 1 end
+               if string_value == "Windowed" then preset = 2 end
+               return preset
+           end
+           game.engine_data.window_mode = option3_to_int(setting.string_value)
+           game.engine_data:apply()
+        end,
+        label = "Fullscreen",
+        name = "Fullscreen",
     })
 
     local function generate_setting(name, command)
@@ -96,7 +119,6 @@ function register_graphics()
 
                 Console.run(command.." "..preset)
 
-                
                 game.engine_data[field] = preset
                 game.engine_data:apply()
             end,

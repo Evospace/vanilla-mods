@@ -2,8 +2,6 @@ local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("FluidFurnaceRecipeDictionary")
     crafter.speed = Vlib.get_speed(crafter)
-
-    Vlib.add_single_slot_invs(crafter.crafter_input_container, crafter, "ii", 1)
             
     local inv = ResourceInventory.new(crafter, "rio")
     inv.item = StaticItem.find("Heat")
@@ -16,12 +14,17 @@ local logic = function(self)
     acc.is_output = true
     acc.channel = "Heat"
     acc.cover = StaticCover.find("HeatOutput")
+
+    local inv = ResourceInventory.new(crafter, "rii")
+    inv.capacity = 2000
+    crafter.crafter_input_container:bind(inv)
     
     local acc = ResourceAccessor.new(crafter, "rai")
     acc.side, acc.pos = Vec3i.back, Vec3i.zero
     acc.is_input = true
     acc.channel = "Fluid"
     acc.cover = StaticCover.find("FluidInput")
+    acc.inventory = inv
 end
 
 return { logic_init = logic }
