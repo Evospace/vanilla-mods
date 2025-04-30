@@ -94,10 +94,13 @@ Vlib.FillBlock("Mixer", require('Blocks/mixer'))
 checkAndSet("PyrolysisUnit", 4)
 Vlib.FillBlock("PyrolysisUnit", require('Blocks/pyrolysis_unit'))
 
+checkAndSet("FractionatingColumn", 5)
+Vlib.FillBlock("FractionatingColumn", require('Blocks/fractionating_column'))
+
 checkAndSet("Constructor", 1)
 Vlib.FillBlock("Constructor", require('Blocks/constructor'))
 
-checkAndSet("Constructor", 3)
+checkAndSet("Sifter", 3)
 Vlib.FillBlock("Sifter", require('Blocks/sifter'))
 
 Vlib.FillBlock("Computer", require('Blocks/computer'))
