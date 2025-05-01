@@ -1,4 +1,4 @@
-function register_controls()
+   return function()
     db:from_table({
        class = "Setting",
        category = "Controls",
