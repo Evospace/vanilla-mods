@@ -1,13 +1,10 @@
-require 'controls'
-require 'graphics'
-require 'game_settings'
-
 local core_mod = {}
 
 function core_mod.pre_init()
-   register_graphics()
-   register_controls()   
-   register_game_settings()
+   require('controls')()
+   require('graphics')()
+   require('game_settings')()
+   require('audio')()
 end
 
 function core_mod.init()

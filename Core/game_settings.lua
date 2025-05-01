@@ -1,4 +1,4 @@
-function register_game_settings()
+return function()
     local LocalizationMap = {
         English   = "en",
         Russian   = "ru-RU",
@@ -33,7 +33,7 @@ function register_game_settings()
         ---@param setting Setting
         set_action = function(setting)
             local loc = get_select(setting.string_value)
-            Setting.set_localization(loc)
+            game.localization = loc
         end,
         label = "Localization",
         name = "Localization",

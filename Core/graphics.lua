@@ -1,4 +1,4 @@
-function register_graphics()
+return function()
     local function option4_to_int(string_value)
         local preset = 0
         if string_value == "Medium" then preset = 1 end
