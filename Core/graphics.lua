@@ -173,7 +173,7 @@ return function()
         type = "Slider",
         max_value = 10,
         min_value = 1,
-        int_default_value = 100,
+        int_default_value = 10,
         ---@param setting Setting
         set_action = function(setting)
            local value = (12 - setting.int_value) / 2.0
