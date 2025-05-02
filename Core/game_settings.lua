@@ -33,6 +33,7 @@ return function()
         ---@param setting Setting
         set_action = function(setting)
             local loc = get_select(setting.string_value)
+            print("localization set "..setting.string_value)
             game.localization = loc
         end,
         label = "Localization",
