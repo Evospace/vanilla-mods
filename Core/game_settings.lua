@@ -1,4 +1,22 @@
 return function()
+    db:from_table({
+        class = "Setting",
+        category = "Game",
+        type = "Slider",
+        max_value = 17,
+        min_value = 4,
+        int_default_value = 9,
+        ---@param setting Setting
+        set_action = function(setting)
+           local value = setting.int_value
+           game.engine_data.loading_range = value
+           print("set LoadingRange "..value)
+           game.engine_data:apply()
+        end,
+        label = "LoadingRange",
+        name = "LoadingRange",
+    })
+
     local LocalizationMap = {
         English   = "en",
         Russian   = "ru-RU",
@@ -38,7 +56,7 @@ return function()
         end,
         label = "Localization",
         name = "Localization",
-     })
+    })
 
     db:from_table({
        class = "Setting",
@@ -56,5 +74,30 @@ return function()
        end,
        label = "Dpi",
        name = "Dpi",
-   })
+    })
+
+    local function make_bool_set(name, field)
+        db:from_table({
+            class = "Setting",
+            category = "Game",
+            type = "String",
+            default_string_value = "Off",
+            string_options = {"Off", "On"},
+            ---@param setting Setting
+            set_action = function(setting)
+                local value = setting.string_value == "On"
+                print("set "..name.." "..tostring(value))
+                game.engine_data[field] = value
+                game.engine_data:apply()
+            end,
+            label = name,
+            name = name,
+        })
+    end
+
+    make_bool_set("Performance", "performance")
+    make_bool_set("CtrlHotbar", "ctrl_hotbar")
+    make_bool_set("AltHotbar", "alt_hotbar")
+    make_bool_set("ShiftHotbar", "shift_hotbar")
+
 end
