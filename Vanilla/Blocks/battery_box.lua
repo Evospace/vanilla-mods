@@ -14,7 +14,7 @@ local logic = function(self)
         conductor:add_wire(acc)
     end
 
-    conductor.resistance = 500
+    conductor.resistance = 250
     conductor.conductor_channel = 1000
     conductor.channel = "LV"
     conductor.voltage = 1000
