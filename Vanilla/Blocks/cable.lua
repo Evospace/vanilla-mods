@@ -6,7 +6,7 @@ local logic = function(self)
     }
 
     local resistanceMap = {
-        100, 80, 200, 75, 50, 0, 100, 50, 0
+        50, 40, 100, 35, 25, 0, 50, 25, 0
     }
 
     local tierMap = {
