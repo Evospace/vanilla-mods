@@ -19,7 +19,7 @@ local logic = function(self)
     acc.cover = StaticCover.find("KineticInput")
 
     local inv = ResourceInventory.new(crafter, "rio")
-    inv.item = StaticItem.find("LV")
+    inv.item = StaticItem.find("Electricity")
     inv.capacity = Vlib.get_consumption(crafter, energy)
     crafter.energy_output_inventory = inv
 
