@@ -1,0 +1,59 @@
+[
+    [
+        "StackTransfers",
+        "Transferencias de pilas"
+    ],
+    [
+        "StackTransfersDescription",
+        "<blue>Mayúsculas + Izquierda-clic</>: transfiere una sola pila<n<blue>Mayúsculas + Derecha-clic</>: transfiere la mitad de una pila<n<blue>Control + Izquierda-clic</>: transfiere todas las pilas del tipo dado<n<blue>Control + Derecha-clic</>: Transfiere la mitad de los objetos del tipo dado. Control + clic izquierdo en el espacio vacío: transfiere todo el inventario. Control + clic derecho en el espacio vacío: transfiere la mitad de todo el inventario. Alt + clic izquierdo: transfiere cinco objetos. Alt + clic derecho: transfiere un objeto."
+    ],
+    [
+        "ChestLimiting",
+        "Limitación del cofre"
+    ],
+    [
+        "ChestLimitingDescription",
+        ""
+    ],
+    [
+        "Screwdriver",
+        "Destornillador"
+    ],
+    [
+    [
+        "ScrewdriverDescription",
+        "Presiona <blue>Botón Izquierdo del Ratón</> mientras sostienes un <blue>Destornillador</> y arrastra hacia una de las direcciones de las flechas, luego suelta el botón para rotar el bloque. Por el momento, solo los bloques de una sola celda pueden rotarse con este método.\n\nLa rotación depende del plano sobre el que estés apuntando.\nDespués de soltar el botón, el plano rotará de manera que reemplace al plano indicado por la flecha seleccionada."
+    ],
+    [
+        "RotationWhileBuilding",
+        "Rotación durante la construcción"
+    ],
+    [
+        "RotationWhileBuildingDescription",
+        "Presiona <blue>R</> para rotar el bloque alrededor del eje vertical.\nPuedes cambiar este eje manteniendo presionada la tecla <blue>Shift</> o <blue>Alt</>.\nEl eje activo se mostrará con una flecha verde, como en la imagen superior.\n\nMientras sostienes un objeto construible, puedes mantener presionado el <blue>Botón Derecho del Ratón</> y arrastrar hacia una de las direcciones de las flechas, luego soltar el botón para rotar el bloque. Este método permite la rotación de bloques de cualquier tamaño."
+    ],
+    [
+        "Accessors1",
+        "Accesores I"
+    ],
+    [
+        "Accessors1Description",
+        "La mayoría de los bloques tienen entradas y/o salidas, llamadas Accesores. Los Accesores están codificados por colores: amarillo para <yellow>Cinético</>, azul para <blue>Electricidad</>, rojo para <red>Calor</>.\n\nNo hay una marca específica en los bloques para indicar si es una entrada o salida, pero generalmente no es difícil deducirlo según las funciones del bloque. Esto también se menciona directamente en la descripción del objeto.\n\nDurante la construcción de bloques, puedes ver los Accesores como se muestra en la imagen superior. Para transferir energía de un bloque a otro, es necesario colocarlos de manera que los Accesores del mismo tipo se conecten. Además, existen conductos específicos para cada tipo de Accesor: cables para electricidad, tuberías de calor para calor y volantes de inercia para energía cinética."
+    ],
+    [
+        "BlockPipette",
+        "Pipeta de Bloque"
+    ],
+    [
+        "BlockPipetteDescription",
+        "Presiona <blue>Q</> para copiar el bloque sobre el que estás apuntando junto con su rotación. Presiona <blue>Q</> de nuevo para borrar la selección.\nSiempre funciona en modo Creativo y solo cuando tienes el mismo objeto en el inventario en modo Normal.\n\nPresiona <blue>Ctrl+C</> para copiar la configuración del bloque sobre el que estás apuntando.\nPresiona <blue>Ctrl+V</> para pegar la configuración desde el portapapeles al bloque sobre el que estás apuntando.\n\nLas configuraciones de los bloques no están disponibles para todos los bloques. Todas las configuraciones de los bloques son solo texto."
+    ],
+    [
+        "FirstSteps",
+        "Primeros Pasos"
+    ],
+    [
+        "FirstStepsDescription",
+        "Encontrar y Fundir Mineral de Cobre\n\n1. Primero, localiza el mineral de cobre. Las áreas donde el mineral es visible en la superficie generalmente tienen más depósitos cerca o justo debajo de la superficie.\n2. Recolecta el mineral de cobre.\n3. Usa bloques básicos de tu inventario para crear una plataforma por conveniencia.\n4. Fabrica un horno y un fundidor. Coloca el fundidor encima del horno.\n5. Coloca combustible en el horno y coloca el mineral de cobre en el fundidor.\n6. Una vez que el proceso de fundición esté completo, recoge los lingotes de cobre.\n\nConstrucción de Maquinaria Esencial\n\n1. Crea otro horno, un motor Stirling, un generador compacto y una computadora.\n2. Organiza estos componentes según sus entradas y salidas.\n3. Una vez que la computadora esté operativa, puedes comenzar a investigar nuevas tecnologías."
+    ]
+]
