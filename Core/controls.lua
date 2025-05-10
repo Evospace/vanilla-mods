@@ -90,6 +90,15 @@ return function()
       class = "Setting",
       category = "Controls",
       type = "Key",
+      key_binding = "Search",
+      label = "Search",
+      name = "Search",
+      default_key = "Tab",
+   })
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Key",
       key_binding = "ChangeMovementMode",
       label = "ChangeMovementMode",
       name = "ChangeMovementMode",
