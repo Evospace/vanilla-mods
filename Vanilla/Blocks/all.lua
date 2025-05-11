@@ -97,7 +97,7 @@ Vlib.FillBlock("PyrolysisUnit", require('Blocks/pyrolysis_unit'))
 checkAndSet("FractionatingColumn", 5)
 Vlib.FillBlock("FractionatingColumn", require('Blocks/fractionating_column'))
 
-checkAndSet("Constructor", 1)
+checkAndSet("Hand", 1)
 Vlib.FillBlock("Constructor", require('Blocks/constructor'))
 
 checkAndSet("Sifter", 3)
