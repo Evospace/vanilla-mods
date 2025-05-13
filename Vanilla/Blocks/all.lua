@@ -70,9 +70,6 @@ Vlib.FillBlock("BiElectricEngine", require('Blocks/bi_electric_engine'))
 checkAndSet("Separator", 2)
 Vlib.FillBlock("Separator", require('Blocks/separator'))
 
-checkAndSet("IndustrialSeparator", 2)
-Vlib.FillBlock("IndustrialSeparator", require('Blocks/industrial_separator'))
-
 checkAndSet("Electrolyzer", 2)
 Vlib.FillBlock("Electrolyzer", require('Blocks/electrolyzer'))
 
@@ -113,4 +110,8 @@ Vlib.FillBlock("Container", require('Blocks/container'))
 
 Vlib.FillBlock("Chest", require('Blocks/chest'))
 
+Vlib.FillBlock("TeslaTower", require('Blocks/tesla_tower'))
+
 Vlib.FillBlockCustom(Vlib.cable_array, require('Blocks/cable'))
+
+Vlib.FillBlockCustom(Vlib.transformer_array, require('Blocks/transformer'))
