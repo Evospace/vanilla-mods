@@ -45,12 +45,12 @@ return function()
             set.int_value = math.floor(values[scalability + 1])
             set:set_action()
 
-            local values = {"FXAA", "FXAA", "TAA", "TSR"}
+            local values = {"FXAA", "FXAA", "TAA", "TAA"}
             local set = Setting.find("AntiAliasingMethod")
             set.string_value = values[scalability + 1]
             set:set_action()
 
-            local values = {"75%", "85%", "90%", "85%"}
+            local values = {"85%", "90%", "100%", "100%"}
             local set = Setting.find("ScreenPersentage")
             set.string_value = values[scalability + 1]
             set:set_action()
@@ -150,7 +150,7 @@ return function()
         class = "Setting",
         category = "Graphics",
         type = "String",
-        default_string_value = "90%",
+        default_string_value = "100%",
         string_options = {"30%", "50%", "75%", "85%", "90%", "100%"},
         ---@param setting Setting
         set_action = function(setting)

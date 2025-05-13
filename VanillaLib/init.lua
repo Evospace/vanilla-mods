@@ -105,6 +105,13 @@ Vlib = {
         "ABCCOCable",
     },
 
+    transformer_array = {
+        "TransformerLVMV",
+        "TransformerMVLV",
+        "AdvancedTransformerLVMV",
+        "AdvancedTransformerMVLV",
+    },
+
     sides = {
         Vec3i.back, Vec3i.front, Vec3i.right, Vec3i.left, Vec3i.down, Vec3i.up
     },
