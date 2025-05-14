@@ -18,4 +18,8 @@ local logic = function(self)
     acc.cover = StaticCover.find("HeatOutput")
 end
 
-return { logic_init = logic }
+local visual = function(self)
+    
+end
+
+return { logic_init = logic, visual_init = visual }

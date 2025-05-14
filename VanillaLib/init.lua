@@ -148,18 +148,7 @@ Vlib = {
 
     --- @param self BlockActor
     CommonActorInit = function(self)
-        local tier_material = {
-            "Stone",
-            "Copper",
-            "Steel",
-            "Aluminium",
-            "StainlessSteel",
-            "Titanium",
-            "HardMetal",
-            "Neutronium"
-        }
-
-        local mat = Material.load("/Game/Materials/"..tier_material[self.logic.static_block.tier + 1])
+        local mat = Material.load("/Game/Materials/"..Vlib.tier_material[self.logic.static_block.tier + 1])
         Legacy.this:set_field_object("HullMaterial", mat)
     end,
 
