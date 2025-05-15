@@ -27,7 +27,7 @@ local logic = function(self)
     end
 
     conductor.side_cover = StaticCover.find(Vlib.cable_array[t])
-    conductor.center_cover = StaticCover.find("e"..tierMap[t])
+    conductor.center_cover = StaticCover.find("CableCenter"..tierMap[t])
     conductor.resistance = resistanceMap[t]
     conductor.conductor_channel = channelMap[t]
     conductor.channel = tierMap[t]
