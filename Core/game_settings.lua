@@ -3,9 +3,9 @@ return function()
         class = "Setting",
         category = "Game",
         type = "Slider",
-        max_value = 17,
+        max_value = 25,
         min_value = 4,
-        int_default_value = 9,
+        int_default_value = 15,
         ---@param setting Setting
         set_action = function(setting)
            local value = setting.int_value
