@@ -5,7 +5,7 @@ return function()
         type = "Slider",
         max_value = 25,
         min_value = 4,
-        int_default_value = 15,
+        int_default_value = 12,
         ---@param setting Setting
         set_action = function(setting)
            local value = setting.int_value
