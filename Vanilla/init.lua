@@ -69,13 +69,13 @@ function vanilla_mod.init()
       else
          print(ore_name.."Cluster not found, skipping")
       end
-      es:sub(defines.events.on_entity_spawn, function(context)
+      ore.on_spawn = function(prop, pos)
          --print(dump(ore))
          --print(dump(context.prop))
-         if context.prop == ore then
-            local spos = RegionMap.world_block_to_grid(context.pos)
-            local position = Vec2i.new(context.pos.x, context.pos.y)
-            local old_reg = regions:find_source(context.pos)
+         if prop == ore then
+            local spos = RegionMap.world_block_to_grid(pos)
+            local position = Vec2i.new(pos.x, pos.y)
+            local old_reg = regions:find_source(pos)
             if old_reg ~= nil and old_reg.position == position then
                Vlib.verbose("same "..tostring(ore.item))
                return
@@ -89,7 +89,7 @@ function vanilla_mod.init()
             sd.position = position
             region:add_source(sd)
          end
-      end)
+      end
    end
 end
 

@@ -96,6 +96,7 @@ return function()
     end
 
     make_bool_set("Performance", "performance")
+    make_bool_set("PerformanceGraph", "performance_graph")
     make_bool_set("CtrlHotbar", "ctrl_hotbar")
     make_bool_set("AltHotbar", "alt_hotbar")
     make_bool_set("ShiftHotbar", "shift_hotbar")
