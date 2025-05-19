@@ -4,7 +4,7 @@ return function()
         category = "Game",
         type = "Slider",
         max_value = 25,
-        min_value = 4,
+        min_value = 6,
         int_default_value = 12,
         ---@param setting Setting
         set_action = function(setting)
