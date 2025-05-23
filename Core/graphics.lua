@@ -193,7 +193,7 @@ return function()
         int_default_value = 10,
         ---@param setting Setting
         set_action = function(setting)
-           local value = (12 - setting.int_value) / 2.0
+           local value = setting.int_value / 10.0
            game.engine_data.props_quality = value
            print("set DecorationsQuality "..value)
            game.engine_data:apply()
