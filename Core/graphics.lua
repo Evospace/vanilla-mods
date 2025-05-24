@@ -100,6 +100,25 @@ return function()
         name = "Fullscreen",
     })
 
+    local function generate_setting_on_off(name, command)
+        db:from_table({
+            class = "Setting",
+            category = "Graphics",
+            type = "String",
+            default_string_value = "Off",
+            string_options = {"Off", "On"},
+            ---@param setting Setting
+            set_action = function(setting)
+                local value = (setting.string_value == "On") and 1 or 0
+                Console.run(command.." "..value)
+            end,
+            label = name,
+            name = name,
+        })
+    end
+
+    generate_setting_on_off("HardwareRayTracing", "r.Lumen.HardwareRayTracing")
+
     local function generate_setting(name, command)
         db:from_table({
             class = "Setting",
@@ -258,21 +277,7 @@ return function()
         name = "MaxFps",
     })
 
-    db:from_table({
-        class = "Setting",
-        category = "Graphics",
-        type = "String",
-        default_string_value = "On",
-        string_options = {"Off", "On"},
-        ---@param setting Setting
-        set_action = function(setting)
-           local value = (setting.string_value == "On") and 1 or 0
-           Console.run("r.Vsync "..value)
-        end,
-        label = "VSync",
-        name = "VSync",
-    })
-     
+    generate_setting_on_off("VSync", "r.Vsync")
 
     --r.DynamicRes.OperationMode
     --r.AntiAliasingMethod
