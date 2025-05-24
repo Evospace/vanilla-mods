@@ -35,7 +35,7 @@ return function()
             set.string_value = relf_values[scalability + 1]
             set:set_action()
 
-            local rt_values = {"Off", "Off", "Off", "On"}
+            local rt_values = {"Off", "Off", "Off", "Off"}
             local set = Setting.find("HardwareRayTracing")
             set.string_value = rt_values[scalability + 1]
             set:set_action()
