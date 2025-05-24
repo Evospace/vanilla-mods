@@ -35,6 +35,11 @@ return function()
             set.string_value = relf_values[scalability + 1]
             set:set_action()
 
+            local rt_values = {"Off", "Off", "Off", "On"}
+            local set = Setting.find("HardwareRayTracing")
+            set.string_value = rt_values[scalability + 1]
+            set:set_action()
+
             local values = {0.3, 0.7, 1.0, 1.0}
             local set = Setting.find("GrassRenderingRange")
             set.int_value = math.floor(values[scalability + 1] * 100)
