@@ -35,11 +35,6 @@ return function()
             set.string_value = relf_values[scalability + 1]
             set:set_action()
 
-            local rt_values = {"Off", "Off", "Off", "Off"}
-            local set = Setting.find("HardwareRayTracing")
-            set.string_value = rt_values[scalability + 1]
-            set:set_action()
-
             local values = {0.3, 0.7, 1.0, 1.0}
             local set = Setting.find("GrassRenderingRange")
             set.int_value = math.floor(values[scalability + 1] * 100)
@@ -121,8 +116,6 @@ return function()
             name = name,
         })
     end
-
-    generate_setting_on_off("HardwareRayTracing", "r.Lumen.HardwareRayTracing")
 
     local function generate_setting(name, command)
         db:from_table({
