@@ -22,7 +22,7 @@ return function()
         Russian   = "ru-RU",
         Portugese = "pt-BR",
         Hungarian = "hu-HU",
-        Deutch    = "de-DE",
+        German    = "de-DE",
         Polish    = "pl-PL",
         Japanese  = "ja-JP",
         Korean    = "ko-KR",
