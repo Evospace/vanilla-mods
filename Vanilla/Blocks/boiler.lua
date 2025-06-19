@@ -3,7 +3,7 @@ local logic = function(self)
     crafter.recipes = RecipeDictionary.find("BoilerRecipeDictionary")
     crafter.speed = 100
 
-    local energy = 100
+    local energy = Balance.boiler_per_tick
 
     local inv = ResourceInventory.new(crafter, "rii_")
     inv.item = StaticItem.find("Water")
