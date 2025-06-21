@@ -5,7 +5,7 @@ local logic = function(self)
 
     local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("Electricity")
-    inv.capacity = Vlib.get_consumption(crafter, 20)
+    inv.capacity = Vlib.get_consumption(crafter, 40)
     crafter.energy_input_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "rai")
