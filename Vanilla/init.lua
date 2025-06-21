@@ -25,23 +25,23 @@ function vanilla_mod.init()
    --    end
    -- end)
 
-   local oreProps = StaticPropList.find("OreProps")
+   -- local oreProps = StaticPropList.find("OreProps")
 
-   local resources = {}
-   for _, value in ipairs(oreProps.data[1].props) do
-      -- assuming value is a string like "RubyCluster"
-      local base = value.name:gsub("Cluster$", "") -- remove "Cluster" from the end
-      table.insert(resources, {base, 1})
-      print("Ore "..base.." preparation")
-   end
+   -- local resources = {}
+   -- for _, value in ipairs(oreProps.data[1].props) do
+   --    -- assuming value is a string like "RubyCluster"
+   --    local base = value.name:gsub("Cluster$", "") -- remove "Cluster" from the end
+   --    table.insert(resources, {base, 1})
+   --    print("Ore "..base.." preparation")
+   -- end
 
-   for _, value in ipairs(resources) do
-      local ed = ExtractionData.new()
-      ed.item = StaticItem.find(value[1].."Ore")
-      ed.speed = 100
-      ed.prop = StaticProp.find(value[1].."Cluster")
-      regions:add_resource(ed)
-   end
+   -- for _, value in ipairs(resources) do
+   --    local ed = ExtractionData.new()
+   --    ed.item = StaticItem.find(value[1].."Ore")
+   --    ed.speed = 100
+   --    ed.prop = StaticProp.find(value[1].."Cluster")
+   --    regions:add_resource(ed)
+   -- end
 
    for _, proto in pairs(db:objects()) do
       local block = StaticBlock.cast(proto)
@@ -56,38 +56,37 @@ function vanilla_mod.init()
    --ss.generate = function(_) print("11111111111") end TODO: lua ref leak
    ss.size = Vec2i.new(10, 10)
 
-   local oreGeneratorCounter = 1
-
-   for _, ore in ipairs(resources) do
-      local ore_name = ore[1]
-      local ore = StaticProp.find(ore_name.."Cluster")
-      if ore then 
-         print("Registering "..ore_name.."Cluster".." on_entity_spawn subscription")
-      else
-         print(ore_name.."Cluster not found, skipping")
-      end
-      ore.on_spawn = function(prop, pos)
-         --print(dump(ore))
-         --print(dump(context.prop))
-         if prop == ore then
-            local spos = RegionMap.world_block_to_grid(pos)
-            local position = Vec2i.new(pos.x, pos.y)
-            local old_reg = regions:find_source(pos)
-            if old_reg ~= nil and old_reg.position == position then
-               Vlib.verbose("same "..tostring(ore.item))
-               return
-            else
-               Vlib.verbose("new "..tostring(ore.item))
-            end
-            local region = regions:get_region(spos)
-            local sd = SourceData.new_simple()
-            oreGeneratorCounter = oreGeneratorCounter + 1
-            sd.item = StaticItem.find(ore_name.."Ore")
-            sd.position = position
-            region:add_source(sd)
-         end
-      end
-   end
+   -- local oreGeneratorCounter = 1
+   -- for _, ore in ipairs(resources) do
+   --    local ore_name = ore[1]
+   --    local ore = StaticProp.find(ore_name.."Cluster")
+   --    if ore then 
+   --       print("Registering "..ore_name.."Cluster".." on_entity_spawn subscription")
+   --    else
+   --       print(ore_name.."Cluster not found, skipping")
+   --    end
+   --    ore.on_spawn = function(prop, pos)
+   --       --print(dump(ore))
+   --       --print(dump(context.prop))
+   --       if prop == ore then
+   --          local spos = RegionMap.world_block_to_grid(pos)
+   --          local position = Vec2i.new(pos.x, pos.y)
+   --          local old_reg = regions:find_source(pos)
+   --          if old_reg ~= nil and old_reg.position == position then
+   --             Vlib.verbose("same "..tostring(ore.item))
+   --             return
+   --          else
+   --             Vlib.verbose("new "..tostring(ore.item))
+   --          end
+   --          local region = regions:get_region(spos)
+   --          local sd = SourceData.new_simple()
+   --          oreGeneratorCounter = oreGeneratorCounter + 1
+   --          sd.item = StaticItem.find(ore_name.."Ore")
+   --          sd.position = position
+   --          region:add_source(sd)
+   --       end
+   --    end
+   -- end
 end
 
 function vanilla_mod.post_init()
