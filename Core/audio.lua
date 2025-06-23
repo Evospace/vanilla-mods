@@ -1,6 +1,6 @@
 return function()
    local function make_audio(name, class) 
-         db:from_table({
+      db:from_table({
          class = "Setting",
          category = "Audio",
          type = "Slider",
@@ -15,9 +15,9 @@ return function()
             print("set "..class.." volume "..value)
             game.engine_data:apply()
          end,
-         label = class,
-         name = class,
-   })
+         label = name,
+         name = name,
+      })
    end
 
    make_audio("Master", "EvospaceMaster")

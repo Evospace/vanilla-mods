@@ -113,5 +113,3 @@ Vlib.FillBlock("Chest", require('Blocks/chest'))
 Vlib.FillBlock("TeslaTower", require('Blocks/tesla_tower'))
 
 Vlib.FillBlockCustom(Vlib.cable_array, require('Blocks/cable'))
-
-Vlib.FillBlockCustom(Vlib.transformer_array, require('Blocks/transformer'))

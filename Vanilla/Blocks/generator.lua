@@ -14,8 +14,8 @@ local logic = function(self)
     local acc = ResourceAccessor.new(crafter, "rao")
     acc.side, acc.pos = Vec3i.front, Vec3i.zero
     acc.inventory = inv
-    acc.channel = "MV"
-    acc.cover = StaticCover.find("MVOutput")
+    acc.channel = "Electricity"
+    acc.cover = StaticCover.find("ElectricityOutput")
     acc.is_output = true
     
     local inv = ResourceInventory.new(crafter, "rii")

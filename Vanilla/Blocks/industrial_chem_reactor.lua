@@ -26,7 +26,7 @@ local logic = function(self)
     acc.side, acc.pos = Vec3i.front, Vec3i.zero
     acc.inventory = inv
     acc.is_input = true
-    acc.channel = "LV"
+    acc.channel = "Electricity"
     acc.cover = StaticCover.find("ElectricityInput")
 
     local acc = ResourceAccessor.new(crafter, "rao")
