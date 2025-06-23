@@ -43,6 +43,16 @@ return function()
       class = "Setting",
       category = "Controls",
       type = "Key",
+      key_binding = "VertOffset",
+      label = "RaiseBlock",
+      name = "RaiseBlock",
+      int_default_value = 1,
+      default_key = "MouseWheelAxis",
+   })
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Key",
       key_binding = "MoveUp",
       label = "MoveUp",
       name = "MoveUp",
