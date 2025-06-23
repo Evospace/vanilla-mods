@@ -24,7 +24,7 @@ local logic = function(self)
     acc.side, acc.pos = Vec3i.back, Vec3i.zero
     acc.inventory = inv
     acc.is_input = true
-    acc.channel = "LV"
+    acc.channel = "Electricity"
     acc.cover = StaticCover.find("ElectricityInput")
 end
 

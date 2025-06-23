@@ -13,7 +13,7 @@ local logic = function(self)
     acc.inventory = inv
     acc.is_input = true
     acc.cover = StaticCover.find("ElectricityInput")
-    acc.channel = "LV"
+    acc.channel = "Electricity"
 
     local acc = ResourceAccessor.new(crafter, "rai_")
     acc.side, acc.pos = Vec3i.left, Vec3i.zero

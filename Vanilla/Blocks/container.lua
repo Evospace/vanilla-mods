@@ -11,10 +11,8 @@ local logic = function(self)
     end
 
     container.capacity = 30*(t)*1000
-    container.resistance = 0
     container.conductor_channel = 0
     container.channel = "Fluid"
-    container.voltage = container.static_block.tier * 100
 end
 
 return { logic_init = logic }
