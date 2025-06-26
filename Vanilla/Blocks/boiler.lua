@@ -2,6 +2,7 @@ local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("BoilerRecipeDictionary")
     crafter.speed = 100
+    crafter.stable_supply = false
 
     local energy = Balance.boiler_per_tick
 

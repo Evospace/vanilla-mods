@@ -114,4 +114,10 @@ Vlib.FillBlock("TeslaTower", require('Blocks/tesla_tower'))
 
 Vlib.FillBlock("KineticHeater", require('Blocks/kinetic_heater'))
 
+Vlib.FillBlock("FissionReactor", require('Blocks/fission_reactor'))
+
+Vlib.FillBlock("DrillingRig", require('Blocks/drilling_rig'))
+
+Vlib.FillBlock("Pumpjack", require('Blocks/pumpjack'))
+
 Vlib.FillBlockCustom(Vlib.cable_array, require('Blocks/cable'))
