@@ -1,4 +1,4 @@
-local energy = Balance.boiler_per_tick
+local energy = Balance.industrial_boiler_per_tick
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
@@ -12,7 +12,7 @@ local logic = function(self)
     crafter.crafter_input_container:bind(inv)
 
     local acc = ResourceAccessor.new(crafter, "rai")
-    acc.side, acc.pos = Vec3i.back, Vec3i.zero
+    acc.side, acc.pos = Vec3i.up, Vec3i.new(0, -1, 2)
     acc.is_input = true
     acc.channel = "Fluid"
     acc.inventory = inv
@@ -24,7 +24,7 @@ local logic = function(self)
     crafter.energy_input_inventory = inv
 
     local acc = ResourceAccessor.new(crafter, "rai_")
-    acc.side, acc.pos = Vec3i.down, Vec3i.zero
+    acc.side, acc.pos = Vec3i.right, Vec3i.new(-2, -2, 0)
     acc.inventory = inv
     acc.is_input = true
     acc.channel = "Heat"
@@ -36,7 +36,7 @@ local logic = function(self)
     crafter.energy_output_inventory = inv
 
     local acc = ResourceAccessor.new(crafter, "rao")
-    acc.side, acc.pos = Vec3i.up, Vec3i.zero
+    acc.side, acc.pos = Vec3i.back, Vec3i.new(-3, 0, 0)
     acc.inventory = inv
     acc.is_output = true
     acc.channel = "Fluid"

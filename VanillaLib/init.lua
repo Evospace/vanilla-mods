@@ -41,6 +41,14 @@ Vlib = {
         end
         return inventories
     end,
+
+    ---Calculate power from per_tick value and level, returns as string
+    ---@param per_tick integer
+    ---@param level integer
+    ---@return string
+    ToPower = function(per_tick, level)
+        return Loc.gui_number(math.pow(2.0, level) * per_tick * 20)
+    end,
     
     dump = function (o)
         if type(o) == 'table' then
@@ -110,12 +118,18 @@ Vlib = {
     },
 
     --- @param names string[]
-    --- @param table table
-    FillBlockCustom = function(names, table)
+    --- @param register_fn function
+    FillBlockCustom = function(names, register_fn)
+        local first_tier = nil
         for index, name in pairs(names) do
             local block = StaticBlock.find(name)
             if block ~= nil then
+                if first_tier == nil then
+                    first_tier = index - 1
+                end
                 print(name.." found, registering lua table")
+
+                local table = register_fn(name, index - 1, index - first_tier)
 
                 for key, value in pairs(table) do
                     block.lua[key] = value
@@ -125,12 +139,18 @@ Vlib = {
     end,
 
     --- @param name string
-    --- @param table table
-    FillBlock = function(name, table)
+    --- @param register_fn function
+    FillBlock = function(name, register_fn)
+        local first_tier = nil
         for index, tier in pairs(Vlib.tier_material) do
             local block = StaticBlock.find(tier..name)
             if block ~= nil then
+                if first_tier == nil then
+                    first_tier = index - 1
+                end
                 print(tier..name.." found, registering lua table")
+
+                local table = register_fn(tier..name, index - 1, index - first_tier - 1)
 
                 for key, value in pairs(table) do
                     block.lua[key] = value

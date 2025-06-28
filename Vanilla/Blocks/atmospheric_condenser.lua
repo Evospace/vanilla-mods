@@ -10,4 +10,6 @@ local logic = function(self)
     acc.cover = StaticCover.find("FluidOutput")
 end
 
-return { logic_init = logic }
+return function(name, tier, level)
+    return { logic_init = logic }
+end

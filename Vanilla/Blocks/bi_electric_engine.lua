@@ -36,4 +36,7 @@ local logic = function(self)
     acc.is_output = true
 end
 
-return { logic_init = logic }
+return function(name, tier, level)
+    LocData.set(name, Vlib.ToPower(level, 1))
+    return { logic_init = logic }
+end

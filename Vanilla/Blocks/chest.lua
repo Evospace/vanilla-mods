@@ -6,4 +6,7 @@ local logic = function(self)
     chest.capacity = 20 + t * 5
 end
 
-return { logic_init = logic }
+return function(name, tier, level)
+    LocData.set(name, Vlib.ToPower(level, 1))
+    return { logic_init = logic }
+end

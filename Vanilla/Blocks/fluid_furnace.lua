@@ -27,4 +27,7 @@ local logic = function(self)
     acc.inventory = inv
 end
 
-return { logic_init = logic }
+return function(name, tier, level)
+    LocData.set(name, Vlib.ToPower(level, 1))
+    return { logic_init = logic }
+end
