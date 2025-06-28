@@ -2,7 +2,7 @@ local energy = Balance.industrial_boiler_per_tick * 2
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
-    crafter.recipes = RecipeDictionary.find("PortalRecipeDictionary")
+    crafter.recipes = RecipeDictionary.find("FusionReactorRecipeDictionary")
     crafter.speed = Vlib.get_speed(crafter)
         
     local inv = ResourceInventory.new(crafter, "rii")
