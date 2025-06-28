@@ -1,4 +1,4 @@
-local energy = Balance.industrial_boiler_per_tick * 2
+local energy = Balance.industrial_boiler_per_tick
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
