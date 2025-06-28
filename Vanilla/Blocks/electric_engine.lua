@@ -1,10 +1,10 @@
+local energy = 100
+
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("GeneratorRecipeDictionary")
     crafter.speed = 100
     crafter.stable_supply = false
-
-    local energy = 100
         
     local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("Electricity")
@@ -38,4 +38,7 @@ local logic = function(self)
     acc.cover = StaticCover.find("KineticOutput")
 end
 
-return { logic_init = logic }
+return function(name, tier, level)
+    LocData.set(name, Vlib.ToPower(energy, level))
+    return { logic_init = logic }
+end

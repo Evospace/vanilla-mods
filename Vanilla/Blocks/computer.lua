@@ -1,7 +1,7 @@
+local energy = 20
+
 local logic = function(self)
     local crafter = ComputerBlockLogic.cast(self)
-
-    local energy = 20
 
     local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("Electricity")
@@ -18,4 +18,7 @@ local logic = function(self)
     crafter.energy_input = acc
 end
 
-return { logic_init = logic }
+return function(name, tier, level)
+    LocData.set(name, Vlib.ToPower(energy, level))
+    return { logic_init = logic }
+end

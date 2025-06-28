@@ -120,4 +120,8 @@ Vlib.FillBlock("DrillingRig", require('Blocks/drilling_rig'))
 
 Vlib.FillBlock("Pumpjack", require('Blocks/pumpjack'))
 
+Vlib.FillBlock("IndustrialBoiler", require('Blocks/industrial_boiler'))
+Vlib.FillBlock("IndustrialSteamTurbine", require('Blocks/industrial_steam_turbine'))
+Vlib.FillBlock("IndustrialGenerator", require('Blocks/industrial_generator'))
+
 Vlib.FillBlockCustom(Vlib.cable_array, require('Blocks/cable'))

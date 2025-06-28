@@ -1,3 +1,5 @@
+local energy = 20
+
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("SmelterRecipeDictionary")
@@ -9,7 +11,7 @@ local logic = function(self)
         
     local input = ResourceInventory.new(crafter, "rii")
     input.item = StaticItem.find("Heat")
-    input.capacity = Vlib.get_consumption(crafter, 20)
+    input.capacity = Vlib.get_consumption(crafter, energy)
     crafter.energy_input_inventory = input
     
     local acc = ResourceAccessor.new(crafter, "Input")
@@ -19,4 +21,7 @@ local logic = function(self)
     acc.channel = "Heat"
 end
 
-return { logic_init = logic }
+return function(name, tier, level)
+    LocData.set(name, Vlib.ToPower(energy, level))
+    return { logic_init = logic }
+end

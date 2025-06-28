@@ -1,3 +1,5 @@
+local energy = 30
+
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("AutomaticHammerRecipeDictionary")
@@ -5,7 +7,7 @@ local logic = function(self)
             
     local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("Kinetic")
-    inv.capacity = Vlib.get_consumption(crafter, 30)
+    inv.capacity = Vlib.get_consumption(crafter, energy)
     crafter.energy_input_inventory = inv
 
     Vlib.add_single_slot_invs(crafter.crafter_input_container, crafter, "ii", 1)
@@ -19,4 +21,7 @@ local logic = function(self)
     acc.cover = StaticCover.find("KineticInput")
 end
 
-return { logic_init = logic }
+return function(name, tier, level)
+    LocData.set(name, Vlib.ToPower(energy, level))
+    return { logic_init = logic }
+end

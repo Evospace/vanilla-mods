@@ -1,3 +1,5 @@
+local energy = 50
+
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("FurnaceRecipeDictionary")
@@ -7,7 +9,7 @@ local logic = function(self)
             
     local inv = ResourceInventory.new(crafter, "rio")
     inv.item = StaticItem.find("Heat")
-    inv.capacity = Vlib.get_consumption(crafter, 50)
+    inv.capacity = Vlib.get_consumption(crafter, energy)
     crafter.energy_output_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "rao")
@@ -22,4 +24,7 @@ local visual = function(self)
     
 end
 
-return { logic_init = logic, visual_init = visual }
+return function(name, tier, level)
+    LocData.set(name, Vlib.ToPower(energy, level))
+    return { logic_init = logic, visual_init = visual }
+end

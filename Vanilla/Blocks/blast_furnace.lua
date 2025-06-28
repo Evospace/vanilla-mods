@@ -7,4 +7,7 @@ local logic = function(self)
     Vlib.add_single_slot_invs(crafter.crafter_output_container, crafter, "io", 1)
 end
 
-return { logic_init = logic }
+return function(name, tier, level)
+    LocData.set(name, Vlib.ToPower(level, 1))
+    return { logic_init = logic }
+end
