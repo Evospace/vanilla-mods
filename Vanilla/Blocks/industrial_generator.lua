@@ -12,7 +12,7 @@ local logic = function(self)
     crafter.energy_output_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "rao")
-    acc.side, acc.pos = Vec3i.left, Vec3i.new( 0, 1, 0 )
+    acc.side, acc.pos = Vec3i.right, Vec3i.new( 0, 0, 0 )
     acc.inventory = inv
     acc.channel = "Electricity"
     acc.cover = StaticCover.find("ElectricityOutput")
@@ -24,7 +24,7 @@ local logic = function(self)
     crafter.energy_input_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "rai")
-    acc.side, acc.pos = Vec3i.right, Vec3i.new( 0, -2, 0 )
+    acc.side, acc.pos = Vec3i.left, Vec3i.new( 0, 3, 0 )
     acc.inventory = inv
     acc.channel = "Kinetic"
     acc.cover = StaticCover.find("KineticInput")

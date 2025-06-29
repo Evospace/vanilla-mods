@@ -24,7 +24,7 @@ local logic = function(self)
     crafter.energy_input_inventory = inv
 
     local acc = ResourceAccessor.new(crafter, "rai_")
-    acc.side, acc.pos = Vec3i.right, Vec3i.new(-2, -2, 0)
+    acc.side, acc.pos = Vec3i.front, Vec3i.new(0, -1, 0)
     acc.inventory = inv
     acc.is_input = true
     acc.channel = "Heat"
