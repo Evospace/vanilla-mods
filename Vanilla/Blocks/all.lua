@@ -128,5 +128,6 @@ Vlib.FillBlock("FusionReactor", require('Blocks/fusion_reactor'))
 Vlib.FillBlock("Portal", require('Blocks/portal'))
 Vlib.FillBlock("SmallSolarPanel", require('Blocks/small_solar_panel'))
 Vlib.FillBlock("SolarPanel", require('Blocks/solar_panel'))
+Vlib.FillBlock("Riteg", require('Blocks/riteg'))
 
 Vlib.FillBlockCustom(Vlib.cable_array, require('Blocks/cable'))
