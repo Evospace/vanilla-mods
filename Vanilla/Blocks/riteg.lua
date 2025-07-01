@@ -1,8 +1,8 @@
-local energy = 200
+local energy = 400
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
-    crafter.recipes = RecipeDictionary.find("FluidFurnaceRecipeDictionary")
+    crafter.recipes = RecipeDictionary.find("FurnaceRecipeDictionary")
     crafter.speed = Vlib.get_speed(crafter)
             
     local inv = ResourceInventory.new(crafter, "rio")
@@ -11,25 +11,25 @@ local logic = function(self)
     crafter.energy_output_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "rao")
-    acc.side, acc.pos = Vec3i.up, Vec3i.zero
+    acc.side, acc.pos = Vec3i.down, Vec3i.new( 0, 0, 0 )
     acc.inventory = inv
     acc.is_output = true
     acc.channel = "Heat"
     acc.cover = StaticCover.find("HeatOutput")
 
-    local inv = ResourceInventory.new(crafter, "rii")
-    inv.capacity = 2000
-    crafter.crafter_input_container:bind(inv)
-    
-    local acc = ResourceAccessor.new(crafter, "rai")
-    acc.side, acc.pos = Vec3i.back, Vec3i.zero
-    acc.is_input = true
-    acc.channel = "Fluid"
-    acc.cover = StaticCover.find("FluidInput")
+    local acc = ResourceAccessor.new(crafter, "rao")
+    acc.side, acc.pos = Vec3i.up, Vec3i.new( 0, 0, 1 )
     acc.inventory = inv
+    acc.is_output = true
+    acc.channel = "Heat"
+    acc.cover = StaticCover.find("HeatOutput")
+end
+
+local visual = function(self)
+    
 end
 
 return function(name, tier, level)
     LocData.set(name, Vlib.ToPower(energy, level))
-    return { logic_init = logic }
+    return { logic_init = logic, visual_init = visual }
 end
