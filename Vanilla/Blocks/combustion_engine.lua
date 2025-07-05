@@ -1,29 +1,29 @@
-local energy = 200
+local energy = Balance.industrial_boiler_per_tick / 2
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
-    crafter.recipes = RecipeDictionary.find("FluidFurnaceRecipeDictionary")
+    crafter.recipes = RecipeDictionary.find("CombustionEngineRecipeDictionary")
     crafter.speed = Vlib.get_speed(crafter)
     crafter.stable_supply = false
-            
+        
     local inv = ResourceInventory.new(crafter, "rio")
-    inv.item = StaticItem.find("Heat")
+    inv.item = StaticItem.find("Kinetic")
     inv.capacity = Vlib.get_consumption(crafter, energy)
     crafter.energy_output_inventory = inv
     
-    local acc = ResourceAccessor.new(crafter, "rao")
-    acc.side, acc.pos = Vec3i.up, Vec3i.zero
+    local acc = ResourceAccessor.new(crafter, "Output")
+    acc.side, acc.pos = Vec3i.right, Vec3i.new(-1, 0, 0)
     acc.inventory = inv
     acc.is_output = true
-    acc.channel = "Heat"
-    acc.cover = StaticCover.find("HeatOutput")
-
+    acc.channel = "Kinetic"
+    acc.cover = StaticCover.find("KineticOutput")
+    
     local inv = ResourceInventory.new(crafter, "rii")
-    inv.capacity = 2000
+    inv.capacity = 3000
     crafter.crafter_input_container:bind(inv)
     
-    local acc = ResourceAccessor.new(crafter, "rai")
-    acc.side, acc.pos = Vec3i.back, Vec3i.zero
+    local acc = ResourceAccessor.new(crafter, "Input")
+    acc.side, acc.pos = Vec3i.front, Vec3i.new(0, 0, 0)
     acc.inventory = inv
     acc.channel = "Fluid"
     acc.cover = StaticCover.find("FluidInput")
