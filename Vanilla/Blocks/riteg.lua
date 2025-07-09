@@ -2,7 +2,7 @@ local energy = 400
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
-    crafter.recipes = RecipeDictionary.find("FurnaceRecipeDictionary")
+    crafter.recipes = RecipeDictionary.find("GeneratorRecipeDictionary")
     crafter.speed = Vlib.get_speed(crafter)
             
     local inv = ResourceInventory.new(crafter, "rio")
