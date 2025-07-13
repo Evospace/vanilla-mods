@@ -8,23 +8,6 @@ end
 function vanilla_mod.init()
    local es = EventSystem.get_instance()
 
-   -- es:sub(defines.events.on_player_at_sector, function(context) 
-   --    --local pos = context.pos * cs.sector_size + Vec3i.new(0,0,23)
-   --    --print("On sector "..tostring(pos)) 
-   --    --local block = StaticBlock.find("CopperMacerator")
-   --    --dim:spawn_block_identity(pos, block)
-   --    local grid_pos = LargeSectors.world_block_to_grid(pos)
-   --    if not regions:has_region(grid_pos) then
-   --       local region = regions:get_region(grid_pos)
-
-   --       local ms = MapStructure.new()
-   --       ms.structure = ss
-   --       ms.position = Vec2i.zero()
-
-   --       region:add_structure(ms)
-   --    end
-   -- end)
-
    -- local oreProps = StaticPropList.find("OreProps")
 
    -- local resources = {}
@@ -52,9 +35,48 @@ function vanilla_mod.init()
 
    require('Blocks/all')
 
-   local ss = StaticStructure.new("StartPlatform")
-   --ss.generate = function(_) print("11111111111") end TODO: lua ref leak
+   local ss = StaticStructure.reg("StartPlatform")
+
+   -- @param context table
+   ss.generate = function(context)
+      local block = StaticBlock.find("BasicPlatform")
+      local gen_zero = context.pos * Vec2i.new(cs.sector_size.x, cs.sector_size.y)
+      local z_start = 2
+      local platform_size = 11
+      for i=0, platform_size - 1 do
+         for j=0, platform_size - 1 do
+
+            dim:set_cell(Vec3i.new(i + gen_zero.x, j + gen_zero.y, z_start), block)
+            for k=0, 20 do
+               dim:set_cell(Vec3i.new(i + gen_zero.x, j + gen_zero.y, z_start + 1 + k), nil)
+            end
+
+            for k=0, 10 do
+               dim:set_cell(Vec3i.new(gen_zero.x, gen_zero.y, z_start - 1 - k), block)
+               dim:set_cell(Vec3i.new(gen_zero.x + platform_size - 1, gen_zero.y, z_start - 1 - k), block)
+               dim:set_cell(Vec3i.new(gen_zero.x, gen_zero.y + platform_size - 1, z_start - 1 - k), block)
+               dim:set_cell(Vec3i.new(gen_zero.x + platform_size - 1, gen_zero.y + platform_size - 1, z_start - 1 - k), block)
+            end
+         end
+      end
+
+      local block = StaticBlock.find("CopperSpawner")
+      dim:spawn_block_identity(Vec3i.new(gen_zero.x, gen_zero.y, z_start + 1), block)
+   end
    ss.size = Vec2i.new(10, 10)
+
+   es:sub(defines.events.on_region_spawn, function(region) 
+      print("On region spawn "..tostring(region.pos))
+
+      if region.pos.x == 0 and region.pos.y == 0 then
+         local ms = MapStructure.new()
+         ms.structure = ss
+         ms.offset = Vec2i.zero
+
+         region:add_structure(ms)
+         print("Spawn platform at "..tostring(region.pos))
+      end
+   end)
 
    -- local oreGeneratorCounter = 1
    -- for _, ore in ipairs(resources) do
