@@ -17,8 +17,8 @@ local logic = function(self)
     acc.channel = "Heat"
     acc.cover = StaticCover.find("HeatOutput")
 
-    local acc = ResourceAccessor.new(crafter, "rao")
-    acc.side, acc.pos = Vec3i.up, Vec3i.new(0,0,2)
+    local acc = ResourceAccessor.new(crafter, "rao_")
+    acc.side, acc.pos = Vec3i.up, Vec3i.new(0,0,1)
     acc.inventory = inv
     acc.is_output = true
     acc.channel = "Heat"
