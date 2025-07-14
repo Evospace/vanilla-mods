@@ -49,6 +49,7 @@ function vanilla_mod.init()
             dim:set_cell(Vec3i.new(i + gen_zero.x, j + gen_zero.y, z_start), block)
             for k=0, 20 do
                dim:set_cell(Vec3i.new(i + gen_zero.x, j + gen_zero.y, z_start + 1 + k), nil)
+               dim:clear_props(Vec3i.new(i + gen_zero.x, j + gen_zero.y, z_start + k), nil)
             end
 
             for k=0, 10 do
