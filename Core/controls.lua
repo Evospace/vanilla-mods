@@ -1,4 +1,41 @@
 return function()
+
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Slider",
+      max_value = 200,
+      min_value = 30,
+      int_default_value = 100,
+      ---@param setting Setting
+      set_action = function(setting)
+         local value = setting.int_value / 200.0
+         game.engine_data.mouse_sensitivity_x = value
+         print("set MouseSensitivityX "..value)
+         game.engine_data:apply()
+      end,
+      label = "MouseSensitivityX",
+      name = "MouseSensitivityX",
+   })
+
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Slider",
+      max_value = 200,
+      min_value = 30,
+      int_default_value = 100,
+      ---@param setting Setting
+      set_action = function(setting)
+         local value = setting.int_value / 200.0
+         game.engine_data.mouse_sensitivity_y = value
+         print("set MouseSensitivityY "..value)
+         game.engine_data:apply()
+      end,
+      label = "MouseSensitivityY",
+      name = "MouseSensitivityY",
+   })
+
    db:from_table({
       class = "Setting",
       category = "Controls",
