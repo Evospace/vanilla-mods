@@ -66,23 +66,6 @@ return function()
         class = "Setting",
         category = "Graphics",
         type = "String",
-        default_string_value = "1920x1080",
-        string_options = Game.get_supported_resolutions(),
-        ---@param setting Setting
-        set_action = function(setting)
-            local width, height = string.match(setting.string_value, "^(%d+)x(%d+)$")
-            game.engine_data.res_x, game.engine_data.res_y = tonumber(width), tonumber(height)
-            print("resolution set "..width.."x"..height)
-            game.engine_data:apply()
-        end,
-        label = "Resolution",
-        name = "Resolution",
-    })
-
-    db:from_table({
-        class = "Setting",
-        category = "Graphics",
-        type = "String",
         default_string_value = "Fullscreen",
         string_options = {"Fullscreen", "WindowedFullscreen", "Windowed"},
         ---@param setting Setting
@@ -98,6 +81,23 @@ return function()
         end,
         label = "Fullscreen",
         name = "Fullscreen",
+    })
+
+    db:from_table({
+        class = "Setting",
+        category = "Graphics",
+        type = "String",
+        default_string_value = "1920x1080",
+        string_options = Game.get_supported_resolutions(),
+        ---@param setting Setting
+        set_action = function(setting)
+            local width, height = string.match(setting.string_value, "^(%d+)x(%d+)$")
+            game.engine_data.res_x, game.engine_data.res_y = tonumber(width), tonumber(height)
+            print("resolution set "..width.."x"..height)
+            game.engine_data:apply()
+        end,
+        label = "Resolution",
+        name = "Resolution",
     })
 
     local function generate_setting_on_off(name, command)

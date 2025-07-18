@@ -39,6 +39,38 @@ return function()
    db:from_table({
       class = "Setting",
       category = "Controls",
+      type = "Bool",
+      bool_default_value = false,
+      ---@param setting Setting
+      set_action = function(setting)
+         local value = setting.bool_value
+         game.engine_data.mouse_inversion_x = value
+         print("set MouseInversionX "..tostring(value))
+         game.engine_data:apply()
+      end,
+      label = "MouseInversionX",
+      name = "MouseInversionX",
+   })
+
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Bool",
+      bool_default_value = false,
+      ---@param setting Setting
+      set_action = function(setting)
+         local value = setting.bool_value
+         game.engine_data.mouse_inversion_y = value
+         print("set MouseInversionY "..tostring(value))
+         game.engine_data:apply()
+      end,
+      label = "MouseInversionY",
+      name = "MouseInversionY",
+   })
+
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
       type = "Key",
       key_binding = "MoveForward",
       label = "MoveForward",
