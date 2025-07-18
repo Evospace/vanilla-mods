@@ -3,6 +3,7 @@ local VanillaTipsMod = {}
 function VanillaTipsMod.init()
     local i_first = AutosizeInventory.new_simple()
     i_first:add(StaticItem.find("ChalcopyriteOre"), 1)
+    i_first:add(StaticItem.find("MalachiteOre"), 1)
     i_first:add(StaticItem.find("BasicPlatform"), 1)
     i_first:add(StaticItem.find("StoneSmelter"), 1)
     i_first:add(StaticItem.find("StoneFurnace"), 1)
