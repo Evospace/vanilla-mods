@@ -66,7 +66,7 @@ return function()
         class = "Setting",
         category = "Graphics",
         type = "String",
-        default_string_value = "Fullscreen",
+        default_string_value = "Windowed",
         string_options = {"Fullscreen", "WindowedFullscreen", "Windowed"},
         ---@param setting Setting
         set_action = function(setting)
@@ -77,6 +77,7 @@ return function()
                return preset
            end
            game.engine_data.window_mode = option3_to_int(setting.string_value)
+           game.engine_data:show_confirmation()
            game.engine_data:apply()
         end,
         label = "Fullscreen",
@@ -87,13 +88,14 @@ return function()
         class = "Setting",
         category = "Graphics",
         type = "String",
-        default_string_value = "1920x1080",
+        default_string_value = "800x600",
         string_options = Game.get_supported_resolutions(),
         ---@param setting Setting
         set_action = function(setting)
             local width, height = string.match(setting.string_value, "^(%d+)x(%d+)$")
             game.engine_data.res_x, game.engine_data.res_y = tonumber(width), tonumber(height)
             print("resolution set "..width.."x"..height)
+            game.engine_data:show_confirmation()
             game.engine_data:apply()
         end,
         label = "Resolution",
