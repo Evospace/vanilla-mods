@@ -88,7 +88,7 @@ function VanillaTipsMod.init()
         class = "StaticTip",
         name = "RotationWhileBuilding",
         label = Loc.new("RotationWhileBuilding", "tips"),
-        description_parts = Loc.new("RotationWhileBuildingDescription", "tips"),
+        description_parts = {Loc.new("RotationWhileBuildingDescription", "tips")},
         image = "Textures/Rotation.png"
     })
 
