@@ -2,6 +2,7 @@ local energy = 1000
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
+    crafter.map_register = true
         
     local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("Electricity")

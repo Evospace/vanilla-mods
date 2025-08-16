@@ -5,7 +5,7 @@ local logic = function(self)
     crafter.recipes = RecipeDictionary.find("SeparatorRecipeDictionary")
     crafter.recipes.start_tier = 2
     crafter.speed = Vlib.get_speed(crafter)
-    crafter.map_register = true
+    --crafter.map_register = true
             
     local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("Kinetic")

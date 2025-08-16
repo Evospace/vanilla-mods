@@ -4,6 +4,7 @@ local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("GeneratorRecipeDictionary")
     crafter.speed = Vlib.get_speed(crafter)
+    --crafter.map_register = true
             
     local inv = ResourceInventory.new(crafter, "rio")
     inv.item = StaticItem.find("Heat")

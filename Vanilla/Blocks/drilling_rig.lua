@@ -1,5 +1,6 @@
 local logic = function(self)
     local crafter = DrillingMachineBase.cast(self)
+    crafter.map_register = true
 
     local inv = crafter.energy
     

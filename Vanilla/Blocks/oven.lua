@@ -5,6 +5,7 @@ local logic = function(self)
     crafter.recipes = RecipeDictionary.find("OvenRecipeDictionary")
     crafter.recipes.start_tier = 1
     crafter.speed = Vlib.get_speed(crafter)
+    --crafter.map_register = true
 
     Vlib.add_single_slot_invs(crafter.crafter_input_container, crafter, "ii", 1)
     Vlib.add_single_slot_invs(crafter.crafter_output_container, crafter, "io", 1)
