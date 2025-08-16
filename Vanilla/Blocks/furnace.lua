@@ -4,6 +4,7 @@ local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("FurnaceRecipeDictionary")
     crafter.speed = Vlib.get_speed(crafter)
+    --crafter.map_register = true
 
     Vlib.add_single_slot_invs(crafter.crafter_input_container, crafter, "ii", 1)
             

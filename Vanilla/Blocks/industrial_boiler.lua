@@ -5,6 +5,7 @@ local logic = function(self)
     crafter.recipes = RecipeDictionary.find("BoilerRecipeDictionary")
     crafter.speed = 100
     crafter.stable_supply = false
+    --crafter.map_register = true
 
     local inv = ResourceInventory.new(crafter, "rii_")
     inv.item = StaticItem.find("Water")

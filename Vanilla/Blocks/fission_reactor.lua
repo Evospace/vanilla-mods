@@ -5,7 +5,7 @@ local logic = function(self)
     crafter.recipes = RecipeDictionary.find("FissionReactorRecipeDictionary")
     crafter.speed = 100
     crafter.load_independent = true
-    crafter.map_register = true
+    --crafter.map_register = true
     
     local inv = ResourceInventory.new(crafter, "rio")
     inv.item = StaticItem.find("Heat")

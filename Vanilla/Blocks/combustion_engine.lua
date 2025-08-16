@@ -4,7 +4,7 @@ local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("CombustionEngineRecipeDictionary")
     crafter.speed = Vlib.get_speed(crafter)
-    crafter.stable_supply = false
+    -- crafter.stable_supply = false
         
     local inv = ResourceInventory.new(crafter, "rio")
     inv.item = StaticItem.find("Kinetic")

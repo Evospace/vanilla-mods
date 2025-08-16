@@ -5,6 +5,7 @@ local logic = function(self)
     crafter.recipes = RecipeDictionary.find("FluidFurnaceRecipeDictionary")
     crafter.speed = Vlib.get_speed(crafter)
     crafter.stable_supply = false
+    --crafter.map_register = true
             
     local inv = ResourceInventory.new(crafter, "rio")
     inv.item = StaticItem.find("Heat")
