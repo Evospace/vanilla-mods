@@ -49,7 +49,7 @@ function vanilla_mod.init()
             dim:set_cell(Vec3i.new(i + gen_zero.x, j + gen_zero.y, z_start), block)
             for k=0, 20 do
                dim:set_cell(Vec3i.new(i + gen_zero.x, j + gen_zero.y, z_start + 1 + k), nil)
-               dim:clear_props(Vec3i.new(i + gen_zero.x, j + gen_zero.y, z_start + k), nil)
+               dim:clear_props(Vec3i.new(i + gen_zero.x, j + gen_zero.y, z_start + k))
             end
 
             for k=0, 10 do
@@ -78,6 +78,37 @@ function vanilla_mod.init()
          print("Spawn platform at "..tostring(region.pos))
       end
    end)
+
+   -- local gen = BiomeWorldGenerator.reg("TEST")
+
+   -- local hg1 = HeightGenerator.reg("TEST_BiomeHeight_Rugged")
+   -- local n1 = NoiseGenerator.reg("TEST_BiomeNoise_Rugged")
+   -- n1:set_frequency(0.002)
+   -- n1:set_fractal_octaves(5)
+   -- n1.min = -10
+   -- n1.max = 30
+   -- hg1:add_noise(n1)
+
+   -- local hg2 = HeightGenerator.reg("TEST_BiomeHeight_Flat")
+   -- local n2 = NoiseGenerator.reg("TEST_BiomeNoise_Flat")
+   -- n2:set_frequency(0.0005)
+   -- n2:set_fractal_octaves(2)
+   -- n2.min = -2
+   -- n2.max = 5
+   -- hg2:add_noise(n2)
+
+   -- local b1 = Biome.reg("TEST_Biome_Rugged")
+   -- b1.height = hg1
+
+   -- local b2 = Biome.reg("TEST_Biome_Flat")
+   -- b2.height = hg2
+
+   -- local gf = GlobalBiomeFamily.reg("TEST_GlobalBiomeFamily")
+   -- gf.sub_biomes = { b1, b2 }
+
+   -- gen.global_biome = gf
+
+   -- ------------
 
    -- local oreGeneratorCounter = 1
    -- for _, ore in ipairs(resources) do
