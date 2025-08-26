@@ -141,6 +141,122 @@ function vanilla_mod.init()
    --       end
    --    end
    -- end
+
+   math.randomseed(123)
+   local rand = math.random
+
+   ---------------------------------------------------------------------------
+
+   -- Блоки, которые будем использовать
+   local BLOCK_PLAT    = StaticBlock.find("BasicPlatform")       -- плоская платформа
+   local BLOCK_WALL    = StaticBlock.find("BasicPlatform")          -- кусок стены
+   local BLOCK_COL_BASE= StaticBlock.find("BasicPlatform")          -- основание колонны
+   local BLOCK_COL_SEG = StaticBlock.find("BasicPlatform")      -- сегмент колонны
+   local BLOCK_COL_CAP = StaticBlock.find("BasicPlatform")          -- вершина колонны
+
+   ---------------------------------------------------------------------------
+
+   -- === Вспомогательные функции ===
+
+   -- Создаём квадратную платформу
+   local function generate_platform(ctx, pos)
+   local size = rand(4, 7)           -- размер платформы (4-7)
+   local z    = 2                    -- высота платформы над уровнем
+   for i = 0, size-1 do
+      for j = 0, size-1 do
+         local p = Vec3i.new(pos.x + i, pos.y + j, z)
+         dim:set_cell(p, BLOCK_PLAT)
+         -- создаём свободный воздух над платформой
+         for k = 1, 4 do
+         dim:set_cell(p + Vec3i.new(0, 0, k), nil)
+         dim:clear_props(p + Vec3i.new(0, 0, k))
+         end
+      end
+   end
+   end
+
+   -- Строим колонну с основанием, несколькими сегментами и вершиной
+   local function generate_column(ctx, pos)
+   local h = rand(3, 6)          -- высота колонны без основания
+   -- Основание колонны
+   dim:set_cell(Vec3i.new(pos.x, pos.y, 1), BLOCK_COL_BASE)
+   -- Сегменты
+   for k = 2, 1 + h do
+      dim:set_cell(Vec3i.new(pos.x, pos.y, k), BLOCK_COL_SEG)
+   end
+   -- Вершина (если высота достаточна)
+   if h >= 2 then
+      dim:set_cell(Vec3i.new(pos.x, pos.y, h + 1), BLOCK_COL_CAP)
+   end
+   -- Очищаем воздух вокруг
+   for dx = -1, 1 do
+      for dy = -1, 1 do
+         for k = 1, h + 3 do
+         dim:set_cell(Vec3i.new(pos.x + dx, pos.y + dy, k), nil)
+         dim:clear_props(Vec3i.new(pos.x + dx, pos.y + dy, k))
+         end
+      end
+   end
+   end
+
+   -- Кладём ряд стен одной высоты
+   local function generate_wall(ctx, pos, len, dir)
+   local z = 2
+   local dvec = dir == "x" and Vec2i.new(1, 0) or Vec2i.new(0, 1)
+   for i = 0, len-1 do
+      local p = Vec3i.new(pos.x + i*dvec.x, pos.y + i*dvec.y, z)
+      dim:set_cell(p, BLOCK_WALL)
+      -- Очищаем воздух над стеной
+      for k = 1, 3 do
+         dim:set_cell(p + Vec3i.new(0, 0, k), nil)
+      end
+   end
+   end
+
+   ---------------------------------------------------------------------------
+
+   -- === Основная структура генерации ===
+
+   local RuinsGen = StaticStructure.reg("RuinsGenerator")
+   RuinsGen.size = Vec2i.new(10, 10)   -- размер области, в которой генерируются элементы
+
+   RuinsGen.generate = function(ctx)
+   local gen_zero = ctx.pos * Vec2i.new(cs.sector_size.x, cs.sector_size.y)
+
+   -- Сколько элементов генерируем
+   local count = rand(3, 6)
+
+   for _ = 1, count do
+      -- Случайно выбираем тип элемента
+      local choice = rand(1, 3)
+      -- Случайная позиция внутри сектора
+      local offset = Vec2i.new(rand(0, 9), rand(0, 9))
+      local pos = gen_zero + offset
+
+      if choice == 1 then
+         generate_platform(ctx, pos)
+      elseif choice == 2 then
+         generate_column(ctx, pos)
+      else
+         local len = rand(2, 5)
+         local dir = rand(1, 2) == 1 and "x" or "y"
+         generate_wall(ctx, pos, len, dir)
+      end
+   end
+   end
+
+   ---------------------------------------------------------------------------
+
+   -- === Подписка на событие появления региона ===
+
+   -- es:sub(defines.events.on_region_spawn, function(region)
+   --    for a = 0, 10 do
+   --       local ms = MapStructure.new()
+   --       ms.structure = RuinsGen
+   --       ms.offset = Vec2i.new(rand(0, 100), rand(0, 100))
+   --       region:add_structure(ms)
+   --    end
+   -- end)
 end
 
 function vanilla_mod.post_init()
