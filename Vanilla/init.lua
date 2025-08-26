@@ -249,14 +249,14 @@ function vanilla_mod.init()
 
    -- === Подписка на событие появления региона ===
 
-   -- es:sub(defines.events.on_region_spawn, function(region)
-   --    for a = 0, 10 do
-   --       local ms = MapStructure.new()
-   --       ms.structure = RuinsGen
-   --       ms.offset = Vec2i.new(rand(0, 100), rand(0, 100))
-   --       region:add_structure(ms)
-   --    end
-   -- end)
+   es:sub(defines.events.on_region_spawn, function(region)
+      for a = 0, 10 do
+         local ms = MapStructure.new()
+         ms.structure = RuinsGen
+         ms.offset = Vec2i.new(rand(0, 100), rand(0, 100))
+         region:add_structure(ms)
+      end
+   end)
 end
 
 function vanilla_mod.post_init()
