@@ -148,8 +148,8 @@ function vanilla_mod.init()
    ---------------------------------------------------------------------------
 
    -- Блоки, которые будем использовать
-   local BLOCK_PLAT    = StaticBlock.find("BasicPlatform")       -- плоская платформа
-   local BLOCK_WALL    = StaticBlock.find("BasicPlatform")          -- кусок стены
+   local BLOCK_PLAT    = StaticBlock.find("TerracottaBricks")       -- плоская платформа
+   local BLOCK_WALL    = StaticBlock.find("WoodenPlanks")          -- кусок стены
    local BLOCK_COL_BASE= StaticBlock.find("BasicPlatform")          -- основание колонны
    local BLOCK_COL_SEG = StaticBlock.find("BasicPlatform")      -- сегмент колонны
    local BLOCK_COL_CAP = StaticBlock.find("BasicPlatform")          -- вершина колонны
@@ -162,15 +162,21 @@ function vanilla_mod.init()
    local function generate_platform(pos)
    local size = rand(4, 7)           -- размер платформы (4-7)
    local h    = dim:sample_height(pos.x, pos.y)
-   local z    = math.floor(h + 1)  -- высота платформы по рельефу
+   local z    = math.floor(h)  -- высота платформы по рельефу
    for i = 0, size-1 do
       for j = 0, size-1 do
          local p = Vec3i.new(pos.x + i, pos.y + j, z)
-         dim:set_cell(p, BLOCK_PLAT)
-         -- создаём свободный воздух над платформой
+         for k = 0, 2 do
+            dim:set_cell(p - Vec3i.new(0, 0, k), BLOCK_PLAT)
+         end
+
          for k = 1, 4 do
-         dim:set_cell(p + Vec3i.new(0, 0, k), nil)
-         dim:clear_props(p + Vec3i.new(0, 0, k))
+            dim:set_cell(p + Vec3i.new(0, 0, k), BLOCK_WALL)
+         end
+         -- создаём свободный воздух над платформой
+         for k = 4, 6 do
+            dim:set_cell(p + Vec3i.new(0, 0, k), nil)
+            dim:clear_props(p + Vec3i.new(0, 0, k))
          end
       end
    end
