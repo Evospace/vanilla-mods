@@ -55,11 +55,36 @@ return function()
             set.string_value = values[scalability + 1]
             set:set_action()
 
+            local detail = Setting.find("DetailShadows")
+            if scalability <= 1 then
+                detail.string_value = "Off"
+            else
+                detail.string_value = "On"
+            end
+            detail:set_action()
+
             Setting.update_widgets()
         end,
 
         label = "ScalabilityPreset",
         name = "ScalabilityPreset",
+    })
+
+    -- High-detail shadows toggle (affects static props that opt-in)
+    db:from_table({
+        class = "Setting",
+        category = "Graphics",
+        type = "String",
+        default_string_value = "On",
+        string_options = {"Off", "On"},
+        ---@param setting Setting
+        set_action = function(setting)
+            local enabled = (setting.string_value == "On")
+            game.engine_data.detail_shadows = enabled
+            game.engine_data:apply()
+        end,
+        label = "DetailShadows",
+        name = "DetailShadows",
     })
 
     db:from_table({
