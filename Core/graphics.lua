@@ -63,6 +63,14 @@ return function()
             end
             detail:set_action()
 
+            local clouds = Setting.find("VolumetricClouds")
+            if scalability == 0 then
+                clouds.string_value = "Off"
+            else
+                clouds.string_value = "On"
+            end
+            clouds:set_action()
+
             Setting.update_widgets()
         end,
 
@@ -70,7 +78,24 @@ return function()
         name = "ScalabilityPreset",
     })
 
-    -- High-detail shadows toggle (affects static props that opt-in)
+    db:from_table({
+        class = "Setting",
+        category = "Graphics",
+        type = "String",
+        default_string_value = "High",
+        string_options = {"Off", "On"},
+        ---@param setting Setting
+        set_action = function(setting)
+            if setting.string_value == "Off" then
+                Console.run("r.VolumetricCloud 0")
+            else
+                Console.run("r.VolumetricCloud 1")
+            end
+        end,
+        label = "VolumetricClouds",
+        name = "VolumetricClouds",
+    })
+
     db:from_table({
         class = "Setting",
         category = "Graphics",
