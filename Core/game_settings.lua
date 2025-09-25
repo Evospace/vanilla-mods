@@ -101,4 +101,22 @@ return function()
     make_bool_set("AltHotbar", "alt_hotbar")
     make_bool_set("ShiftHotbar", "shift_hotbar")
 
+    db:from_table({
+        class = "Setting",
+        category = "Game",
+        type = "Slider",
+        max_value = 60,
+        min_value = 0,
+        int_default_value = 10,
+        ---@param setting Setting
+        set_action = function(setting)
+           local value = setting.int_value
+           game.engine_data.autosave_period = value
+           print("set AutosavePeriod "..value)
+           game.engine_data:apply()
+        end,
+        label = "AutosavePeriod",
+        name = "AutosavePeriod",
+     })
+
 end
