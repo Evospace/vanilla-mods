@@ -1,8 +1,8 @@
 local logic = function(self)
     local chest = ChestBlockLogic.cast(self)
-    chest.signal.export = {
-        LogicExportOption.find("ChestExportInventory")
-    }
+    -- chest.signal.export = {
+    --     LogicExportOption.find("ChestExportInventory")
+    -- }
 
     local t = chest.static_block.tier
 
