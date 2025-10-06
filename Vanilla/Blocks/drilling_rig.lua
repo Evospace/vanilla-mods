@@ -2,24 +2,13 @@ local logic = function(self)
     local crafter = DrillingMachineBase.cast(self)
     crafter.map_register = true
 
+    crafter.energy_per_tick = 60 * crafter.static_block.level
+    crafter.productivity = 15 * crafter.static_block.level
+
     local inv = crafter.energy
     
     local acc = ResourceAccessor.new(crafter, "ria")
     acc.side, acc.pos = Vec3i.back, Vec3i.new(-2, 0, 0)
-    acc.inventory = inv
-    acc.is_input = true
-    acc.channel = "Kinetic"
-    acc.cover = StaticCover.find("KineticInput")
-
-    local acc = ResourceAccessor.new(crafter, "ria_")
-    acc.side, acc.pos = Vec3i.back, Vec3i.new(-2, -1, 0)
-    acc.inventory = inv
-    acc.is_input = true
-    acc.channel = "Kinetic"
-    acc.cover = StaticCover.find("KineticInput")
-
-    local acc = ResourceAccessor.new(crafter, "ria_1")
-    acc.side, acc.pos = Vec3i.back, Vec3i.new(-2, 1, 0)
     acc.inventory = inv
     acc.is_input = true
     acc.channel = "Kinetic"

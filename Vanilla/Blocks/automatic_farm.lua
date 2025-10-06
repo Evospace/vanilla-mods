@@ -2,6 +2,9 @@ local logic = function(self)
     local crafter = DrillingMachineBase.cast(self)
     crafter.map_register = true
 
+    crafter.energy_per_tick = 1 * crafter.static_block.level
+    crafter.productivity = 15 * crafter.static_block.level
+
     local inv = crafter.energy
     inv.item = StaticItem.find("Water")
 
