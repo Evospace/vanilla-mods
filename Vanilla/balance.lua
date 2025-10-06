@@ -4,5 +4,5 @@ Balance_internal = {
 
 Balance = {
     boiler_per_tick = Balance_internal.boiler_per_tick,
-    industrial_boiler_per_tick = Balance_internal.boiler_per_tick * 20 * 8,
+    industrial_boiler_per_tick = Balance_internal.boiler_per_tick * 20 * 8
 }

@@ -3,24 +3,13 @@ local logic = function(self)
     crafter.production = 200
     crafter.map_register = true
 
+    crafter.energy_per_tick = 60 * crafter.static_block.level
+    crafter.productivity = 20 * crafter.static_block.level
+
     local inv = crafter.energy
     
     local acc = ResourceAccessor.new(crafter, "ria")
     acc.side, acc.pos = Vec3i.back, Vec3i.new(-4, 0, 0)
-    acc.inventory = inv
-    acc.is_input = true
-    acc.channel = "Kinetic"
-    acc.cover = StaticCover.find("KineticInput")
-
-    local acc = ResourceAccessor.new(crafter, "ria_")
-    acc.side, acc.pos = Vec3i.back, Vec3i.new(-4, -1, 0)
-    acc.inventory = inv
-    acc.is_input = true
-    acc.channel = "Kinetic"
-    acc.cover = StaticCover.find("KineticInput")
-
-    local acc = ResourceAccessor.new(crafter, "ria_1")
-    acc.side, acc.pos = Vec3i.back, Vec3i.new(-4, 1, 0)
     acc.inventory = inv
     acc.is_input = true
     acc.channel = "Kinetic"
