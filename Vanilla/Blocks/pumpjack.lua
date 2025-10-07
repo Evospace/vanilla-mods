@@ -3,10 +3,11 @@ local logic = function(self)
     crafter.production = 200
     crafter.map_register = true
 
-    crafter.energy_per_tick = 60 * crafter.static_block.level
+    crafter.energy_per_tick = 60 * (crafter.static_block.level + 1)
     crafter.productivity = 20 * crafter.static_block.level
 
     local inv = crafter.energy
+    inv.capacity = crafter.energy_per_tick
     
     local acc = ResourceAccessor.new(crafter, "ria")
     acc.side, acc.pos = Vec3i.back, Vec3i.new(-4, 0, 0)
