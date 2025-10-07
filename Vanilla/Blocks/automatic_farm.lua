@@ -3,9 +3,11 @@ local logic = function(self)
     crafter.map_register = true
 
     crafter.energy_per_tick = 1 * (crafter.static_block.level + 1)
-    crafter.productivity = 15 * crafter.static_block.level
+    crafter.productivity = 25 * crafter.static_block.level
+    crafter.ticks_per_item = 1000
 
     local inv = crafter.energy
+    inv.capacity = crafter.energy_per_tick
     inv.item = StaticItem.find("Water")
 
     local acc = ResourceAccessor.new(crafter, "rai")
