@@ -19,7 +19,7 @@ local logic = function(self)
     local invs = Vlib.add_single_slot_invs(crafter.inventory, crafter, "ii", 1)
     invs[1].capacity = 100
 
-    local acc = SolidAccessor.new(crafter, "oa")
+    local acc = BaseInventoryAccessor.new(crafter, "oa")
     acc.side, acc.pos = Vec3i.front, Vec3i.new(0, -1, 0)
     acc.output = invs[1]
     acc.auto_output = true
