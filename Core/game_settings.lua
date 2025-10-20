@@ -9,9 +9,9 @@ return function()
         ---@param setting Setting
         set_action = function(setting)
            local value = setting.int_value
-           game.engine_data.loading_range = value
+           engine.loading_range = value
            print("set LoadingRange "..value)
-           game.engine_data:apply()
+           engine:apply()
         end,
         label = "LoadingRange",
         name = "LoadingRange",
@@ -68,9 +68,9 @@ return function()
        ---@param setting Setting
        set_action = function(setting)
           local value = setting.int_value / 100.0
-          game.engine_data.dpi = value
+          engine.dpi = value
           print("set Dpi "..value)
-          game.engine_data:apply()
+          engine:apply()
        end,
        label = "Dpi",
        name = "Dpi",
@@ -87,8 +87,8 @@ return function()
             set_action = function(setting)
                 local value = setting.string_value == "On"
                 print("set "..name.." "..tostring(value))
-                game.engine_data[field] = value
-                game.engine_data:apply()
+                engine[field] = value
+                engine:apply()
             end,
             label = name,
             name = name,
@@ -112,9 +112,9 @@ return function()
         ---@param setting Setting
         set_action = function(setting)
            local value = setting.int_value
-           game.engine_data.autosave_period = value
+           engine.autosave_period = value
            print("set AutosavePeriod "..value)
-           game.engine_data:apply()
+           engine:apply()
         end,
         label = "AutosavePeriod",
         name = "AutosavePeriod",

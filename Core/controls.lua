@@ -10,9 +10,9 @@ return function()
       ---@param setting Setting
       set_action = function(setting)
          local value = setting.int_value / 200.0
-         game.engine_data.mouse_sensitivity_x = value
+         engine.mouse_sensitivity_x = value
          print("set MouseSensitivityX "..value)
-         game.engine_data:apply()
+         engine:apply()
       end,
       label = "MouseSensitivityX",
       name = "MouseSensitivityX",
@@ -28,9 +28,9 @@ return function()
       ---@param setting Setting
       set_action = function(setting)
          local value = setting.int_value / 200.0
-         game.engine_data.mouse_sensitivity_y = value
+         engine.mouse_sensitivity_y = value
          print("set MouseSensitivityY "..value)
-         game.engine_data:apply()
+         engine:apply()
       end,
       label = "MouseSensitivityY",
       name = "MouseSensitivityY",
@@ -44,9 +44,9 @@ return function()
       ---@param setting Setting
       set_action = function(setting)
          local value = setting.bool_value
-         game.engine_data.mouse_inversion_x = value
+         engine.mouse_inversion_x = value
          print("set MouseInversionX "..tostring(value))
-         game.engine_data:apply()
+         engine:apply()
       end,
       label = "MouseInversionX",
       name = "MouseInversionX",
@@ -60,9 +60,9 @@ return function()
       ---@param setting Setting
       set_action = function(setting)
          local value = setting.bool_value
-         game.engine_data.mouse_inversion_y = value
+         engine.mouse_inversion_y = value
          print("set MouseInversionY "..tostring(value))
-         game.engine_data:apply()
+         engine:apply()
       end,
       label = "MouseInversionY",
       name = "MouseInversionY",
