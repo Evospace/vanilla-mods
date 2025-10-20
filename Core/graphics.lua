@@ -105,8 +105,8 @@ return function()
         ---@param setting Setting
         set_action = function(setting)
             local enabled = (setting.string_value == "On")
-            game.engine_data.detail_shadows = enabled
-            game.engine_data:apply()
+            engine.detail_shadows = enabled
+            engine:apply()
         end,
         label = "DetailShadows",
         name = "DetailShadows",
@@ -126,9 +126,9 @@ return function()
                if string_value == "Windowed" then preset = 2 end
                return preset
            end
-           game.engine_data.window_mode = option3_to_int(setting.string_value)
-           game.engine_data:show_confirmation()
-           game.engine_data:apply()
+           engine.window_mode = option3_to_int(setting.string_value)
+           engine:show_confirmation()
+           engine:apply()
         end,
         label = "Fullscreen",
         name = "Fullscreen",
@@ -143,10 +143,10 @@ return function()
         ---@param setting Setting
         set_action = function(setting)
             local width, height = string.match(setting.string_value, "^(%d+)x(%d+)$")
-            game.engine_data.res_x, game.engine_data.res_y = tonumber(width), tonumber(height)
+            engine.res_x, engine.res_y = tonumber(width), tonumber(height)
             print("resolution set "..width.."x"..height)
-            game.engine_data:show_confirmation()
-            game.engine_data:apply()
+            engine:show_confirmation()
+            engine:apply()
         end,
         label = "Resolution",
         name = "Resolution",
@@ -205,8 +205,8 @@ return function()
 
                 Console.run(command.." "..preset)
 
-                game.engine_data[field] = preset
-                game.engine_data:apply()
+                engine[field] = preset
+                engine:apply()
             end,
             label = name,
             name = name,
@@ -263,9 +263,9 @@ return function()
         ---@param setting Setting
         set_action = function(setting)
            local value = setting.int_value / 10.0
-           game.engine_data.props_quality = value
+           engine.props_quality = value
            print("set DecorationsQuality "..value)
-           game.engine_data:apply()
+           engine:apply()
         end,
         label = "DecorationsQuality",
         name = "DecorationsQuality",
@@ -282,9 +282,9 @@ return function()
             ---@param setting Setting
             set_action = function(setting)
                local value = setting.int_value / 100.0
-               game.engine_data[variable] = value
+               engine[variable] = value
                print("set "..variable.." "..value)
-               game.engine_data:apply()
+               engine:apply()
             end,
             label = name,
             name = name,
@@ -304,9 +304,9 @@ return function()
         ---@param setting Setting
         set_action = function(setting)
            local value = setting.int_value
-           game.engine_data.fov = value
+           engine.fov = value
            print("set ".."Fov".." "..value)
-           game.engine_data:apply()
+           engine:apply()
         end,
         label = "Fov",
         name = "Fov",
@@ -320,8 +320,8 @@ return function()
         string_options = {"24", "30", "60", "120"},
         ---@param setting Setting
         set_action = function(setting)
-           game.engine_data.fps = tonumber(setting.string_value)
-           game.engine_data:apply()
+           engine.fps = tonumber(setting.string_value)
+           engine:apply()
         end,
         label = "MaxFps",
         name = "MaxFps",
