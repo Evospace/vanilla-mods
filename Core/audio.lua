@@ -10,7 +10,8 @@ return function()
          ---@param setting Setting
          set_action = function(setting)
             local value = setting.int_value / 100.0
-            local sc = SoundClass.load("/Game/Sounds/"..class.."."..class)
+            local className = "/Game/Audio/"..class.."."..class
+            local sc = SoundClass.load(className)
             sc.volume = value
             print("set "..class.." volume "..value)
             engine:apply()
