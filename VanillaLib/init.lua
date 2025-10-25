@@ -162,7 +162,8 @@ Vlib = {
     --- @param self BlockActor
     CommonActorInit = function(self)
         local mat = Material.load("/Game/Materials/"..Vlib.tier_material[self.logic.static_block.tier + 1])
-        Legacy.this:set_field_object("HullMaterial", mat)
+        self.hull_material = mat
+        --Legacy.this:set_field_object("HullMaterial", mat)
     end,
 
     --- @param crafter BlockLogic
