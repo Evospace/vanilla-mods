@@ -132,3 +132,5 @@ Vlib.FillBlock("SolarPanel", require('Blocks/solar_panel'))
 Vlib.FillBlock("Riteg", require('Blocks/riteg'))
 
 Vlib.FillBlockCustom(Vlib.cable_array, require('Blocks/cable'))
+
+Vlib.FillBlockCustom({"Stairs"}, require('Blocks/stairs'))
