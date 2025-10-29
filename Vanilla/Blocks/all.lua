@@ -133,4 +133,4 @@ Vlib.FillBlock("Riteg", require('Blocks/riteg'))
 
 Vlib.FillBlockCustom(Vlib.cable_array, require('Blocks/cable'))
 
-Vlib.FillBlockCustom({"Stairs"}, require('Blocks/stairs'))
+Vlib.FillBlockCustom({"Stairs", "Corner", "Beam"}, require('Blocks/designable'))

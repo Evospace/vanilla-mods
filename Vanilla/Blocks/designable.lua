@@ -1,9 +1,6 @@
-local energy = 160
-
 local logic = function(self)
     local cover = DesignableCoverBlockLogic.cast(self)
-    cover.cover_set = StaticCoverSet.find("Stairs")
-    print(123123123)
+    cover.cover_set = StaticCoverSet.find(cover.static_block.name)
 end
 
 return function(name, tier, level)
