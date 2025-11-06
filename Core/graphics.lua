@@ -63,6 +63,11 @@ return function()
             end
             detail:set_action()
 
+            local values = {"Low", "Medium", "High", "High"}
+            local transparency = Setting.find("Transparency")
+            transparency.string_value = values[scalability + 1]
+            transparency:set_action()
+
             local clouds = Setting.find("VolumetricClouds")
             if scalability == 0 then
                 clouds.string_value = "Off"
@@ -189,6 +194,20 @@ return function()
     generate_setting("TextureQuality", "sg.TextureQuality")
     generate_setting("EffectsQuality", "sg.EffectsQuality")
     generate_setting("PostProcessQuality", "sg.PostProcessQuality")
+
+    db:from_table({
+        class = "Setting",
+        category = "Graphics",
+        type = "String",
+        default_string_value = "High",
+        string_options = {"Low", "Medium", "High"},
+        ---@param setting Setting
+        set_action = function(setting)
+            engine.transparency_preset = option4_to_int(setting.string_value)
+        end,
+        label = "Transparency",
+        name = "Transparency",
+    })
 
     local function generate_reflection(name, command, field)
         db:from_table({
