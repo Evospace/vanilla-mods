@@ -84,6 +84,9 @@ Vlib = {
             if a.energy_output_inventory ~= nil then
                 t = t.."\nProduction: "..Loc.gui_number(a.energy_output_inventory.capacity*20).."W"
             end
+            if a.total_production > 0 then
+                t = t.."\nTotal production: "..a.total_production
+            end
             return t
         end
 
