@@ -125,6 +125,8 @@ Vlib.FillBlock("IndustrialBoiler", require('Blocks/industrial_boiler'))
 Vlib.FillBlock("IndustrialSteamTurbine", require('Blocks/industrial_steam_turbine'))
 Vlib.FillBlock("IndustrialGenerator", require('Blocks/industrial_generator'))
 Vlib.FillBlock("IndustrialGenerator", require('Blocks/industrial_generator'))
+
+checkAndSet("FusionReactor", 6)
 Vlib.FillBlock("FusionReactor", require('Blocks/fusion_reactor'))
 Vlib.FillBlock("Portal", require('Blocks/portal'))
 Vlib.FillBlock("SmallSolarPanel", require('Blocks/small_solar_panel'))
@@ -133,4 +135,4 @@ Vlib.FillBlock("Riteg", require('Blocks/riteg'))
 
 Vlib.FillBlockCustom(Vlib.cable_array, require('Blocks/cable'))
 
-Vlib.FillBlockCustom({"Stairs", "Corner", "Beam", "Scaffold", "Chair", "Table", "Ladder", "Fence"}, require('Blocks/designable'))
+Vlib.FillBlockCustom({"Stairs", "Corner", "Beam", "Scaffold", "Chair", "Table", "Ladder", "Fence", "Column", "Floor"}, require('Blocks/designable'))
