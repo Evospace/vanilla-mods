@@ -105,6 +105,22 @@ return function()
         class = "Setting",
         category = "Graphics",
         type = "String",
+        default_string_value = "High",
+        string_options = {"Off", "On"},
+        ---@param setting Setting
+        set_action = function(setting)
+            local enabled = (setting.string_value == "On")
+            engine.enable_rain = enabled
+            engine:apply()
+        end,
+        label = "Rain",
+        name = "Rain",
+    })
+
+    db:from_table({
+        class = "Setting",
+        category = "Graphics",
+        type = "String",
         default_string_value = "On",
         string_options = {"Off", "On"},
         ---@param setting Setting
