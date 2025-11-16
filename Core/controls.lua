@@ -336,6 +336,24 @@ return function()
       name = "ToggleSideIcons",
       default_key = "X",
    })
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Key",
+      key_binding = "ToggleHud",
+      label = "ToggleHud",
+      name = "ToggleHud",
+      default_key = "Period",
+   })
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Key",
+      key_binding = "ToggleFlashlight",
+      label = "ToggleFlashlight",
+      name = "ToggleFlashlight",
+      default_key = "L",
+   })
    local nums = {"Zero","One","Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"}
    for i=0,9 do
       db:from_table({
