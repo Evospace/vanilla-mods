@@ -26,6 +26,7 @@ return function()
    make_audio("Blocks", "Blocks", 100)
    make_audio("Ambient", "Ambient", 100)
    make_audio("NatureAmbient", "NatureAmbient", 100)
+   make_audio("Rain", "Rain", 100)
    make_audio("Footsteps", "Footsteps", 100)
    make_audio("UI", "UI", 100)
  end
