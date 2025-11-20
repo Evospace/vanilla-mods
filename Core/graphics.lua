@@ -35,6 +35,11 @@ return function()
             set.string_value = relf_values[scalability + 1]
             set:set_action()
 
+            local relf_values = {"Low", "Medium", "High", "High"}
+            local set = Setting.find("MaterialQuality")
+            set.string_value = relf_values[scalability + 1]
+            set:set_action()
+
             local values = {0.3, 0.7, 1.0, 1.0}
             local set = Setting.find("GrassRenderingRange")
             set.int_value = math.floor(values[scalability + 1] * 100)
@@ -223,6 +228,25 @@ return function()
         end,
         label = "Transparency",
         name = "Transparency",
+    })
+
+    db:from_table({
+        class = "Setting",
+        category = "Graphics",
+        type = "String",
+        default_string_value = "High",
+        string_options = {"Low", "Medium", "High"},
+        ---@param setting Setting
+        set_action = function(setting)
+            local preset = 0
+            if setting.string_value == "Low" then preset = 0 end
+            if setting.string_value == "Medium" then preset = 2 end
+            if setting.string_value == "High" then preset = 1 end
+
+            Console.run("R.MaterialQualityLevel "..preset)
+        end,
+        label = "MaterialQuality",
+        name = "MaterialQuality",
     })
 
     local function generate_reflection(name, command, field)
