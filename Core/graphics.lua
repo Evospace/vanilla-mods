@@ -45,7 +45,7 @@ return function()
             set.int_value = math.floor(values[scalability + 1] * 100)
             set:set_action()
 
-            values = {2, 5, 9, 10}
+            local values = {2, 5, 9, 10}
             local set = Setting.find("DecorationsQuality")
             set.int_value = math.floor(values[scalability + 1])
             set:set_action()
@@ -55,7 +55,7 @@ return function()
             set.string_value = values[scalability + 1]
             set:set_action()
 
-            local values = {"85%", "90%", "100%", "100%"}
+            local values = {"100%", "100%", "100%", "100%"}
             local set = Setting.find("ScreenPersentage")
             set.string_value = values[scalability + 1]
             set:set_action()

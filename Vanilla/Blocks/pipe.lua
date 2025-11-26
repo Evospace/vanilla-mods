@@ -1,5 +1,5 @@
 local logic = function(self)
-    local conductor = ConductorBlockLogic.cast(self)
+    local conductor = FluidConductorBlockLogic.cast(self)
 
     local t = conductor.static_block.tier
 
@@ -10,6 +10,7 @@ local logic = function(self)
         conductor:add_wire(acc)
     end
 
+    conductor.capacity = 100
     conductor.side_cover = StaticCover.find(Vlib.tier_material[t+1].."PipeSide")
     conductor.center_cover = StaticCover.find(Vlib.tier_material[t+1].."PipeCenter")
     conductor.conductor_channel = 2000 + conductor.static_block.tier
