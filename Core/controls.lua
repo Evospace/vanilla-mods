@@ -136,7 +136,7 @@ return function()
       label = "MoveDown",
       name = "MoveDown",
       int_default_value = -1,
-      default_key = "LeftShift",
+      default_key = "C",
    })
    db:from_table({
       class = "Setting",
