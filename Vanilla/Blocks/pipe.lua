@@ -1,5 +1,5 @@
 local logic = function(self)
-    local conductor = FluidConductorBlockLogic.cast(self)
+    local conductor = ConductorBlockLogic.cast(self)
 
     local t = conductor.static_block.tier
 

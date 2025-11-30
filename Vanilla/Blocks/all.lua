@@ -124,7 +124,6 @@ Vlib.FillBlock("CombustionEngine", require('Blocks/combustion_engine'))
 Vlib.FillBlock("IndustrialBoiler", require('Blocks/industrial_boiler'))
 Vlib.FillBlock("IndustrialSteamTurbine", require('Blocks/industrial_steam_turbine'))
 Vlib.FillBlock("IndustrialGenerator", require('Blocks/industrial_generator'))
-Vlib.FillBlock("IndustrialGenerator", require('Blocks/industrial_generator'))
 
 checkAndSet("FusionReactor", 6)
 Vlib.FillBlock("FusionReactor", require('Blocks/fusion_reactor'))
