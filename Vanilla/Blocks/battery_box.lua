@@ -1,11 +1,11 @@
 local logic = function(self)
-    local conductor = ConductorBlockLogic.cast(self)
+    local conductor = ElectricityContainerBlockLogic.cast(self)
 
     local sides = {
         Vec3i.back, Vec3i.front, Vec3i.right, Vec3i.left, Vec3i.down, Vec3i.up
     }
 
-    local t = conductor.static_block.tier
+    local level = conductor.static_block.level
 
     for index, side in pairs(sides) do
         local acc = ResourceAccessor.new(conductor, "WireElectricity"..index)
@@ -14,6 +14,7 @@ local logic = function(self)
         conductor:add_wire(acc)
     end
 
+    conductor.capacity = 256000 * (level + 1)
     conductor.conductor_channel = 1000
     conductor.channel = "Electricity"
 end
