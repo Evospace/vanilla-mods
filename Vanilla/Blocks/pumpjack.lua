@@ -1,6 +1,6 @@
 local logic = function(self)
     local crafter = DrillingMachineBase.cast(self)
-    crafter.production = 200
+    crafter.production = 500
     crafter.map_register = true
 
     crafter.energy_per_tick = 60 * (crafter.static_block.level + 1)
