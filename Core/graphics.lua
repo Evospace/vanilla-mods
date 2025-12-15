@@ -73,11 +73,13 @@ return function()
             transparency.string_value = values[scalability + 1]
             transparency:set_action()
 
-            local clouds = Setting.find("VolumetricClouds")
+            local clouds = Setting.find("CloudsQuality")
             if scalability == 0 then
                 clouds.string_value = "Off"
+            elseif scalability == 1 then
+                clouds.string_value = "Simple"
             else
-                clouds.string_value = "On"
+                clouds.string_value = "Volumteric"
             end
             clouds:set_action()
 
@@ -92,18 +94,21 @@ return function()
         class = "Setting",
         category = "Graphics",
         type = "String",
-        default_string_value = "High",
-        string_options = {"Off", "On"},
+        default_string_value = "Simple",
+        string_options = {"Off", "Simple", "Volumteric"},
         ---@param setting Setting
         set_action = function(setting)
-            if setting.string_value == "Off" then
-                Console.run("r.VolumetricCloud 0")
-            else
-                Console.run("r.VolumetricCloud 1")
-            end
+           local function option3_to_int(string_value)
+               local preset = 0
+               if string_value == "Simple" then preset = 1 end
+               if string_value == "Volumteric" then preset = 2 end
+               return preset
+           end
+           engine.cloud_preset = option3_to_int(setting.string_value)
+           engine:apply()
         end,
-        label = "VolumetricClouds",
-        name = "VolumetricClouds",
+        label = "CloudsQuality",
+        name = "CloudsQuality",
     })
 
     db:from_table({
