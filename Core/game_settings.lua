@@ -17,6 +17,24 @@ return function()
         name = "LoadingRange",
     })
 
+    db:from_table({
+        class = "Setting",
+        category = "Game",
+        type = "Slider",
+        max_value = 3,
+        min_value = 0,
+        int_default_value = 0,
+        ---@param setting Setting
+        set_action = function(setting)
+           local value = setting.int_value
+           engine.sector_lod_count = value
+           print("set SectorLodCount "..value)
+           engine:apply()
+        end,
+        label = "SectorLodCount",
+        name = "SectorLodCount",
+    })
+
     local LocalizationMap = {
         English   = "en",
         Russian   = "ru-RU",
