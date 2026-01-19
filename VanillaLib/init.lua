@@ -130,7 +130,7 @@ Vlib = {
                 if first_tier == nil then
                     first_tier = index - 1
                 end
-                print(name.." found, registering lua table")
+                print("Logic set: "..name)
 
                 local table = register_fn(name, index - 1, index - first_tier)
 
@@ -151,7 +151,7 @@ Vlib = {
                 if first_tier == nil then
                     first_tier = index - 1
                 end
-                print(tier..name.." found, registering lua table")
+                print("Logic set: "..tier..name)
 
                 local table = register_fn(tier..name, index - 1, index - first_tier - 1)
 
