@@ -105,6 +105,7 @@ Vlib.FillBlock("Computer", require('Blocks/computer'))
 Vlib.FillBlock("BatteryBox", require('Blocks/battery_box'))
 
 Vlib.FillBlock("Pipe", require('Blocks/pipe'))
+Vlib.FillBlock("HeatPipe", require('Blocks/heat_pipe'))
 
 Vlib.FillBlock("Container", require('Blocks/container'))
 
