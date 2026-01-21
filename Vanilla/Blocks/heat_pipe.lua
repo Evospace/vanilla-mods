@@ -1,5 +1,5 @@
 local logic = function(self)
-    local conductor = HeatConductorBlockLogic.cast(self)
+    local conductor = ConductorBlockLogic.cast(self)
 
     local sides = {
         Vec3i.back, Vec3i.front, Vec3i.right, Vec3i.left, Vec3i.down, Vec3i.up
