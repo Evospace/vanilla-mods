@@ -10,7 +10,7 @@ return function()
         set_action = function(setting)
            local value = setting.int_value
            engine.loading_range = value
-           print("set LoadingRange "..value)
+           print_info("set LoadingRange "..value)
            engine:apply()
         end,
         label = "LoadingRange",
@@ -28,7 +28,7 @@ return function()
         set_action = function(setting)
            local value = setting.int_value
            engine.sector_lod_count = value
-           print("set SectorLodCount "..value)
+           print_info("set SectorLodCount "..value)
            engine:apply()
         end,
         label = "SectorLodCount",
@@ -69,7 +69,7 @@ return function()
         ---@param setting Setting
         set_action = function(setting)
             local loc = get_select(setting.string_value)
-            print("localization set "..setting.string_value)
+            print_info("localization set "..setting.string_value)
             game.localization = loc
         end,
         label = "Localization",
@@ -87,7 +87,7 @@ return function()
        set_action = function(setting)
           local value = setting.int_value / 100.0
           engine.dpi = value
-          print("set Dpi "..value)
+          print_info("set Dpi "..value)
           engine:apply()
        end,
        label = "Dpi",
@@ -104,7 +104,7 @@ return function()
             ---@param setting Setting
             set_action = function(setting)
                 local value = setting.string_value == "On"
-                print("set "..name.." "..tostring(value))
+                print_info("set "..name.." "..tostring(value))
                 engine[field] = value
                 engine:apply()
             end,
@@ -131,7 +131,7 @@ return function()
         set_action = function(setting)
            local value = setting.int_value
            engine.autosave_period = value
-           print("set AutosavePeriod "..value)
+           print_info("set AutosavePeriod "..value)
            engine:apply()
         end,
         label = "AutosavePeriod",
