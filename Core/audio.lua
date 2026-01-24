@@ -13,7 +13,7 @@ return function()
             local className = "/Game/Audio/"..class.."."..class
             local sc = SoundClass.load(className)
             sc.volume = value
-            print("set "..class.." volume "..value)
+            print_info("set "..class.." volume "..value)
             engine:apply()
          end,
          label = name,

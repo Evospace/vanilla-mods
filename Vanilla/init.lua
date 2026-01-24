@@ -67,7 +67,7 @@ function vanilla_mod.init()
    ss.size = Vec2i.new(10, 10)
 
    es:sub(defines.events.on_region_spawn, function(region) 
-      print("On region spawn "..tostring(region.pos))
+      print_info("On region spawn "..tostring(region.pos))
 
       if region.pos.x == 0 and region.pos.y == 0 then
          local ms = MapStructure.new()
@@ -75,7 +75,7 @@ function vanilla_mod.init()
          ms.offset = Vec2i.zero
 
          region:add_structure(ms)
-         print("Spawn platform at "..tostring(region.pos))
+         print_info("Spawn platform at "..tostring(region.pos))
       end
    end)
 

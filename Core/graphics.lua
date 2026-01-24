@@ -175,7 +175,7 @@ return function()
         set_action = function(setting)
             local width, height = string.match(setting.string_value, "^(%d+)x(%d+)$")
             engine.res_x, engine.res_y = tonumber(width), tonumber(height)
-            print("resolution set "..width.."x"..height)
+            print_info("resolution set "..width.."x"..height)
             engine:show_confirmation()
             engine:apply()
         end,
@@ -328,7 +328,7 @@ return function()
         set_action = function(setting)
            local value = setting.int_value / 10.0
            engine.props_quality = value
-           print("set DecorationsQuality "..value)
+           print_info("set DecorationsQuality "..value)
            engine:apply()
         end,
         label = "DecorationsQuality",
@@ -347,7 +347,7 @@ return function()
             set_action = function(setting)
                local value = setting.int_value / 100.0
                engine[variable] = value
-               print("set "..variable.." "..value)
+               print_info("set "..variable.." "..value)
                engine:apply()
             end,
             label = name,
@@ -369,7 +369,7 @@ return function()
         set_action = function(setting)
            local value = setting.int_value
            engine.fov = value
-           print("set ".."Fov".." "..value)
+           print_info("set ".."Fov".." "..value)
            engine:apply()
         end,
         label = "Fov",

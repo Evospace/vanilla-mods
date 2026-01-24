@@ -11,7 +11,7 @@ return function()
       set_action = function(setting)
          local value = setting.int_value / 200.0
          engine.mouse_sensitivity_x = value
-         print("set MouseSensitivityX "..value)
+         print_info("set MouseSensitivityX "..value)
          engine:apply()
       end,
       label = "MouseSensitivityX",
@@ -29,7 +29,7 @@ return function()
       set_action = function(setting)
          local value = setting.int_value / 200.0
          engine.mouse_sensitivity_y = value
-         print("set MouseSensitivityY "..value)
+         print_info("set MouseSensitivityY "..value)
          engine:apply()
       end,
       label = "MouseSensitivityY",
@@ -45,7 +45,7 @@ return function()
       set_action = function(setting)
          local value = setting.bool_value
          engine.mouse_inversion_x = value
-         print("set MouseInversionX "..tostring(value))
+         print_info("set MouseInversionX "..tostring(value))
          engine:apply()
       end,
       label = "MouseInversionX",
@@ -61,7 +61,7 @@ return function()
       set_action = function(setting)
          local value = setting.bool_value
          engine.mouse_inversion_y = value
-         print("set MouseInversionY "..tostring(value))
+         print_info("set MouseInversionY "..tostring(value))
          engine:apply()
       end,
       label = "MouseInversionY",
