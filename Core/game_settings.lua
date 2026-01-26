@@ -113,9 +113,31 @@ return function()
         })
     end
 
+    local function make_bool_set_on(name, field)
+        db:from_table({
+            class = "Setting",
+            category = "Game",
+            type = "String",
+            default_string_value = "On",
+            string_options = {"Off", "On"},
+            ---@param setting Setting
+            set_action = function(setting)
+                local value = setting.string_value == "On"
+                print_info("set "..name.." "..tostring(value))
+                engine[field] = value
+                engine:apply()
+            end,
+            label = name,
+            name = name,
+        })
+    end
+
     make_bool_set("Performance", "performance")
     make_bool_set("PerformanceGraph", "performance_graph")
     make_bool_set("MemoryStats", "memory_stats")
+    make_bool_set("Compass", "compass")
+    make_bool_set_on("CompassShowNearestOre", "compass_show_nearest_ore")
+    make_bool_set_on("CompassShowSpawnPoint", "compass_show_spawn_point")
     make_bool_set("CtrlHotbar", "ctrl_hotbar")
     make_bool_set("AltHotbar", "alt_hotbar")
     make_bool_set("ShiftHotbar", "shift_hotbar")
