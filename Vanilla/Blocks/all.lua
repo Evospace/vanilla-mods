@@ -121,6 +121,7 @@ Vlib.FillBlock("FissionReactor", require('Blocks/fission_reactor'))
 Vlib.FillBlock("DrillingRig", require('Blocks/drilling_rig'))
 
 Vlib.FillBlock("Pumpjack", require('Blocks/pumpjack'))
+Vlib.FillBlockCustom({"Pumpjack_leg"}, require('Blocks/pumpjack'))
 
 Vlib.FillBlock("CombustionEngine", require('Blocks/combustion_engine'))
 Vlib.FillBlock("IndustrialBoiler", require('Blocks/industrial_boiler'))
