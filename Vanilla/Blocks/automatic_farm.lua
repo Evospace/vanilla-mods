@@ -6,9 +6,10 @@ local logic = function(self)
     crafter.productivity = 25 * crafter.static_block.level
     crafter.ticks_per_item = 1200
 
-    local inv = crafter.energy
+    local inv = ResourceInventory.new(crafter, "energy")
     inv.capacity = crafter.energy_per_tick
     inv.item = StaticItem.find("Water")
+    crafter.energy = inv
 
     local acc = ResourceAccessor.new(crafter, "rai")
     acc.side, acc.pos = Vec3i.front, Vec3i.zero
