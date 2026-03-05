@@ -19,7 +19,7 @@ local logic = function(self)
 
     local inv = ResourceInventory.new(crafter, "rii")
     inv.capacity = 10000
-    inv.item = StaticItem.find("RawOil")
+    inv.draggable = false
     crafter.inventory:bind(inv)
 
     local acc = ResourceAccessor.new(crafter, "oa")
