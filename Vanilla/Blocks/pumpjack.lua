@@ -7,7 +7,7 @@ local logic = function(self)
     crafter.productivity = 20 * crafter.static_block.level
 
     local inv = ResourceInventory.new(crafter, "energy")
-    inv.capacity = crafter.energy_per_tick
+    inv.capacity = crafter.energy_per_tick_test
     crafter.energy = inv
 
     local acc = ResourceAccessor.new(crafter, "ria")
