@@ -76,9 +76,6 @@ Vlib.FillBlock("Electrolyzer", require('Blocks/electrolyzer'))
 checkAndSet("ArcSmelter", 2)
 Vlib.FillBlock("ArcSmelter", require('Blocks/arc_smelter'))
 
-checkAndSet("ChemReactor", 2)
-Vlib.FillBlock("ChemReactor", require('Blocks/chem_reactor'))
-
 checkAndSet("ChemicalBath", 3)
 Vlib.FillBlock("ChemicalBath", require('Blocks/chemical_bath'))
 
