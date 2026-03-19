@@ -83,6 +83,11 @@ return function()
             end
             clouds:set_action()
 
+            local values = {"Low", "Medium", "High", "High"}
+            local vram = Setting.find("VramBudget")
+            vram.string_value = values[scalability + 1]
+            vram:set_action()
+
             Setting.update_widgets()
         end,
 
@@ -389,6 +394,49 @@ return function()
         end,
         label = "MaxFps",
         name = "MaxFps",
+    })
+
+    db:from_table({
+        class = "Setting",
+        category = "Graphics",
+        type = "String",
+        default_string_value = "Medium",
+        string_options = {"Low", "Medium", "High"},
+        ---@param setting Setting
+        set_action = function(setting)
+            if setting.string_value == "Low" then
+                engine.limit_texture_pool_to_vram = true
+                engine.texture_pool_size_mb = 768
+                engine.texture_max_temp_memory_mb = 96
+                engine.texture_mip_bias = 2
+                engine.render_target_pool_min_mb = 256
+            elseif setting.string_value == "High" then
+                engine.limit_texture_pool_to_vram = true
+                engine.texture_pool_size_mb = 1536
+                engine.texture_max_temp_memory_mb = 192
+                engine.texture_mip_bias = 0
+                engine.render_target_pool_min_mb = 400
+            else
+                engine.limit_texture_pool_to_vram = true
+                engine.texture_pool_size_mb = 1200
+                engine.texture_max_temp_memory_mb = 128
+                engine.texture_mip_bias = 1
+                engine.render_target_pool_min_mb = 300
+            end
+
+            local limit_value = engine.limit_texture_pool_to_vram and 1 or 0
+            Console.run("r.TextureStreaming 1")
+            Console.run("r.Streaming.LimitPoolSizeToVRAM "..limit_value)
+            Console.run("r.Streaming.PoolSize "..engine.texture_pool_size_mb)
+            Console.run("r.Streaming.MaxTempMemoryAllowed "..engine.texture_max_temp_memory_mb)
+            Console.run("r.Streaming.MipBias "..engine.texture_mip_bias)
+            Console.run("r.Streaming.UsePerTextureBias 1")
+            Console.run("r.Streaming.DefragDynamicBounds 1")
+            Console.run("r.RenderTargetPoolMin "..engine.render_target_pool_min_mb)
+            engine:apply()
+        end,
+        label = "VramBudget",
+        name = "VramBudget",
     })
 
     generate_setting_on_off("VSync", "r.Vsync")
