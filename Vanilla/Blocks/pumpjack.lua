@@ -21,6 +21,7 @@ local logic = function(self)
     inv.capacity = 10000
     inv.draggable = false
     crafter.inventory:bind(inv)
+    crafter.inventory.draggable = false
 
     local acc = ResourceAccessor.new(crafter, "oa")
     acc.side, acc.pos = Vec3i.front, Vec3i.new(0, 0, 0)
