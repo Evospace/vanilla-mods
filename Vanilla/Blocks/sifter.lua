@@ -1,4 +1,4 @@
-local energy = 50
+local energy = 400
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
