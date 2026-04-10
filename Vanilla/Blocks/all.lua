@@ -101,6 +101,7 @@ Vlib.FillBlock("Computer", require('Blocks/computer'))
 
 Vlib.FillBlock("BatteryBox", require('Blocks/battery_box'))
 
+Vlib.FillBlock("LogicWire", require('Blocks/data_wire'))
 Vlib.FillBlock("Pipe", require('Blocks/pipe'))
 Vlib.FillBlock("HeatPipe", require('Blocks/heat_pipe'))
 Vlib.FillBlock("Flywheel", require('Blocks/flywheel'))
