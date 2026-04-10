@@ -14,6 +14,7 @@ local logic = function(self)
         conductor:add_wire(acc)
     end
 
+    conductor.drain = 1
     conductor.capacity = 32000
     conductor.conductor_channel = 3000
     conductor.channel = "Heat"

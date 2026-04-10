@@ -14,6 +14,7 @@ local logic = function(self)
         conductor:add_wire(acc)
     end
 
+    conductor.drain = 2
     conductor.capacity = 16000
     conductor.conductor_channel = 4000
     conductor.channel = "Kinetic"
