@@ -6,7 +6,7 @@ function vanilla_mod.pre_init()
 end
 
 function vanilla_mod.init()
-   local es = EventSystem.get_instance()
+   local es = EventSystem.get()
 
    -- local oreProps = StaticPropList.find("OreProps")
 
