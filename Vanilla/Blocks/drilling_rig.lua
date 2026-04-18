@@ -3,7 +3,8 @@ local logic = function(self)
     crafter.map_register = true
 
     crafter.ticks_per_item = 60
-    crafter.energy_per_tick = 60 * (crafter.static_block.level + 1)
+    -- Base 96: one Copper Stirling outputs ~50 kinetic/tick → ~52% load (was 60 → ~83%)
+    crafter.energy_per_tick = 96 * (crafter.static_block.level + 1)
     crafter.productivity = 15 * crafter.static_block.level
 
     local inv = ResourceInventory.new(crafter, "energy")
