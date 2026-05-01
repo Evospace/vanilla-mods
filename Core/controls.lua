@@ -169,6 +169,24 @@ return function()
       class = "Setting",
       category = "Controls",
       type = "Key",
+      key_binding = "BlockUp",
+      label = "BlockUp",
+      name = "BlockUp",
+      default_key = "Up",
+   })
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Key",
+      key_binding = "BlockDown",
+      label = "BlockDown",
+      name = "BlockDown",
+      default_key = "Down",
+   })
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Key",
       key_binding = "Search",
       label = "Search",
       name = "Search",
@@ -353,6 +371,42 @@ return function()
       label = "ToggleFlashlight",
       name = "ToggleFlashlight",
       default_key = "L",
+   })
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Key",
+      key_binding = "SelectToolMultitool",
+      label = "SelectToolMultitool",
+      name = "SelectToolMultitool",
+      default_key = "None",
+   })
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Key",
+      key_binding = "SelectToolScrewdriver",
+      label = "SelectToolScrewdriver",
+      name = "SelectToolScrewdriver",
+      default_key = "None",
+   })
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Key",
+      key_binding = "SelectToolLinkTool",
+      label = "SelectToolLinkTool",
+      name = "SelectToolLinkTool",
+      default_key = "None",
+   })
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Key",
+      key_binding = "SelectToolGroundLevelingTool",
+      label = "SelectToolGroundLevelingTool",
+      name = "SelectToolGroundLevelingTool",
+      default_key = "None",
    })
    local nums = {"Zero","One","Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"}
    for i=0,9 do
