@@ -79,6 +79,23 @@ function vanilla_mod.init()
       end
    end)
 
+   es:sub(defines.events.on_surface_day_phase, function(ctx)
+      if music == nil then
+         return
+      end
+      local key
+      if ctx.anchor == "dawn" then
+         key = "default"
+      elseif ctx.anchor == "sunset" then
+         key = "cosmos"
+      else
+         return
+      end
+      if music:set_playlist(key) then
+         music:play_random_crossfade(10.0)
+      end
+   end)
+
    -- local gen = BiomeWorldGenerator.reg("TEST")
 
    -- local hg1 = HeightGenerator.reg("TEST_BiomeHeight_Rugged")
