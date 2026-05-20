@@ -1,4 +1,3 @@
-local energy = 1000
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
@@ -8,7 +7,6 @@ local logic = function(self)
         
     local input = ResourceInventory.new(crafter, "rii")
     input.item = StaticItem.find("Heat")
-    input.capacity = Vlib.get_consumption(crafter, energy)
     crafter.energy_input_inventory = input
     
     local acc = ResourceAccessor.new(crafter, "rai")
@@ -39,6 +37,5 @@ local logic = function(self)
 end
 
 return function(name, tier, level)
-    LocData.set(name, Vlib.ToPower(energy, level))
     return { logic_init = logic }
 end

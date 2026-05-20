@@ -4,11 +4,9 @@ local logic = function(self)
 
     crafter.ticks_per_item = 60
     -- Base 96: one Copper Stirling outputs ~50 kinetic/tick → ~52% load (was 60 → ~83%)
-    crafter.energy_per_tick = 96 * (crafter.static_block.level + 1)
     crafter.productivity = 15 * crafter.static_block.level
 
     local inv = ResourceInventory.new(crafter, "energy")
-    inv.capacity = crafter.energy_per_tick
     crafter.energy = inv
 
     local acc = ResourceAccessor.new(crafter, "ria")
@@ -29,6 +27,5 @@ local logic = function(self)
 end
 
 return function(name, tier, level)
-    LocData.set(name, Vlib.ToPower(level, 1))
     return { logic_init = logic }
 end

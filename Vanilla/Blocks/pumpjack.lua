@@ -2,12 +2,9 @@ local logic = function(self)
     local crafter = DrillingMachineBase.cast(self)
     crafter.production = 500
     crafter.map_register = true
-
-    crafter.energy_per_tick = 60 * (crafter.static_block.level + 1)
     crafter.productivity = 20 * crafter.static_block.level
 
     local inv = ResourceInventory.new(crafter, "energy")
-    inv.capacity = crafter.energy_per_tick
     crafter.energy = inv
 
     local acc = ResourceAccessor.new(crafter, "ria")
@@ -32,6 +29,5 @@ local logic = function(self)
 end
 
 return function(name, tier, level)
-    LocData.set(name, Vlib.ToPower(level, 1))
     return { logic_init = logic }
 end

@@ -42,14 +42,6 @@ Vlib = {
         return inventories
     end,
 
-    ---Calculate power from per_tick value and level, returns as string
-    ---@param per_tick integer
-    ---@param level integer
-    ---@return string
-    ToPower = function(per_tick, level)
-        return Loc.gui_number(math.pow(2.0, level) * per_tick * 20)
-    end,
-    
     dump = function (o)
         if type(o) == 'table' then
             local s = '('
@@ -78,11 +70,12 @@ Vlib = {
             local usage = a.ticks_passed / math.max(a.real_ticks_passed, 1.0) * 100
             local t = "Speed: x"..(a.speed/100.0).."\nUsage: "..string.format("%.0f%%", usage)
             --local t = "Usage: "..string.format("%.0f%%", usage)
-            if a.energy_input_inventory ~= nil then
-                t = t.."\nConsumption: "..Loc.gui_number(a.energy_input_inventory.capacity*20).."W"
+            local sb = a.static_block
+            if sb ~= nil and sb.energy_consumption_per_tick > 0 then
+                t = t.."\nConsumption: "..Loc.gui_number(sb.energy_consumption_per_tick*20).."W"
             end
-            if a.energy_output_inventory ~= nil then
-                t = t.."\nProduction: "..Loc.gui_number(a.energy_output_inventory.capacity*20).."W"
+            if sb ~= nil and sb.energy_production_per_tick > 0 then
+                t = t.."\nProduction: "..Loc.gui_number(sb.energy_production_per_tick*20).."W"
             end
             if a.total_production > 0 then
                 t = t.."\nTotal production: "..a.total_production
@@ -167,12 +160,6 @@ Vlib = {
         local mat = Material.load("/Game/Materials/"..Vlib.tier_material[self.logic.static_block.tier + 1])
         self.hull_material = mat
         --Legacy.this:set_field_object("HullMaterial", mat)
-    end,
-
-    --- @param crafter BlockLogic
-    --- @param value integer
-    get_consumption = function(crafter, value)
-        return math.pow(2.0, crafter.static_block.level) * value
     end,
 
     --- @param crafter AbstractCrafter

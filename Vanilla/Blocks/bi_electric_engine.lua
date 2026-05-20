@@ -6,7 +6,6 @@ local logic = function(self)
         
     local inv = ResourceInventory.new(crafter, "rii")
     inv.item = StaticItem.find("Electricity")
-    inv.capacity = Vlib.get_consumption(crafter, 55)
     crafter.energy_input_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "rai_")
@@ -18,7 +17,6 @@ local logic = function(self)
     
     local inv = ResourceInventory.new(crafter, "rio")
     inv.item = StaticItem.find("Kinetic")
-    inv.capacity = Vlib.get_consumption(crafter, 55)
     crafter.energy_output_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "rao")
@@ -37,6 +35,5 @@ local logic = function(self)
 end
 
 return function(name, tier, level)
-    LocData.set(name, Vlib.ToPower(level, 1))
     return { logic_init = logic }
 end
