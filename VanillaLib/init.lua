@@ -63,27 +63,62 @@ Vlib = {
         if LuaLogFlag then print(str) end
     end,
 
+    --- Build localized tooltip lines from StaticBlock prototype data (energy, tier, level).
+    --- Optional extra_lines: array of already-localized strings (e.g. crafter runtime stats), shown first.
+    --- @param sb StaticBlock|nil
+    --- @param extra_lines string[]|nil
+    --- @return string
+    static_block_tooltip = function(sb, extra_lines)
+        local lines = {}
+        extra_lines = extra_lines or {}
+        for _, l in ipairs(extra_lines) do
+            if l ~= nil and l ~= "" then
+                table.insert(lines, l)
+            end
+        end
+        if sb == nil then
+            return table.concat(lines, "\n")
+        end
+
+        local con = sb.energy_consumption_per_tick or 0
+        local prod = sb.energy_production_per_tick or 0
+
+        if con > 0 then
+            local w = Loc.gui_number(con * 20)
+            table.insert(lines, string.format(Loc.get("TooltipBlockEnergyConsumption", "ui"), w))
+        end
+        if prod > 0 then
+            local w = Loc.gui_number(prod * 20)
+            table.insert(lines, string.format(Loc.get("TooltipBlockEnergyProduction", "ui"), w))
+        end
+        if con > 0 and prod > 0 then
+            local net_w = Loc.gui_number((prod - con) * 20)
+            table.insert(lines, string.format(Loc.get("TooltipBlockEnergyNet", "ui"), net_w))
+        end
+
+        table.insert(lines, string.format(Loc.get("TooltipBlockTier", "ui"), sb.tier or 0))
+        table.insert(lines, string.format(Loc.get("TooltipBlockLevel", "ui"), sb.level or 0))
+
+        return table.concat(lines, "\n")
+    end,
+
     --- @param self BlockLogic
     CommonActorTooltip = function(self)
         local a = AbstractCrafter.cast(self)
         if a ~= nil then
             local usage = a.ticks_passed / math.max(a.real_ticks_passed, 1.0) * 100
-            local t = "Speed: x"..(a.speed/100.0).."\nUsage: "..string.format("%.0f%%", usage)
-            --local t = "Usage: "..string.format("%.0f%%", usage)
-            local sb = a.static_block
-            if sb ~= nil and sb.energy_consumption_per_tick > 0 then
-                t = t.."\nConsumption: "..Loc.gui_number(sb.energy_consumption_per_tick*20).."W"
-            end
-            if sb ~= nil and sb.energy_production_per_tick > 0 then
-                t = t.."\nProduction: "..Loc.gui_number(sb.energy_production_per_tick*20).."W"
-            end
+            local speed_str = Loc.gui_number(a.speed / 100.0)
+            local extra = {
+                string.format(Loc.get("TooltipCrafterSpeed", "ui"), speed_str),
+                string.format(Loc.get("TooltipCrafterUsage", "ui"), string.format("%.0f", usage)),
+            }
             if a.total_production > 0 then
-                t = t.."\nTotal production: "..a.total_production
+                table.insert(extra, string.format(Loc.get("TooltipCrafterTotalProduction", "ui"), a.total_production))
             end
-            return t
+            return Vlib.static_block_tooltip(a.static_block, extra)
         end
 
-        return "hello from lua"
+        return Loc.get("TooltipBlockNoLogic", "ui")
     end,
 
     tier_material = {
