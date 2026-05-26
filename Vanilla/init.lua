@@ -236,6 +236,27 @@ function vanilla_mod.init()
 end
 
 function vanilla_mod.post_init()
+   local firstBlockQuest = StaticQuest.find("PlaceFirstBlock")
+   if firstBlockQuest ~= nil then
+      firstBlockQuest.on_unlock = function(quest)
+         local objective = quest:create_objective("place_block")
+         objective.label = Loc.new("PlaceBlockObjective", "quests")
+         objective.show_progress = true
+         objective.current = 0
+         objective.required = 1
+      end
+
+      firstBlockQuest.events = {
+         [defines.events.on_built_block] = function(ctx, quest)
+            local objective = quest:find_objective_by_id("place_block")
+            if objective ~= nil then
+               objective:set_progress(1, 1, true)
+            end
+            quest:complete()
+         end
+      }
+      firstBlockQuest:refresh_events()
+   end
 end
 
 db:mod(vanilla_mod)
