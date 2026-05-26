@@ -241,6 +241,15 @@ return function()
       class = "Setting",
       category = "Controls",
       type = "Key",
+      key_binding = "QuestBook",
+      label = "QuestBook",
+      name = "QuestBook",
+      default_key = "B",
+   })
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Key",
       key_binding = "Jump",
       label = "Jump",
       name = "Jump",
