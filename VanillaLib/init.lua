@@ -129,18 +129,6 @@ Vlib = {
         "Neutronium"
     },
 
-    cable_array = {
-        "CopperConnector",
-        "OFCCable",
-        "SCable",
-        "GCable",
-        "ACable",
-        "YBCOCable",
-        "PCable",
-        "TNCable",
-        "ABCCOCable",
-    },
-
     sides = {
         Vec3i.back, Vec3i.front, Vec3i.right, Vec3i.left, Vec3i.down, Vec3i.up
     },
@@ -191,7 +179,6 @@ Vlib = {
     CommonActorInit = function(self)
         local mat = Material.load("/Game/Materials/"..Vlib.tier_material[self.logic.static_block.tier + 1])
         self.hull_material = mat
-        --Legacy.this:set_field_object("HullMaterial", mat)
     end,
 
     --- @param crafter AbstractCrafter

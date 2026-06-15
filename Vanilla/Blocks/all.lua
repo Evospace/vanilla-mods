@@ -133,6 +133,6 @@ Vlib.FillBlock("SmallSolarPanel", require('Blocks/small_solar_panel'))
 Vlib.FillBlock("SolarPanel", require('Blocks/solar_panel'))
 Vlib.FillBlock("Riteg", require('Blocks/riteg'))
 
-Vlib.FillBlockCustom(Vlib.cable_array, require('Blocks/cable'))
+Vlib.FillBlockCustom({"CopperConnector"}, require('Blocks/cable'))
 
 Vlib.FillBlockCustom({"Stairs", "Corner", "Beam", "Scaffold", "Chair", "Table", "Ladder", "Fence", "Column", "Floor"}, require('Blocks/designable'))
