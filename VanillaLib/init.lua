@@ -63,7 +63,7 @@ Vlib = {
         if LuaLogFlag then print(str) end
     end,
 
-    --- Build localized tooltip lines from StaticBlock prototype data (energy, tier, level).
+    --- Build localized tooltip lines from StaticBlock prototype data (energy).
     --- Optional extra_lines: array of already-localized strings (e.g. crafter runtime stats), shown first.
     --- @param sb StaticBlock|nil
     --- @param extra_lines string[]|nil
@@ -95,9 +95,6 @@ Vlib = {
             local net_w = Loc.gui_number((prod - con) * 20)
             table.insert(lines, string.format(Loc.get("TooltipBlockEnergyNet", "ui"), net_w))
         end
-
-        table.insert(lines, string.format(Loc.get("TooltipBlockTier", "ui"), sb.tier or 0))
-        table.insert(lines, string.format(Loc.get("TooltipBlockLevel", "ui"), sb.level or 0))
 
         return table.concat(lines, "\n")
     end,
