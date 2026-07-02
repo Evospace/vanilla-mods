@@ -403,15 +403,6 @@ return function()
       class = "Setting",
       category = "Controls",
       type = "Key",
-      key_binding = "SelectToolLinkTool",
-      label = "SelectToolLinkTool",
-      name = "SelectToolLinkTool",
-      default_key = "None",
-   })
-   db:from_table({
-      class = "Setting",
-      category = "Controls",
-      type = "Key",
       key_binding = "SelectToolGroundLevelingTool",
       label = "SelectToolGroundLevelingTool",
       name = "SelectToolGroundLevelingTool",
