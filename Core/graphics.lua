@@ -68,6 +68,14 @@ return function()
             end
             detail:set_action()
 
+            local spotlight = Setting.find("SpotlightShadows")
+            if scalability <= 1 then
+                spotlight.string_value = "Off"
+            else
+                spotlight.string_value = "On"
+            end
+            spotlight:set_action()
+
             local values = {"Low", "Medium", "High", "High"}
             local transparency = Setting.find("Transparency")
             transparency.string_value = values[scalability + 1]
@@ -146,6 +154,22 @@ return function()
         end,
         label = "DetailShadows",
         name = "DetailShadows",
+    })
+
+    db:from_table({
+        class = "Setting",
+        category = "Graphics",
+        type = "String",
+        default_string_value = "On",
+        string_options = {"Off", "On"},
+        ---@param setting Setting
+        set_action = function(setting)
+            local enabled = (setting.string_value == "On")
+            engine.spotlight_shadows = enabled
+            engine:apply()
+        end,
+        label = "SpotlightShadows",
+        name = "SpotlightShadows",
     })
 
     db:from_table({
