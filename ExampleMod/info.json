@@ -1,0 +1,9 @@
+{
+    "name": "ExampleMod",
+    "version": "0.21.1",
+    "title": "Example Mod",
+    "author": "evospace",
+    "evospace_version": "0.21.1",
+    "dependencies": ["Vanilla", "VanillaLib"],
+    "description": "A folder you drop in: one item, one recipe and one machine registered from Lua"
+}
