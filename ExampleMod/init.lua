@@ -21,6 +21,14 @@ local DICTIONARY = "ExampleAssemblerRecipeDictionary"
 local RECIPE = "ExampleGearFromCopperPlate"
 local BLOCK = "ExampleAssembler"
 local INPUT_ITEM = Vlib.tier_material[2] .. "Plate"
+local RESEARCH = "ExampleAssembly"
+local PARENT_RESEARCH = "Metalwork"
+
+-- Every .ini under Loc/<locale>/ in this folder is read as the mod loads, and
+-- its [section] headers become localization tables. Loc.new(key, table) points a
+-- prototype at one line of one of them; a key with no line behind it shows up in
+-- the game as the bare key, so the names below live in Loc/en/example.ini.
+local LOC = "example"
 
 function ExampleMod.pre_init()
 end
@@ -31,6 +39,7 @@ function ExampleMod.init()
    gear.stack_size = 32
    gear.tier = 1
    gear.category = "Example"
+   gear.label = Loc.new(ITEM, LOC)
 
    -- The recipe group a machine family works from.
    local dictionary = RecipeDictionary.reg(DICTIONARY)
@@ -39,6 +48,8 @@ function ExampleMod.init()
    -- Two copper plates in, one gear out, two seconds at 20 ticks per second.
    -- The plate is named through the tier table of VanillaLib rather than spelled
    -- out, so the mod fails loudly if the library it depends on is not there.
+   -- A recipe carries no label of its own: every screen showing one names it
+   -- after the item in its first output slot.
    local recipe = Recipe.reg(RECIPE)
    recipe.ticks = 40
    recipe.tier = 1
@@ -53,6 +64,7 @@ function ExampleMod.init()
    machine_item.stack_size = 32
    machine_item.tier = 1
    machine_item.category = "Example"
+   machine_item.label = Loc.new(BLOCK, LOC)
    machine_item.block = machine
    machine.item = machine_item
 
@@ -83,6 +95,23 @@ function ExampleMod.init()
          accessor.cover = StaticCover.find("ElectricityInput")
       end,
    }
+
+   -- Nothing above makes the machine buildable: an item reaches the player's
+   -- hand crafting only when a research unlocks a recipe of HandRecipeDictionary
+   -- that produces it. So the mod adds both — the hand recipe, and a research
+   -- node hung off a vanilla one through required_research, which is how a mod
+   -- puts its content into the tree the player already climbs.
+   local hand_recipe = Recipe.reg(BLOCK)
+   hand_recipe.ticks = 40
+   hand_recipe.input:add(StaticItem.find(INPUT_ITEM), 8)
+   hand_recipe.output:add(machine_item, 1)
+   RecipeDictionary.find("HandRecipeDictionary"):add(hand_recipe)
+
+   local research = StaticResearchRecipe.reg(RESEARCH)
+   research.label = Loc.new(RESEARCH, LOC)
+   research.complexity = 200
+   research.required_research = { StaticResearch.find(PARENT_RESEARCH) }
+   research:unlocks(hand_recipe)
 end
 
 function ExampleMod.post_init()
