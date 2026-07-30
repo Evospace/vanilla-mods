@@ -3,6 +3,7 @@ require('balance')
 local vanilla_mod = {}
 
 function vanilla_mod.pre_init()
+   Vlib = require('vlib')
 end
 
 function vanilla_mod.init()

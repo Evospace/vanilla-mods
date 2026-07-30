@@ -4,6 +4,6 @@
     "title": "Vanilla",
     "author": "evospace",
     "evospace_version": "0.20.1",
-    "dependencies": ["Core>=0.20.1"],
+    "dependencies": ["Core>=0.20.1", "VanillaLib>=0.20.1"],
     "description": "Vanilla"
 }
