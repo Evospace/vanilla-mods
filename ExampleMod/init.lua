@@ -76,6 +76,8 @@ function ExampleMod.init()
    machine_item.block = machine
    machine.item = machine_item
 
+   dictionary:used_in(machine_item)
+
    -- logic_init runs on every placed block and wires the instance: the
    -- dictionary it crafts from, one input and one output slot, and the
    -- electricity accessor that feeds it from the side.
