@@ -1,5 +1,5 @@
 return function()
-   local function make_audio(name, class, default) 
+   local function make_audio(name, classes, default)
       db:from_table({
          class = "Setting",
          category = "Audio",
@@ -10,10 +10,12 @@ return function()
          ---@param setting Setting
          set_action = function(setting)
             local value = setting.int_value / 100.0
-            local className = "/Game/Audio/"..class.."."..class
-            local sc = SoundClass.load(className)
-            sc.volume = value
-            print_info("set "..class.." volume "..value)
+            for _, path in ipairs(classes) do
+               local className = path .. "." .. string.match(path, "[^/]+$")
+               local sc = SoundClass.load(className)
+               sc.volume = value
+               print_info("set " .. className .. " volume " .. value)
+            end
             engine:apply()
          end,
          label = name,
@@ -21,12 +23,15 @@ return function()
       })
    end
 
-   make_audio("Master", "EvospaceMaster", 100)
-   make_audio("Music", "Music", 60)
-   make_audio("Blocks", "Blocks", 100)
-   make_audio("Ambient", "Ambient", 100)
-   make_audio("NatureAmbient", "NatureAmbient", 100)
-   make_audio("Rain", "Rain", 100)
-   make_audio("Footsteps", "Footsteps", 75)
-   make_audio("UI", "UI", 100)
+   local audio = "/Game/Audio/"
+   local uds = "/Game/UltraDynamicSky/Sound/"
+
+   make_audio("Master", { audio .. "EvospaceMaster", uds .. "UDS_Weather" }, 100)
+   make_audio("Music", { audio .. "Music" }, 60)
+   make_audio("Blocks", { audio .. "Blocks" }, 100)
+   make_audio("Ambient", { audio .. "Ambient" }, 100)
+   make_audio("Environment", { uds .. "UDS_Environment_Sound", uds .. "UDS_Outdoor_Sound" }, 50)
+   make_audio("Weather", { uds .. "UDS_Weather_Mixer" }, 50)
+   make_audio("Footsteps", { audio .. "Footsteps" }, 75)
+   make_audio("UI", { audio .. "UI" }, 100)
  end

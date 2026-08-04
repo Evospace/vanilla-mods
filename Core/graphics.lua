@@ -35,6 +35,11 @@ return function()
             set.string_value = relf_values[scalability + 1]
             set:set_action()
 
+            local relf_values = {"Low", "Low", "High", "High"}
+            local set = Setting.find("ReflectionQuality")
+            set.string_value = relf_values[scalability + 1]
+            set:set_action()
+
             local relf_values = {"Low", "Medium", "High", "High"}
             local set = Setting.find("MaterialQuality")
             set.string_value = relf_values[scalability + 1]
@@ -307,6 +312,23 @@ return function()
     end
     generate_reflection("GlobalIllumination", "r.DynamicGlobalIlluminationMethod", "gi_preset")
     generate_reflection("Reflection", "r.ReflectionMethod", "reflection_preset")
+
+    db:from_table({
+        class = "Setting",
+        category = "Graphics",
+        type = "String",
+        default_string_value = "High",
+        string_options = {"Low", "High"},
+        ---@param setting Setting
+        set_action = function(setting)
+            local preset = 3
+            if setting.string_value == "Low" then preset = 1 end
+
+            Console.run("r.SSR.Quality "..preset)
+        end,
+        label = "ReflectionQuality",
+        name = "ReflectionQuality",
+    })
 
     db:from_table({
         class = "Setting",
