@@ -96,6 +96,11 @@ return function()
             end
             clouds:set_action()
 
+            local values = {"Low", "High", "High", "High"}
+            local particles = Setting.find("WeatherParticles")
+            particles.string_value = values[scalability + 1]
+            particles:set_action()
+
             local values = {"Low", "Medium", "High", "High"}
             local vram = Setting.find("VramBudget")
             vram.string_value = values[scalability + 1]
@@ -134,15 +139,17 @@ return function()
         category = "Graphics",
         type = "String",
         default_string_value = "High",
-        string_options = {"Off", "On"},
+        string_options = {"Off", "Low", "High"},
         ---@param setting Setting
         set_action = function(setting)
-            local enabled = (setting.string_value == "On")
-            engine.enable_rain = enabled
+            local preset = 0
+            if setting.string_value == "Low" then preset = 1 end
+            if setting.string_value == "High" then preset = 2 end
+            engine.weather_particles = preset
             engine:apply()
         end,
-        label = "Rain",
-        name = "Rain",
+        label = "WeatherParticles",
+        name = "WeatherParticles",
     })
 
     db:from_table({

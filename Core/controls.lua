@@ -205,6 +205,24 @@ return function()
       class = "Setting",
       category = "Controls",
       type = "Key",
+      key_binding = "Chat",
+      label = "Chat",
+      name = "Chat",
+      default_key = "Enter",
+   })
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Key",
+      key_binding = "Console",
+      label = "Console",
+      name = "Console",
+      default_key = "Slash",
+   })
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Key",
       key_binding = "Crouch",
       label = "Crouch",
       name = "Crouch",
