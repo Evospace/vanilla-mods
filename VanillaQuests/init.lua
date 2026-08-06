@@ -7,10 +7,11 @@
 --   * an OR-group objective ("20 chalcopyrite OR malachite ore", any mix),
 --   * a quest unlocked by completing another (StockpileCopperOre),
 --   * a quest whose objective tracks a different event (BuildFirstSmelter),
+--   * a quest that sends the player to the research tree (ResearchCopperSmelting),
 --   * an explanatory image + an item context preview.
 --
 -- Add real chapters/quests by copying this file's pattern. The remaining
--- objective types (research / count) are shown commented out below.
+-- objective type (count) is shown commented out below.
 
 local qb = require('questbook')
 
@@ -64,15 +65,30 @@ function VanillaQuestsMod.init()
       label = Loc.new("BuildFirstSmelter", "quests"),
       description = { Loc.new("BuildFirstSmelterDesc", "quests") },
       context = { "StoneSmelter", "CopperSmelter" },
+      unlocks = { "ResearchCopperSmelting" },
       objectives = {
          qb.build_block({ "StoneSmelter", "CopperSmelter" }, 1,
             { label = Loc.new("ObjBuildFirstSmelter", "quests") }),
       },
    })
 
+   -- Quest 4: unlocked when BuildFirstSmelter is completed. The chain leaves the
+   -- world here and points at the research tree: this objective tracks
+   -- on_research_finished. Research names carry a level suffix and the base level
+   -- is unsuffixed, so "Smelting" is level 0 and "Smelting1" unlocks the copper
+   -- smelter the stone one is a stopgap for.
+   qb.quest("ResearchCopperSmelting", {
+      chapter = "CopperProduction",
+      label = Loc.new("ResearchCopperSmelting", "quests"),
+      description = { Loc.new("ResearchCopperSmeltingDesc", "quests") },
+      context = { "CopperSmelter" },
+      objectives = {
+         qb.research("Smelting1",
+            { label = Loc.new("ObjResearchCopperSmelting", "quests") }),
+      },
+   })
+
    -- === Other objective types (examples, kept commented) ===
-   --
-   -- qb.research("Smelting0"),   -- research names may carry a level suffix
    --
    -- A second chapter gated behind the copper chapter (chapter unlock graph):
    -- qb.chapter("NuclearEnergy", {

@@ -2,7 +2,6 @@
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("PyrolysisUnitRecipeDictionary")
-    crafter.recipes.start_tier = 3
     crafter.speed = Vlib.get_speed(crafter)
     --crafter.map_register = true
 

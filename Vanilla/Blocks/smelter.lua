@@ -2,7 +2,6 @@
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.find("SmelterRecipeDictionary")
-    crafter.recipes.start_tier = 0
     crafter.speed = Vlib.get_speed(crafter)
 
     Vlib.add_single_slot_invs(crafter.crafter_input_container, crafter, "ii", 1)
