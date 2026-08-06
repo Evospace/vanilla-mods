@@ -27,6 +27,7 @@
 --   qb.collect_item({names}, count)  -- mine any of the named items (OR-group)
 --   qb.research(name)                -- finish the named research
 --   qb.build_block({names}, count)   -- build any of the named blocks (OR-group)
+--   qb.build_stack({top}, {bottom})  -- build one of the top blocks standing on a bottom one
 --   qb.count(id, count, label)       -- generic manual counter (advance from your own code)
 
 local qb = {}
@@ -71,9 +72,13 @@ end
 -- `event` may be nil for purely manual objectives (kind == "count").
 -- ---------------------------------------------------------------------------
 
+-- `opts.weights` gives an item a rate other than one unit per item, which is how
+-- an OR-group whose members are not worth the same is written: 20 coal or 40
+-- logs is count 40 with coal weighted 2, and any mix in between counts.
 function qb.collect_item(names, count, opts)
    opts = opts or {}
    local set = to_set(names)
+   local weights = opts.weights or {}
    return {
       kind = "collect_item",
       id = opts.id or ("collect_" .. names_label(set):gsub("[^%w]", "_")),
@@ -82,7 +87,7 @@ function qb.collect_item(names, count, opts)
       show_progress = true,
       label = opts.label,
       match = function(ctx) return ctx.item ~= nil and set[ctx.item.name] == true end,
-      amount = function(ctx) return ctx.count or 1 end,
+      amount = function(ctx) return (ctx.count or 1) * (weights[ctx.item.name] or 1) end,
    }
 end
 
@@ -97,6 +102,39 @@ function qb.build_block(names, count, opts)
       show_progress = (count or 1) > 1,
       label = opts.label,
       match = function(ctx) return ctx.block ~= nil and set[ctx.block.name] == true end,
+      amount = function(ctx) return 1 end,
+   }
+end
+
+-- One block standing directly on another, in either build order: the objective
+-- answers the top block being placed over a bottom one and the bottom block
+-- being placed under a top one, so a player who builds the stack upside down is
+-- not left with a quest that cannot close.
+function qb.build_stack(top_names, bottom_names, opts)
+   opts = opts or {}
+   local top = to_set(top_names)
+   local bottom = to_set(bottom_names)
+   return {
+      kind = "build_stack",
+      id = opts.id or ("stack_" .. names_label(top):gsub("[^%w]", "_")),
+      event = defines.events.on_built_block,
+      required = 1,
+      show_progress = false,
+      label = opts.label,
+      match = function(ctx)
+         if ctx.block == nil or ctx.position == nil then
+            return false
+         end
+         if top[ctx.block.name] then
+            local under = dim:get_cell(ctx.position + Vec3i.down)
+            return under ~= nil and bottom[under.name] == true
+         end
+         if bottom[ctx.block.name] then
+            local over = dim:get_cell(ctx.position + Vec3i.up)
+            return over ~= nil and top[over.name] == true
+         end
+         return false
+      end,
       amount = function(ctx) return 1 end,
    }
 end
