@@ -38,24 +38,35 @@ local qb = {}
 
 local chapter_defs = {}   -- chapters declared since the last qb.build()
 local quest_defs = {}      -- quests declared since the last qb.build()
-local quest_by_name = {}   -- name -> quest definition (runtime registry, every mod's)
+local quest_by_name = {}   -- lower-cased name -> quest definition (runtime registry, every mod's)
 local activated_handler_id = nil
 
+local function to_list(names)
+   if type(names) == "string" then
+      return { names }
+   end
+   local list = {}
+   for _, n in ipairs(names or {}) do
+      list[#list + 1] = n
+   end
+   return list
+end
+
+-- A prototype name reaches Lua as the display form of an FName, and outside the
+-- editor that form is whatever registered the name first: the Log item comes back
+-- as "log" in a packaged build. Every name matched against an event is therefore
+-- folded to lower case, on both sides of the comparison.
 local function to_set(names)
    local set = {}
-   if type(names) == "string" then
-      set[names] = true
-   elseif type(names) == "table" then
-      for _, n in ipairs(names) do
-         set[n] = true
-      end
+   for _, n in ipairs(to_list(names)) do
+      set[n:lower()] = true
    end
    return set
 end
 
-local function names_label(set)
+local function names_label(list)
    local parts = {}
-   for n in pairs(set) do
+   for _, n in ipairs(list) do
       parts[#parts + 1] = n
    end
    return table.concat(parts, " / ")
@@ -76,31 +87,36 @@ end
 -- logs is count 40 with coal weighted 2, and any mix in between counts.
 function qb.collect_item(names, count, opts)
    opts = opts or {}
-   local set = to_set(names)
-   local weights = opts.weights or {}
+   local list = to_list(names)
+   local set = to_set(list)
+   local weights = {}
+   for name, weight in pairs(opts.weights or {}) do
+      weights[name:lower()] = weight
+   end
    return {
       kind = "collect_item",
-      id = opts.id or ("collect_" .. names_label(set):gsub("[^%w]", "_")),
+      id = opts.id or ("collect_" .. names_label(list):gsub("[^%w]", "_")),
       event = defines.events.on_player_mined_item,
       required = count or 1,
       show_progress = true,
       label = opts.label,
-      match = function(ctx) return ctx.item ~= nil and set[ctx.item.name] == true end,
-      amount = function(ctx) return (ctx.count or 1) * (weights[ctx.item.name] or 1) end,
+      match = function(ctx) return ctx.item ~= nil and set[ctx.item.name:lower()] == true end,
+      amount = function(ctx) return (ctx.count or 1) * (weights[ctx.item.name:lower()] or 1) end,
    }
 end
 
 function qb.build_block(names, count, opts)
    opts = opts or {}
-   local set = to_set(names)
+   local list = to_list(names)
+   local set = to_set(list)
    return {
       kind = "build_block",
-      id = opts.id or ("build_" .. names_label(set):gsub("[^%w]", "_")),
+      id = opts.id or ("build_" .. names_label(list):gsub("[^%w]", "_")),
       event = defines.events.on_built_block,
       required = count or 1,
       show_progress = (count or 1) > 1,
       label = opts.label,
-      match = function(ctx) return ctx.block ~= nil and set[ctx.block.name] == true end,
+      match = function(ctx) return ctx.block ~= nil and set[ctx.block.name:lower()] == true end,
       amount = function(ctx) return 1 end,
    }
 end
@@ -111,11 +127,12 @@ end
 -- not left with a quest that cannot close.
 function qb.build_stack(top_names, bottom_names, opts)
    opts = opts or {}
-   local top = to_set(top_names)
+   local top_list = to_list(top_names)
+   local top = to_set(top_list)
    local bottom = to_set(bottom_names)
    return {
       kind = "build_stack",
-      id = opts.id or ("stack_" .. names_label(top):gsub("[^%w]", "_")),
+      id = opts.id or ("stack_" .. names_label(top_list):gsub("[^%w]", "_")),
       event = defines.events.on_built_block,
       required = 1,
       show_progress = false,
@@ -124,13 +141,13 @@ function qb.build_stack(top_names, bottom_names, opts)
          if ctx.block == nil or ctx.position == nil then
             return false
          end
-         if top[ctx.block.name] then
+         if top[ctx.block.name:lower()] then
             local under = dim:get_cell(ctx.position + Vec3i.down)
-            return under ~= nil and bottom[under.name] == true
+            return under ~= nil and bottom[under.name:lower()] == true
          end
-         if bottom[ctx.block.name] then
+         if bottom[ctx.block.name:lower()] then
             local over = dim:get_cell(ctx.position + Vec3i.up)
-            return over ~= nil and top[over.name] == true
+            return over ~= nil and top[over.name:lower()] == true
          end
          return false
       end,
@@ -147,7 +164,7 @@ function qb.research(name, opts)
       required = 1,
       show_progress = false,
       label = opts.label,
-      match = function(ctx) return ctx.research ~= nil and ctx.research.name == name end,
+      match = function(ctx) return ctx.research ~= nil and ctx.research.name:lower() == name:lower() end,
       amount = function(ctx) return 1 end,
    }
 end
@@ -183,7 +200,7 @@ function qb.quest(name, def)
    def.name = name
    def.objectives = def.objectives or {}
    quest_defs[#quest_defs + 1] = def
-   quest_by_name[name] = def
+   quest_by_name[name:lower()] = def
    return def
 end
 
@@ -259,7 +276,7 @@ end
 -- Manually advance a "count" objective from gameplay code.
 function qb.advance(quest_name, objective_id, amount)
    local q = StaticQuest.find(quest_name)
-   local def = quest_by_name[quest_name]
+   local def = quest_by_name[quest_name:lower()]
    if q == nil or def == nil then
       return
    end
@@ -402,7 +419,7 @@ function qb.build()
          if quest == nil then
             return
          end
-         local def = quest_by_name[quest.name]
+         local def = quest_by_name[quest.name:lower()]
          if def == nil then
             return
          end
