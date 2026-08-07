@@ -36,10 +36,9 @@ local qb = {}
 -- internal state
 -- ---------------------------------------------------------------------------
 
-local chapter_defs = {}   -- ordered list of chapter definitions
-local quest_defs = {}      -- ordered list of quest definitions
-local quest_by_name = {}   -- name -> quest definition (runtime registry)
-local built = false
+local chapter_defs = {}   -- chapters declared since the last qb.build()
+local quest_defs = {}      -- quests declared since the last qb.build()
+local quest_by_name = {}   -- name -> quest definition (runtime registry, every mod's)
 local activated_handler_id = nil
 
 local function to_set(names)
@@ -284,10 +283,10 @@ end
 -- registration (call qb.build() once at the end of your mod init)
 -- ---------------------------------------------------------------------------
 
-local function resolve_relations()
+local function resolve_relations(defs)
    -- accumulate required-quest names per quest
    local required = {}
-   for _, def in ipairs(quest_defs) do
+   for _, def in ipairs(defs) do
       required[def.name] = {}
       if def.requires ~= nil then
          for _, r in ipairs(def.requires) do
@@ -296,7 +295,7 @@ local function resolve_relations()
       end
    end
    -- "A unlocks {B,C}" means B and C require A
-   for _, def in ipairs(quest_defs) do
+   for _, def in ipairs(defs) do
       if def.unlocks ~= nil then
          for _, target in ipairs(def.unlocks) do
             if required[target] == nil then
@@ -310,14 +309,20 @@ local function resolve_relations()
    return required
 end
 
+-- Every mod calling require('questbook') shares one instance of this module: the
+-- module cache is keyed by resolved path for the whole lua state. So build()
+-- registers the batch declared since the last call and hands the lists back
+-- empty rather than latching -- a second mod's build() must not re-register the
+-- first mod's chapters, and must not be a no-op. `quest_by_name` is the runtime
+-- registry the on_quest_activated handler reads and keeps every mod's quests.
 function qb.build()
-   if built then
-      return
-   end
-   built = true
+   local chapters = chapter_defs
+   local quests = quest_defs
+   chapter_defs = {}
+   quest_defs = {}
 
    -- 1) chapters
-   for _, def in ipairs(chapter_defs) do
+   for _, def in ipairs(chapters) do
       db:from_table({
          class = "StaticChapter",
          name = def.name,
@@ -327,7 +332,7 @@ function qb.build()
    end
 
    -- 2) quests (objectives are created later, on activation)
-   for _, def in ipairs(quest_defs) do
+   for _, def in ipairs(quests) do
       local row = {
          class = "StaticQuest",
          name = def.name,
@@ -361,8 +366,8 @@ function qb.build()
    end
 
    -- 3) relations: required_quests (quest graph) + chapter gating
-   local required = resolve_relations()
-   for _, def in ipairs(quest_defs) do
+   local required = resolve_relations(quests)
+   for _, def in ipairs(quests) do
       local names = required[def.name]
       if names ~= nil and #names > 0 then
          local refs = {}
@@ -375,7 +380,7 @@ function qb.build()
          StaticQuest.find(def.name).required_quests = refs
       end
    end
-   for _, def in ipairs(chapter_defs) do
+   for _, def in ipairs(chapters) do
       if def.requires ~= nil and #def.requires > 0 then
          local refs = {}
          for _, n in ipairs(def.requires) do
@@ -390,20 +395,22 @@ function qb.build()
 
    -- 4) (re)build objectives whenever a quest becomes Active (fresh unlock or
    --    when a save loads a quest as Active), so objectives survive reload.
-   local es = EventSystem.get()
-   activated_handler_id = es:sub(defines.events.on_quest_activated, function(ctx)
-      local quest = ctx.quest
-      if quest == nil then
-         return
-      end
-      local def = quest_by_name[quest.name]
-      if def == nil then
-         return
-      end
-      build_objectives(quest, def)
-   end)
+   if activated_handler_id == nil then
+      local es = EventSystem.get()
+      activated_handler_id = es:sub(defines.events.on_quest_activated, function(ctx)
+         local quest = ctx.quest
+         if quest == nil then
+            return
+         end
+         local def = quest_by_name[quest.name]
+         if def == nil then
+            return
+         end
+         build_objectives(quest, def)
+      end)
+   end
 
-   print_info("questbook: registered " .. tostring(#chapter_defs) .. " chapters, " .. tostring(#quest_defs) .. " quests")
+   print_info("questbook: registered " .. tostring(#chapters) .. " chapters, " .. tostring(#quests) .. " quests")
 end
 
 return qb

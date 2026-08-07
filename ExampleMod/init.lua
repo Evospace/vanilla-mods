@@ -13,6 +13,7 @@
 -- the file: every mod folder is registered before any init.lua runs, so a
 -- dependency does not have to sort earlier than you on disk.
 local Vlib = require('vlib')
+local qb = require('questbook')
 
 local ExampleMod = {}
 
@@ -25,6 +26,8 @@ local RESEARCH = "ExampleAssembly"
 local PARENT_RESEARCH = "Metalwork"
 local TIP = "ExampleGuide"
 local BARE_BLOCK = "ExampleBareAssembler"
+local CHAPTER = "ExampleAutomation"
+local QUEST = "LearnExampleAssembly"
 
 -- Every .ini under Loc/<locale>/ in this folder is read as the mod loads, and
 -- its [section] headers become localization tables. Loc.new(key, table) points a
@@ -152,6 +155,28 @@ function ExampleMod.init()
          crafter.switch_on = crafter:select_recipe_by_output(StaticItem.find(ITEM))
       end,
    }
+
+   -- A questbook chapter of the mod's own, so the player is told the machine
+   -- exists rather than having to find it in the tree. `questbook` is a module of
+   -- VanillaQuests, which is why it is in the dependencies of info.json; a mod
+   -- declares its chapters and quests and calls qb.build() once at the end of its
+   -- own init, next to whatever the other mods declared.
+   qb.chapter(CHAPTER, {
+      label = Loc.new(CHAPTER, LOC),
+      description = { Loc.new(CHAPTER .. "Description", LOC) },
+   })
+
+   qb.quest(QUEST, {
+      chapter = CHAPTER,
+      label = Loc.new(QUEST, LOC),
+      description = { Loc.new(QUEST .. "Description", LOC) },
+      context = { BLOCK },
+      objectives = {
+         qb.research(RESEARCH, { label = Loc.new("Obj" .. QUEST, LOC) }),
+      },
+   })
+
+   qb.build()
 end
 
 function ExampleMod.post_init()
