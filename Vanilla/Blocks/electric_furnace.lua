@@ -1,12 +1,12 @@
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
-    crafter.recipes = RecipeDictionary.find("GeneratorRecipeDictionary")
+    crafter.recipes = RecipeDictionary.get("GeneratorRecipeDictionary")
     crafter.stable_supply = false
     --crafter.map_register = true
             
     local inv = ResourceInventory.new(crafter, "rio")
-    inv.item = StaticItem.find("Heat")
+    inv.item = StaticItem.get("Heat")
     crafter.energy_output_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "rao")
@@ -14,10 +14,10 @@ local logic = function(self)
     acc.inventory = inv
     acc.is_output = true
     acc.channel = "Heat"
-    acc.cover = StaticCover.find("HeatOutput")
+    acc.cover = StaticCover.get("HeatOutput")
 
     local inv = ResourceInventory.new(crafter, "rii")
-    inv.item = StaticItem.find("Electricity")
+    inv.item = StaticItem.get("Electricity")
     crafter.energy_input_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "rai")
@@ -25,7 +25,7 @@ local logic = function(self)
     acc.inventory = inv
     acc.is_input = true
     acc.channel = "Electricity"
-    acc.cover = StaticCover.find("ElectricityInput")
+    acc.cover = StaticCover.get("ElectricityInput")
 end
 
 return function(name, tier, level)

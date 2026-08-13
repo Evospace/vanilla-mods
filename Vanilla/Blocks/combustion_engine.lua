@@ -1,12 +1,12 @@
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
-    crafter.recipes = RecipeDictionary.find("CombustionEngineRecipeDictionary")
+    crafter.recipes = RecipeDictionary.get("CombustionEngineRecipeDictionary")
     crafter.speed = Vlib.get_speed(crafter)
     -- crafter.stable_supply = false
         
     local inv = ResourceInventory.new(crafter, "rio")
-    inv.item = StaticItem.find("Kinetic")
+    inv.item = StaticItem.get("Kinetic")
     crafter.energy_output_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "Output")
@@ -14,7 +14,7 @@ local logic = function(self)
     acc.inventory = inv
     acc.is_output = true
     acc.channel = "Kinetic"
-    acc.cover = StaticCover.find("KineticOutput")
+    acc.cover = StaticCover.get("KineticOutput")
     
     local inv = ResourceInventory.new(crafter, "rii")
     inv.capacity = 3000
@@ -24,7 +24,7 @@ local logic = function(self)
     acc.side, acc.pos = Vec3i.front, Vec3i.new(0, 0, 0)
     acc.inventory = inv
     acc.channel = "Fluid"
-    acc.cover = StaticCover.find("FluidInput")
+    acc.cover = StaticCover.get("FluidInput")
     acc.is_input = true
 end
 

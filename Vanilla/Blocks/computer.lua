@@ -3,7 +3,7 @@ local logic = function(self)
     local crafter = ComputerBlockLogic.cast(self)
 
     local inv = ResourceInventory.new(crafter, "rii")
-    inv.item = StaticItem.find("Electricity")
+    inv.item = StaticItem.get("Electricity")
     crafter.energy_inventory = inv
 
     local acc = ResourceAccessor.new(crafter, "rai")
@@ -11,7 +11,7 @@ local logic = function(self)
     acc.inventory = inv
     acc.is_input = true
     acc.channel = "Electricity"
-    acc.cover = StaticCover.find("ElectricityInput")
+    acc.cover = StaticCover.get("ElectricityInput")
     crafter.energy_input = acc
 end
 

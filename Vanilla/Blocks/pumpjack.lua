@@ -12,7 +12,7 @@ local logic = function(self)
     acc.inventory = inv
     acc.is_input = true
     acc.channel = "Kinetic"
-    acc.cover = StaticCover.find("KineticInput")
+    acc.cover = StaticCover.get("KineticInput")
 
     local inv = ResourceInventory.new(crafter, "rii")
     inv.capacity = 10000
@@ -25,7 +25,7 @@ local logic = function(self)
     acc.inventory = inv
     acc.is_output = true
     acc.channel = "Fluid"
-    acc.cover = StaticCover.find("FluidOutput")
+    acc.cover = StaticCover.get("FluidOutput")
 end
 
 return function(name, tier, level)

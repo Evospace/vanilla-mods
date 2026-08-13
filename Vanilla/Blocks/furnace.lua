@@ -1,14 +1,14 @@
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
-    crafter.recipes = RecipeDictionary.find("FurnaceRecipeDictionary")
+    crafter.recipes = RecipeDictionary.get("FurnaceRecipeDictionary")
     crafter.speed = Vlib.get_speed(crafter)
     --crafter.map_register = true
 
     Vlib.add_single_slot_invs(crafter.crafter_input_container, crafter, "ii", 1)
             
     local inv = ResourceInventory.new(crafter, "rio")
-    inv.item = StaticItem.find("Heat")
+    inv.item = StaticItem.get("Heat")
     crafter.energy_output_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "rao")
@@ -16,13 +16,9 @@ local logic = function(self)
     acc.inventory = inv
     acc.is_output = true
     acc.channel = "Heat"
-    acc.cover = StaticCover.find("HeatOutput")
-end
-
-local visual = function(self)
-    
+    acc.cover = StaticCover.get("HeatOutput")
 end
 
 return function(name, tier, level)
-    return { logic_init = logic, visual_init = visual }
+    return { logic_init = logic }
 end

@@ -1,13 +1,13 @@
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
-    crafter.recipes = RecipeDictionary.find("FissionReactorRecipeDictionary")
+    crafter.recipes = RecipeDictionary.get("FissionReactorRecipeDictionary")
     crafter.speed = 100
     crafter.load_independent = true
     --crafter.map_register = true
     
     local inv = ResourceInventory.new(crafter, "rio")
-    inv.item = StaticItem.find("Heat")
+    inv.item = StaticItem.get("Heat")
     crafter.energy_output_inventory = inv
 
     local outputs = {
@@ -27,7 +27,7 @@ local logic = function(self)
         acc.inventory = inv
         acc.is_output = true
         acc.channel = "Heat"
-        acc.cover = StaticCover.find("HeatOutput")
+        acc.cover = StaticCover.get("HeatOutput")
     end
 end
 

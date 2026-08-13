@@ -1,12 +1,12 @@
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
-    crafter.recipes = RecipeDictionary.find("MixerRecipeDictionary")
+    crafter.recipes = RecipeDictionary.get("MixerRecipeDictionary")
     crafter.speed = Vlib.get_speed(crafter)
     --crafter.map_register = true
         
     local inv = ResourceInventory.new(crafter, "rii")
-    inv.item = StaticItem.find("Kinetic")
+    inv.item = StaticItem.get("Kinetic")
     crafter.energy_input_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "rai")
@@ -14,19 +14,19 @@ local logic = function(self)
     acc.inventory = inv
     acc.is_input = true
     acc.channel = "Kinetic"
-    acc.cover = StaticCover.find("KineticInput")
+    acc.cover = StaticCover.get("KineticInput")
 
     local acc = ResourceAccessor.new(crafter, "rai_")
     acc.side, acc.pos = Vec3i.left, Vec3i.zero
     acc.is_input = true
     acc.channel = "Fluid"
-    acc.cover = StaticCover.find("FluidInput")
+    acc.cover = StaticCover.get("FluidInput")
 
     local acc = ResourceAccessor.new(crafter, "rao")
     acc.side, acc.pos = Vec3i.right, Vec3i.zero
     acc.is_output = true
     acc.channel = "Fluid"
-    acc.cover = StaticCover.find("FluidOutput1")
+    acc.cover = StaticCover.get("FluidOutput1")
 end
 
 return function(name, tier, level)

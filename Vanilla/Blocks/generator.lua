@@ -1,31 +1,31 @@
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
-    crafter.recipes = RecipeDictionary.find("GeneratorRecipeDictionary")
+    crafter.recipes = RecipeDictionary.get("GeneratorRecipeDictionary")
     crafter.speed = 100
     crafter.stable_supply = false
     --crafter.map_register = true
         
     local inv = ResourceInventory.new(crafter, "rio")
-    inv.item = StaticItem.find("Electricity")
+    inv.item = StaticItem.get("Electricity")
     crafter.energy_output_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "rao")
     acc.side, acc.pos = Vec3i.front, Vec3i.zero
     acc.inventory = inv
     acc.channel = "Electricity"
-    acc.cover = StaticCover.find("ElectricityOutput")
+    acc.cover = StaticCover.get("ElectricityOutput")
     acc.is_output = true
     
     local inv = ResourceInventory.new(crafter, "rii")
-    inv.item = StaticItem.find("Kinetic")
+    inv.item = StaticItem.get("Kinetic")
     crafter.energy_input_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "rai")
     acc.side, acc.pos = Vec3i.back, Vec3i.new(-1, 1, 0)
     acc.inventory = inv
     acc.channel = "Kinetic"
-    acc.cover = StaticCover.find("KineticInput")
+    acc.cover = StaticCover.get("KineticInput")
     acc.is_input = true
 end
 

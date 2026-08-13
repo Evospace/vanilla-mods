@@ -17,7 +17,7 @@
 --   qb.chapter("CopperProduction", { label = ..., description = { ... } })
 --   qb.quest("GatherCopperOre", {
 --       chapter     = "CopperProduction",
---       label       = ..., description = { ... }, image = "Textures/ore.png",
+--       label       = ..., description = { ... },
 --       unlocks     = { "SmeltCopper" },
 --       objectives  = { qb.collect_item({ "ChalcopyriteOre", "MalachiteOre" }, 20) },
 --   })
@@ -29,6 +29,8 @@
 --   qb.research(name)                -- finish the named research
 --   qb.build_block({names}, count)   -- build any of the named blocks (OR-group)
 --   qb.build_stack({top}, {bottom})  -- build one of the top blocks standing on a bottom one
+--   qb.build_chain({steps})          -- build a run of blocks actually wired one into the next
+--   qb.open_gui({names})             -- open one of the named windows
 --   qb.count(id, count, label)       -- generic manual counter (advance from your own code)
 
 local qb = {}
@@ -63,6 +65,18 @@ local function to_set(names)
       set[n:lower()] = true
    end
    return set
+end
+
+-- An objective's `event` is one event id, several of them, or none at all for a
+-- purely manual counter.
+local function to_event_list(event)
+   if event == nil then
+      return {}
+   end
+   if type(event) == "table" then
+      return event
+   end
+   return { event }
 end
 
 local function names_label(list)
@@ -106,9 +120,10 @@ function qb.collect_item(names, count, opts)
    }
 end
 
--- Items coming out of a machine, counted as they are produced rather than as
--- they sit in an inventory: a player who smelts the required amount and then
--- spends it still closes the objective.
+-- Items as they are produced rather than as they sit in an inventory: a player
+-- who smelts the required amount and then spends it still closes the objective.
+-- A machine craft and a hand craft both count, so the objective does not care
+-- whether the recipe was run in a block or in the player's own crafter.
 function qb.craft_item(names, count, opts)
    opts = opts or {}
    local list = to_list(names)
@@ -116,7 +131,7 @@ function qb.craft_item(names, count, opts)
    return {
       kind = "craft_item",
       id = opts.id or ("craft_" .. names_label(list):gsub("[^%w]", "_")),
-      event = defines.events.on_machine_crafted,
+      event = { defines.events.on_machine_crafted, defines.events.on_player_crafted },
       required = count or 1,
       show_progress = true,
       label = opts.label,
@@ -171,6 +186,124 @@ function qb.build_stack(top_names, bottom_names, opts)
          end
          return false
       end,
+      amount = function(ctx) return 1 end,
+   }
+end
+
+-- A run of blocks wired one into the next. Every step names the block and its two
+-- ends: `inp` is the accessor the previous step feeds, `out` the accessor feeding
+-- the next one. The objective answers any block of the run being placed and walks
+-- outwards from it in both directions, so the run may be assembled in any order.
+--
+-- The walk follows accessors, not cells: it repeats the test the simulation makes
+-- before moving a resource across a side, so a run that reads as built here is a
+-- run that really carries its resource end to end whatever the blocks' rotations.
+function qb.build_chain(steps, opts)
+   opts = opts or {}
+   local blocks = {}
+   for i, step in ipairs(steps) do
+      blocks[i] = to_set(step.block)
+   end
+
+   local function across(block, acc_name, want_output)
+      local side = block:find_accessor(acc_name)
+      if side == nil then
+         return nil
+      end
+      local acc = ResourceAccessor.cast(side)
+      if acc == nil then
+         return nil
+      end
+      local facing = acc:neighbor()
+      if facing == nil then
+         return nil
+      end
+      local other = ResourceAccessor.cast(facing)
+      if other == nil or other.channel ~= acc.channel then
+         return nil
+      end
+      if want_output and not other.is_output then
+         return nil
+      end
+      if not want_output and not other.is_input then
+         return nil
+      end
+      return other.owner
+   end
+
+   local function is_step(index, block)
+      return block ~= nil and block.static_block ~= nil
+         and blocks[index][block.static_block.name:lower()] == true
+   end
+
+   local function fed_back_to_start(index, block)
+      while index > 1 do
+         local prev = across(block, steps[index].inp, true)
+         if not is_step(index - 1, prev) then
+            return false
+         end
+         block, index = prev, index - 1
+      end
+      return true
+   end
+
+   local function feeds_on_to_end(index, block)
+      while index < #steps do
+         local next_block = across(block, steps[index].out, false)
+         if not is_step(index + 1, next_block) then
+            return false
+         end
+         block, index = next_block, index + 1
+      end
+      return true
+   end
+
+   local function built_chain(index, block)
+      return fed_back_to_start(index, block) and feeds_on_to_end(index, block)
+   end
+
+   local last = to_list(steps[#steps].block)
+   return {
+      kind = "build_chain",
+      id = opts.id or ("chain_" .. names_label(last):gsub("[^%w]", "_")),
+      event = defines.events.on_built_block,
+      required = 1,
+      show_progress = false,
+      label = opts.label,
+      match = function(ctx)
+         if ctx.block == nil or ctx.position == nil then
+            return false
+         end
+         local built = ctx.block.name:lower()
+         local block = nil
+         for i = 1, #steps do
+            if blocks[i][built] then
+               block = block or dim:get_block(ctx.position)
+               if block ~= nil and built_chain(i, block) then
+                  return true
+               end
+            end
+         end
+         return false
+      end,
+      amount = function(ctx) return 1 end,
+   }
+end
+
+-- Window names as the engine emits them: "inventory", "recipes", "map", "research",
+-- "questbook", "pause", "spawn", "saves".
+function qb.open_gui(names, opts)
+   opts = opts or {}
+   local list = to_list(names)
+   local set = to_set(list)
+   return {
+      kind = "open_gui",
+      id = opts.id or ("open_" .. names_label(list):gsub("[^%w]", "_")),
+      event = defines.events.on_gui_opened,
+      required = 1,
+      show_progress = false,
+      label = opts.label,
+      match = function(ctx) return ctx.gui ~= nil and set[ctx.gui:lower()] == true end,
       amount = function(ctx) return 1 end,
    }
 end
@@ -263,9 +396,9 @@ end
 local function build_events_table(def)
    local by_event = {}
    for _, spec in ipairs(def.objectives) do
-      if spec.event ~= nil then
-         by_event[spec.event] = by_event[spec.event] or {}
-         table.insert(by_event[spec.event], spec)
+      for _, event in ipairs(to_event_list(spec.event)) do
+         by_event[event] = by_event[event] or {}
+         table.insert(by_event[event], spec)
       end
    end
 
@@ -386,13 +519,10 @@ function qb.build()
             row.chapter = chapter
          end
       end
-      if def.image ~= nil then
-         row.image = def.image
-      end
       db:from_table(row)
 
       if def.context ~= nil then
-         local q = StaticQuest.find(def.name)
+         local q = StaticQuest.get(def.name)
          for _, item_name in ipairs(def.context) do
             local item = StaticItem.find(item_name)
             if item ~= nil then
@@ -414,7 +544,7 @@ function qb.build()
                table.insert(refs, r)
             end
          end
-         StaticQuest.find(def.name).required_quests = refs
+         StaticQuest.get(def.name).required_quests = refs
       end
    end
    for _, def in ipairs(chapters) do
@@ -426,7 +556,7 @@ function qb.build()
                table.insert(refs, r)
             end
          end
-         StaticChapter.find(def.name).required_quests = refs
+         StaticChapter.get(def.name).required_quests = refs
       end
    end
 

@@ -4,7 +4,7 @@ local logic = function(self)
     crafter.map_register = true
         
     local inv = ResourceInventory.new(crafter, "rii")
-    inv.item = StaticItem.find("Electricity")
+    inv.item = StaticItem.get("Electricity")
     crafter.energy_input_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "Input")
@@ -12,7 +12,7 @@ local logic = function(self)
     acc.inventory = inv
     acc.is_input = true
     acc.channel = "Electricity"
-    acc.cover = StaticCover.find("HVInput")
+    acc.cover = StaticCover.get("HVInput")
 end
 
 return function(name, tier, level)

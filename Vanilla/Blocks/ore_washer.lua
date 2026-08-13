@@ -1,12 +1,12 @@
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
-    crafter.recipes = RecipeDictionary.find("OreWasherRecipeDictionary")
+    crafter.recipes = RecipeDictionary.get("OreWasherRecipeDictionary")
     crafter.speed = Vlib.get_speed(crafter)
     --crafter.map_register = true
             
     local inv = ResourceInventory.new(crafter, "rii")
-    inv.item = StaticItem.find("Kinetic")
+    inv.item = StaticItem.get("Kinetic")
     crafter.energy_input_inventory = inv
 
     local acc = ResourceAccessor.new(crafter, "Input")
@@ -14,12 +14,12 @@ local logic = function(self)
     acc.inventory = inv
     acc.is_input = true
     acc.channel = "Kinetic"
-    acc.cover = StaticCover.find("KineticInput")
+    acc.cover = StaticCover.get("KineticInput")
 
     Vlib.add_single_slot_invs(crafter.crafter_input_container, crafter, "ii", 1)
 
     local inv = ResourceInventory.new(crafter, "rio")
-    inv.item = StaticItem.find("Water")
+    inv.item = StaticItem.get("Water")
     inv.capacity = 1000
     crafter.crafter_input_container:bind(inv)
 
@@ -29,7 +29,7 @@ local logic = function(self)
     acc.side, acc.pos = Vec3i.right, Vec3i.new(-2,0,1)
     acc.is_input = true
     acc.channel = "Fluid"
-    acc.cover = StaticCover.find("FluidInput")
+    acc.cover = StaticCover.get("FluidInput")
     acc.inventory = inv
 end
 

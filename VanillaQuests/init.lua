@@ -6,29 +6,27 @@ function VanillaQuestsMod.pre_init()
 end
 
 function VanillaQuestsMod.init()
-   qb.chapter("CopperProduction", {
-      label = Loc.new("CopperProductionChapter", "quests"),
-      description = { Loc.new("CopperProductionChapterDesc", "quests") },
+   qb.chapter("OreToPower", {
+      label = Loc.new("OreToPowerChapter", "quests"),
+      description = { Loc.new("OreToPowerChapterDesc", "quests") },
    })
 
    qb.quest("GatherCopperOre", {
-      chapter = "CopperProduction",
+      chapter = "OreToPower",
       label = Loc.new("GatherCopperOre", "quests"),
       description = {
          Loc.new("GatherCopperOreDesc1", "quests"),
          Loc.new("GatherCopperOreDesc2", "quests"),
       },
-      image = "Textures/CopperOre.png",
       context = { "ChalcopyriteOre", "MalachiteOre" },
-      unlocks = { "BuildFirstSmelter" },
       objectives = {
-         qb.collect_item({ "ChalcopyriteOre", "MalachiteOre" }, 20,
+         qb.collect_item({ "ChalcopyriteOre", "MalachiteOre" }, 25,
             { label = Loc.new("ObjGatherCopperOre", "quests") }),
       },
    })
 
    qb.quest("GatherFuel", {
-      chapter = "CopperProduction",
+      chapter = "OreToPower",
       label = Loc.new("GatherFuel", "quests"),
       description = { Loc.new("GatherFuelDesc", "quests") },
       context = { "CoalOre", "Log" },
@@ -38,8 +36,54 @@ function VanillaQuestsMod.init()
       },
    })
 
+   qb.quest("OpenInventory", {
+      chapter = "OreToPower",
+      label = Loc.new("OpenInventory", "quests"),
+      description = {
+         Loc.new("OpenInventoryDesc1", "quests"),
+         Loc.new("OpenInventoryDesc2", "quests"),
+      },
+      requires = { "GatherCopperOre", "GatherFuel" },
+      objectives = {
+         qb.open_gui("inventory", { label = Loc.new("ObjOpenInventory", "quests") }),
+      },
+   })
+
+   qb.quest("MineStone", {
+      chapter = "OreToPower",
+      label = Loc.new("MineStone", "quests"),
+      description = {
+         Loc.new("MineStoneDesc1", "quests"),
+         Loc.new("MineStoneDesc2", "quests"),
+      },
+      context = { "StoneSurface" },
+      requires = { "GatherCopperOre", "GatherFuel" },
+      unlocks = { "CraftFirstBlocks" },
+      objectives = {
+         qb.collect_item({ "StoneSurface" }, 8,
+            { label = Loc.new("ObjMineStone", "quests") }),
+      },
+   })
+
+   qb.quest("CraftFirstBlocks", {
+      chapter = "OreToPower",
+      label = Loc.new("CraftFirstBlocks", "quests"),
+      description = {
+         Loc.new("CraftFirstBlocksDesc1", "quests"),
+         Loc.new("CraftFirstBlocksDesc2", "quests"),
+      },
+      context = { "StoneFurnace", "StoneSmelter" },
+      unlocks = { "BuildFirstSmelter" },
+      objectives = {
+         qb.craft_item({ "StoneFurnace" }, 1,
+            { label = Loc.new("ObjCraftStoneFurnace", "quests") }),
+         qb.craft_item({ "StoneSmelter" }, 1,
+            { label = Loc.new("ObjCraftStoneSmelter", "quests") }),
+      },
+   })
+
    qb.quest("BuildFirstSmelter", {
-      chapter = "CopperProduction",
+      chapter = "OreToPower",
       label = Loc.new("BuildFirstSmelter", "quests"),
       description = {
          Loc.new("BuildFirstSmelterDesc1", "quests"),
@@ -56,16 +100,94 @@ function VanillaQuestsMod.init()
    })
 
    qb.quest("SmeltCopperPlates", {
-      chapter = "CopperProduction",
+      chapter = "OreToPower",
       label = Loc.new("SmeltCopperPlates", "quests"),
       description = {
          Loc.new("SmeltCopperPlatesDesc1", "quests"),
          Loc.new("SmeltCopperPlatesDesc2", "quests"),
       },
       context = { "CopperPlate" },
+      unlocks = { "CraftMachines" },
       objectives = {
-         qb.craft_item({ "CopperPlate" }, 20,
+         qb.craft_item({ "CopperPlate" }, 25,
             { label = Loc.new("ObjSmeltCopperPlates", "quests") }),
+      },
+   })
+
+   qb.quest("CraftMachines", {
+      chapter = "OreToPower",
+      label = Loc.new("CraftMachines", "quests"),
+      description = {
+         Loc.new("CraftMachinesDesc1", "quests"),
+         Loc.new("CraftMachinesDesc2", "quests"),
+      },
+      context = { "CopperStirlingEngine", "CopperCompactGenerator", "CopperComputer" },
+      unlocks = { "BuildFirstPowerPlant" },
+      objectives = {
+         qb.craft_item({ "CopperStirlingEngine" }, 1,
+            { label = Loc.new("ObjCraftStirlingEngine", "quests") }),
+         qb.craft_item({ "CopperCompactGenerator" }, 1,
+            { label = Loc.new("ObjCraftCompactGenerator", "quests") }),
+         qb.craft_item({ "CopperComputer" }, 1,
+            { label = Loc.new("ObjCraftComputer", "quests") }),
+      },
+   })
+
+   qb.quest("BuildFirstPowerPlant", {
+      chapter = "OreToPower",
+      label = Loc.new("BuildFirstPowerPlant", "quests"),
+      description = {
+         Loc.new("BuildFirstPowerPlantDesc1", "quests"),
+         Loc.new("BuildFirstPowerPlantDesc2", "quests"),
+         Loc.new("BuildFirstPowerPlantDesc3", "quests"),
+      },
+      context = { "StoneFurnace", "CopperStirlingEngine", "CopperCompactGenerator", "CopperComputer" },
+      objectives = {
+         qb.build_chain({
+            { block = { "StoneFurnace", "CopperFurnace" }, out = "rao" },
+            { block = "CopperStirlingEngine", inp = "Input1", out = "Output" },
+            { block = "CopperCompactGenerator", inp = "rai", out = "rao" },
+            { block = "CopperComputer", inp = "rai" },
+         }, { label = Loc.new("ObjBuildPowerPlant", "quests") }),
+      },
+   })
+
+   qb.chapter("Automation", {
+      label = Loc.new("AutomationChapter", "quests"),
+      description = { Loc.new("AutomationChapterDesc", "quests") },
+      requires = { "BuildFirstPowerPlant" },
+   })
+
+   -- Three nodes still stand between the running computer and the drill; everything under them, up
+   -- to Metalwork and DistributedComputing, gates a recipe the first chapter already had the player
+   -- build, so it is complete before this chapter is ever offered. The first of the three carries
+   -- the research window itself, which nothing has asked the player to open until now.
+   qb.quest("ResearchBasicMachines", {
+      chapter = "Automation",
+      label = Loc.new("ResearchBasicMachines", "quests"),
+      description = {
+         Loc.new("ResearchBasicMachinesDesc1", "quests"),
+         Loc.new("ResearchBasicMachinesDesc2", "quests"),
+         Loc.new("ResearchBasicMachinesDesc3", "quests"),
+      },
+      context = { "CopperMacerator", "CopperAutomaticHammer" },
+      unlocks = { "ResearchAutomaticMining" },
+      objectives = {
+         qb.research("BasicMachines", { label = Loc.new("ObjResearchBasicMachines", "quests") }),
+      },
+   })
+
+   qb.quest("ResearchAutomaticMining", {
+      chapter = "Automation",
+      label = Loc.new("ResearchAutomaticMining", "quests"),
+      description = {
+         Loc.new("ResearchAutomaticMiningDesc1", "quests"),
+         Loc.new("ResearchAutomaticMiningDesc2", "quests"),
+      },
+      context = { "CopperConveyor", "CopperRobotArm", "CopperDrillingRig" },
+      objectives = {
+         qb.research("Automatization", { label = Loc.new("ObjResearchAutomatization", "quests") }),
+         qb.research("AutomaticMining", { label = Loc.new("ObjResearchAutomaticMining", "quests") }),
       },
    })
 

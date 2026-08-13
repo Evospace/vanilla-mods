@@ -1,6 +1,6 @@
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
-    crafter.recipes = RecipeDictionary.find("AutomaticFarmRecipeDictionary")
+    crafter.recipes = RecipeDictionary.get("AutomaticFarmRecipeDictionary")
     crafter.speed = Vlib.get_speed(crafter)
     -- crafter.map_register = true
 
@@ -8,7 +8,7 @@ local logic = function(self)
     acc.side, acc.pos = Vec3i.front, Vec3i.zero
     acc.is_input = true
     acc.channel = "Fluid"
-    acc.cover = StaticCover.find("FluidInput")
+    acc.cover = StaticCover.get("FluidInput")
 end
 
 return function(name, tier, level)

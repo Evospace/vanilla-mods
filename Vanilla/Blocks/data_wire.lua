@@ -10,8 +10,8 @@ local logic = function(self)
         conductor:add_wire(acc)
     end
 
-    conductor.side_cover = StaticCover.find("DataSide")
-    conductor.center_cover = StaticCover.find("DataCenter")
+    conductor.side_cover = StaticCover.get("DataSide")
+    conductor.center_cover = StaticCover.get("DataCenter")
     conductor.channel = "Data"
 end
 

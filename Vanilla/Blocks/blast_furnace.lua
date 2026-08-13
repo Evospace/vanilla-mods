@@ -1,6 +1,6 @@
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
-    crafter.recipes = RecipeDictionary.find("BlastFurnaceRecipeDictionary")
+    crafter.recipes = RecipeDictionary.get("BlastFurnaceRecipeDictionary")
     crafter.speed = Vlib.get_speed(crafter)
     -- crafter.map_register = true
 

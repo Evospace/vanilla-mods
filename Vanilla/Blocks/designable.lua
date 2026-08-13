@@ -6,7 +6,7 @@ local logic = function(self)
         if fence.cover_set and fence.cover_set.covers and #fence.cover_set.covers > 0 then
             fence.half_cover = fence.cover_set.covers[1]
         end
-        fence.center_cover = StaticCover.find("FenceCenter")
+        fence.center_cover = StaticCover.get("FenceCenter")
         return
     end
     

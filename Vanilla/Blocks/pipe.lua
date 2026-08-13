@@ -11,8 +11,8 @@ local logic = function(self)
     end
 
     conductor.capacity = 100
-    conductor.side_cover = StaticCover.find(Vlib.tier_material[t+1].."PipeSide")
-    conductor.center_cover = StaticCover.find(Vlib.tier_material[t+1].."PipeCenter")
+    conductor.side_cover = StaticCover.get(Vlib.tier_material[t+1].."PipeSide")
+    conductor.center_cover = StaticCover.get(Vlib.tier_material[t+1].."PipeCenter")
     conductor.conductor_channel = 2000 + conductor.static_block.tier
     conductor.channel = "Fluid"
 end

@@ -1,12 +1,12 @@
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
-    crafter.recipes = RecipeDictionary.find("SeparatorRecipeDictionary")
+    crafter.recipes = RecipeDictionary.get("SeparatorRecipeDictionary")
     crafter.speed = Vlib.get_speed(crafter)
     --crafter.map_register = true
             
     local inv = ResourceInventory.new(crafter, "rii")
-    inv.item = StaticItem.find("Kinetic")
+    inv.item = StaticItem.get("Kinetic")
     crafter.energy_input_inventory = inv
 
     Vlib.add_single_slot_invs(crafter.crafter_input_container, crafter, "ii", 1)
@@ -17,7 +17,7 @@ local logic = function(self)
     acc.inventory = inv
     acc.is_input = true
     acc.channel = "Kinetic"
-    acc.cover = StaticCover.find("KineticInput")
+    acc.cover = StaticCover.get("KineticInput")
 end
 
 return function(name, tier, level)

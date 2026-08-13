@@ -1,13 +1,13 @@
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
-    crafter.recipes = RecipeDictionary.find("BoilerRecipeDictionary")
+    crafter.recipes = RecipeDictionary.get("BoilerRecipeDictionary")
     crafter.speed = 100
     crafter.stable_supply = false
     --crafter.map_register = true
 
     local inv = ResourceInventory.new(crafter, "rii_")
-    inv.item = StaticItem.find("Water")
+    inv.item = StaticItem.get("Water")
     inv.capacity = 1000
     crafter.crafter_input_container:bind(inv)
 
@@ -16,10 +16,10 @@ local logic = function(self)
     acc.is_input = true
     acc.channel = "Fluid"
     acc.inventory = inv
-    acc.cover = StaticCover.find("FluidInput")
+    acc.cover = StaticCover.get("FluidInput")
 
     local inv = ResourceInventory.new(crafter, "rii")
-    inv.item = StaticItem.find("Heat")
+    inv.item = StaticItem.get("Heat")
     crafter.energy_input_inventory = inv
 
     local acc = ResourceAccessor.new(crafter, "rai_")
@@ -27,10 +27,10 @@ local logic = function(self)
     acc.inventory = inv
     acc.is_input = true
     acc.channel = "Heat"
-    acc.cover = StaticCover.find("HeatInput")
+    acc.cover = StaticCover.get("HeatInput")
 
     local inv = ResourceInventory.new(crafter, "rio")
-    inv.item = StaticItem.find("Steam")
+    inv.item = StaticItem.get("Steam")
     crafter.energy_output_inventory = inv
 
     local acc = ResourceAccessor.new(crafter, "rao")
@@ -38,7 +38,7 @@ local logic = function(self)
     acc.inventory = inv
     acc.is_output = true
     acc.channel = "Fluid"
-    acc.cover = StaticCover.find("FluidOutput")
+    acc.cover = StaticCover.get("FluidOutput")
 end
 
 return function(name, tier, level)

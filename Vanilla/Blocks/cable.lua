@@ -8,8 +8,8 @@ local logic = function(self)
         conductor:add_wire(acc)
     end
 
-    conductor.side_cover = StaticCover.find("CableSide")
-    conductor.center_cover = StaticCover.find("CableCenter")
+    conductor.side_cover = StaticCover.get("CableSide")
+    conductor.center_cover = StaticCover.get("CableCenter")
     conductor.conductor_channel = 1000
     conductor.channel = "Electricity"
 end
