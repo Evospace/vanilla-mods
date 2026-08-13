@@ -25,6 +25,7 @@
 --
 -- Objective factories:
 --   qb.collect_item({names}, count)  -- mine any of the named items (OR-group)
+--   qb.craft_item({names}, count)    -- smelt/assemble any of them in a machine
 --   qb.research(name)                -- finish the named research
 --   qb.build_block({names}, count)   -- build any of the named blocks (OR-group)
 --   qb.build_stack({top}, {bottom})  -- build one of the top blocks standing on a bottom one
@@ -102,6 +103,25 @@ function qb.collect_item(names, count, opts)
       label = opts.label,
       match = function(ctx) return ctx.item ~= nil and set[ctx.item.name:lower()] == true end,
       amount = function(ctx) return (ctx.count or 1) * (weights[ctx.item.name:lower()] or 1) end,
+   }
+end
+
+-- Items coming out of a machine, counted as they are produced rather than as
+-- they sit in an inventory: a player who smelts the required amount and then
+-- spends it still closes the objective.
+function qb.craft_item(names, count, opts)
+   opts = opts or {}
+   local list = to_list(names)
+   local set = to_set(list)
+   return {
+      kind = "craft_item",
+      id = opts.id or ("craft_" .. names_label(list):gsub("[^%w]", "_")),
+      event = defines.events.on_machine_crafted,
+      required = count or 1,
+      show_progress = true,
+      label = opts.label,
+      match = function(ctx) return ctx.item ~= nil and set[ctx.item.name:lower()] == true end,
+      amount = function(ctx) return ctx.count or 1 end,
    }
 end
 

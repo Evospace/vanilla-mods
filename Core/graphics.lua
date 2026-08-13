@@ -96,6 +96,11 @@ return function()
             end
             clouds:set_action()
 
+            local values = {"Off", "Minimal", "Full", "Full"}
+            local wind = Setting.find("WindAnimation")
+            wind.string_value = values[scalability + 1]
+            wind:set_action()
+
             local values = {"Low", "High", "High", "High"}
             local particles = Setting.find("WeatherParticles")
             particles.string_value = values[scalability + 1]
@@ -150,6 +155,24 @@ return function()
         end,
         label = "WeatherParticles",
         name = "WeatherParticles",
+    })
+
+    db:from_table({
+        class = "Setting",
+        category = "Graphics",
+        type = "String",
+        default_string_value = "Full",
+        string_options = {"Off", "Minimal", "Full"},
+        ---@param setting Setting
+        set_action = function(setting)
+            local value = 1.0
+            if setting.string_value == "Off" then value = 0.0 end
+            if setting.string_value == "Minimal" then value = 0.25 end
+            engine.wind_animation = value
+            engine:apply()
+        end,
+        label = "WindAnimation",
+        name = "WindAnimation",
     })
 
     db:from_table({
