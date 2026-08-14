@@ -55,6 +55,11 @@ return function()
             set.int_value = math.floor(values[scalability + 1])
             set:set_action()
 
+            local values = {15, 18, 25, 27}
+            local set = Setting.find("LoadingRange")
+            set.int_value = values[scalability + 1]
+            set:set_action()
+
             local values = {"FXAA", "FXAA", "TAA", "TAA"}
             local set = Setting.find("AntiAliasingMethod")
             set.string_value = values[scalability + 1]
@@ -414,6 +419,24 @@ return function()
         end,
         label = "DecorationsQuality",
         name = "DecorationsQuality",
+    })
+
+    db:from_table({
+        class = "Setting",
+        category = "Graphics",
+        type = "Slider",
+        max_value = 30,
+        min_value = 6,
+        int_default_value = 22,
+        ---@param setting Setting
+        set_action = function(setting)
+           local value = setting.int_value
+           engine.loading_range = value
+           print_info("set LoadingRange "..value)
+           engine:apply()
+        end,
+        label = "LoadingRange",
+        name = "LoadingRange",
     })
 
     local function generate_slider(name, variable)

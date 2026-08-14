@@ -3,24 +3,6 @@ return function()
         class = "Setting",
         category = "Game",
         type = "Slider",
-        max_value = 25,
-        min_value = 6,
-        int_default_value = 18,
-        ---@param setting Setting
-        set_action = function(setting)
-           local value = setting.int_value
-           engine.loading_range = value
-           print_info("set LoadingRange "..value)
-           engine:apply()
-        end,
-        label = "LoadingRange",
-        name = "LoadingRange",
-    })
-
-    db:from_table({
-        class = "Setting",
-        category = "Game",
-        type = "Slider",
         max_value = 2,
         min_value = 0,
         int_default_value = 2,
