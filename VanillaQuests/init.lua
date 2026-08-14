@@ -36,19 +36,6 @@ function VanillaQuestsMod.init()
       },
    })
 
-   qb.quest("OpenInventory", {
-      chapter = "OreToPower",
-      label = Loc.new("OpenInventory", "quests"),
-      description = {
-         Loc.new("OpenInventoryDesc1", "quests"),
-         Loc.new("OpenInventoryDesc2", "quests"),
-      },
-      requires = { "GatherCopperOre", "GatherFuel" },
-      objectives = {
-         qb.open_gui("inventory", { label = Loc.new("ObjOpenInventory", "quests") }),
-      },
-   })
-
    qb.quest("MineStone", {
       chapter = "OreToPower",
       label = Loc.new("MineStone", "quests"),
@@ -58,10 +45,22 @@ function VanillaQuestsMod.init()
       },
       context = { "StoneSurface" },
       requires = { "GatherCopperOre", "GatherFuel" },
-      unlocks = { "CraftFirstBlocks" },
+      unlocks = { "CraftFirstBlocks", "OpenInventory" },
       objectives = {
          qb.collect_item({ "StoneSurface" }, 8,
             { label = Loc.new("ObjMineStone", "quests") }),
+      },
+   })
+
+   qb.quest("OpenInventory", {
+      chapter = "OreToPower",
+      label = Loc.new("OpenInventory", "quests"),
+      description = {
+         Loc.new("OpenInventoryDesc1", "quests"),
+         Loc.new("OpenInventoryDesc2", "quests"),
+      },
+      objectives = {
+         qb.open_gui("inventory", { label = Loc.new("ObjOpenInventory", "quests") }),
       },
    })
 
