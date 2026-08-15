@@ -497,7 +497,6 @@ function qb.build()
          class = "StaticChapter",
          name = def.name,
          label = def.label,
-         description_parts = def.description or {},
       })
    end
 
