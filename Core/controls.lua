@@ -9,7 +9,7 @@ return function()
       int_default_value = 100,
       ---@param setting Setting
       set_action = function(setting)
-         local value = setting.int_value / 200.0
+         local value = setting.int_value / 100.0
          engine.mouse_sensitivity_x = value
          print_info("set MouseSensitivityX "..value)
          engine:apply()
@@ -27,7 +27,7 @@ return function()
       int_default_value = 100,
       ---@param setting Setting
       set_action = function(setting)
-         local value = setting.int_value / 200.0
+         local value = setting.int_value / 100.0
          engine.mouse_sensitivity_y = value
          print_info("set MouseSensitivityY "..value)
          engine:apply()
@@ -72,40 +72,36 @@ return function()
       class = "Setting",
       category = "Controls",
       type = "Key",
-      key_binding = "MoveForward",
+      key_binding = "Move",
       label = "MoveForward",
       name = "MoveForward",
-      int_default_value = 1,
       default_key = "W",
    })
    db:from_table({
       class = "Setting",
       category = "Controls",
       type = "Key",
-      key_binding = "MoveForward",
+      key_binding = "Move",
       label = "MoveBack",
       name = "MoveBack",
-      int_default_value = -1,
       default_key = "S",
    })
    db:from_table({
       class = "Setting",
       category = "Controls",
       type = "Key",
-      key_binding = "MoveRight",
+      key_binding = "Move",
       label = "MoveRight",
       name = "MoveRight",
-      int_default_value = 1,
       default_key = "D",
    })
    db:from_table({
       class = "Setting",
       category = "Controls",
       type = "Key",
-      key_binding = "MoveRight",
+      key_binding = "Move",
       label = "MoveLeft",
       name = "MoveLeft",
-      int_default_value = -1,
       default_key = "A",
    })
    db:from_table({
@@ -115,7 +111,6 @@ return function()
       key_binding = "VertOffset",
       label = "RaiseBlock",
       name = "RaiseBlock",
-      int_default_value = 1,
       default_key = "MouseWheelAxis",
    })
    db:from_table({
@@ -125,7 +120,6 @@ return function()
       key_binding = "MoveUp",
       label = "MoveUp",
       name = "MoveUp",
-      int_default_value = 1,
       default_key = "Spacebar",
    })
    db:from_table({
@@ -135,7 +129,6 @@ return function()
       key_binding = "MoveUp",
       label = "MoveDown",
       name = "MoveDown",
-      int_default_value = -1,
       default_key = "C",
    })
    db:from_table({
@@ -183,15 +176,7 @@ return function()
       name = "BlockDown",
       default_key = "Down",
    })
-   db:from_table({
-      class = "Setting",
-      category = "Controls",
-      type = "Key",
-      key_binding = "Search",
-      label = "Search",
-      name = "Search",
-      default_key = "Tab",
-   })
+   
    db:from_table({
       class = "Setting",
       category = "Controls",
@@ -235,13 +220,13 @@ return function()
       key_binding = "EmptyHand",
       label = "EmptyHand",
       name = "EmptyHand",
-      default_key = "None",
+      default_key = "Alt+Q",
    })
    db:from_table({
       class = "Setting",
       category = "Controls",
       type = "Key",
-      key_binding = "Esc",
+      key_binding = "Escape",
       label = "Escape",
       name = "Escape",
       default_key = "Escape",
@@ -406,7 +391,7 @@ return function()
       key_binding = "SelectToolMultitool",
       label = "SelectToolMultitool",
       name = "SelectToolMultitool",
-      default_key = "None",
+      default_key = "Alt+Z",
    })
    db:from_table({
       class = "Setting",
@@ -415,7 +400,7 @@ return function()
       key_binding = "SelectToolScrewdriver",
       label = "SelectToolScrewdriver",
       name = "SelectToolScrewdriver",
-      default_key = "None",
+      default_key = "Alt+X",
    })
    db:from_table({
       class = "Setting",
@@ -424,7 +409,7 @@ return function()
       key_binding = "SelectToolGroundLevelingTool",
       label = "SelectToolGroundLevelingTool",
       name = "SelectToolGroundLevelingTool",
-      default_key = "None",
+      default_key = "Alt+V",
    })
    local nums = {"Zero","One","Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"}
    for i=0,9 do
@@ -432,7 +417,7 @@ return function()
          class = "Setting",
          category = "Controls",
          type = "Key",
-         key_binding = "ActiveSlot_"..i,
+         key_binding = "ActiveSlot"..i,
          label = "ActiveSlot_"..i,
          name = "ActiveSlot_"..i,
          default_key = nums[i+1],

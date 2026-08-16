@@ -43,6 +43,15 @@ local chapter_defs = {}   -- chapters declared since the last qb.build()
 local quest_defs = {}      -- quests declared since the last qb.build()
 local quest_by_name = {}   -- lower-cased name -> quest definition (runtime registry, every mod's)
 local activated_handler_id = nil
+local spawned_handler_id = nil
+
+-- Polled objectives: the quest defs carrying at least one, the scheduler handle
+-- the poll runs on, and per quest the counter reading each objective started
+-- from. See the poll driver below.
+local poll_defs = {}
+local poll_handle = nil
+local poll_anchors = {}
+local poll_interval_ticks = 30
 
 local function to_list(names)
    if type(names) == "string" then
@@ -95,6 +104,11 @@ end
 --     match  = function(ctx) -> bool,        -- does this event advance us?
 --     amount = function(ctx) -> number }     -- how much to advance by
 -- `event` may be nil for purely manual objectives (kind == "count").
+--
+-- An objective whose source is a counter the engine already keeps carries
+--   poll = function() -> number|nil          -- the counter now, nil if unreadable
+-- instead of an event: the framework reads it on an interval and advances by
+-- how much the counter moved since the objective started watching it.
 -- ---------------------------------------------------------------------------
 
 -- `opts.weights` gives an item a rate other than one unit per item, which is how
@@ -124,19 +138,42 @@ end
 -- who smelts the required amount and then spends it still closes the objective.
 -- A machine craft and a hand craft both count, so the objective does not care
 -- whether the recipe was run in a block or in the player's own crafter.
+--
+-- Production is a counter the surface already keeps, so this objective reads it
+-- rather than answering an event: a craft is the hottest thing the simulation
+-- does, and every machine on the map would otherwise call into lua for output
+-- no quest asked about.
 function qb.craft_item(names, count, opts)
    opts = opts or {}
    local list = to_list(names)
-   local set = to_set(list)
+   local items = nil
    return {
       kind = "craft_item",
       id = opts.id or ("craft_" .. names_label(list):gsub("[^%w]", "_")),
-      event = { defines.events.on_machine_crafted, defines.events.on_player_crafted },
       required = count or 1,
       show_progress = true,
       label = opts.label,
-      match = function(ctx) return ctx.item ~= nil and set[ctx.item.name:lower()] == true end,
-      amount = function(ctx) return ctx.count or 1 end,
+      poll = function()
+         if dim == nil then
+            return nil
+         end
+         if items == nil then
+            items = {}
+            for _, name in ipairs(list) do
+               local item = StaticItem.find(name)
+               if item == nil then
+                  print_err("questbook: craft_item references unknown item '" .. name .. "'")
+               else
+                  items[#items + 1] = item
+               end
+            end
+         end
+         local total = 0
+         for _, item in ipairs(items) do
+            total = total + dim:get_produced(item)
+         end
+         return total
+      end,
    }
 end
 
@@ -363,6 +400,7 @@ end
 
 local function build_objectives(quest, def)
    quest:clear_objectives()
+   poll_anchors[def.name] = nil
    for _, spec in ipairs(def.objectives) do
       local obj = quest:create_objective(spec.id)
       if obj ~= nil then
@@ -424,6 +462,63 @@ local function build_events_table(def)
       end
    end
    return events
+end
+
+-- Read every polled objective of every active quest and advance it by how much
+-- its counter moved.
+--
+-- An objective anchors itself the first time it is read: the counter it starts
+-- from and the progress it starts at. That is taken on the first poll rather
+-- than when the quest activates, because a save restores an objective's
+-- progress after activating its quest -- by the first simulation tick the
+-- restored value is in place, and the objective goes on counting from it.
+local function poll_tick()
+   for _, def in ipairs(poll_defs) do
+      local quest = StaticQuest.find(def.name)
+      -- Objectives only exist while the quest is Active, so a nil lookup also
+      -- covers the Locked/Completed cases.
+      if quest ~= nil then
+         local anchors = poll_anchors[def.name]
+         local advanced = false
+
+         for _, spec in ipairs(def.objectives) do
+            local obj = nil
+            if spec.poll ~= nil then
+               obj = quest:find_objective_by_id(spec.id)
+            end
+            if obj ~= nil and not obj.completed then
+               local now = spec.poll()
+               if now ~= nil then
+                  if anchors == nil then
+                     anchors = {}
+                     poll_anchors[def.name] = anchors
+                  end
+                  if anchors[spec.id] == nil then
+                     anchors[spec.id] = { base = obj.current, from = now }
+                  end
+
+                  local anchor = anchors[spec.id]
+                  local gained = now - anchor.from
+                  if gained < 0 then
+                     gained = 0
+                  end
+                  local newcur = anchor.base + gained
+                  if newcur > spec.required then
+                     newcur = spec.required
+                  end
+                  if newcur ~= obj.current then
+                     obj:set_progress(newcur, spec.required, spec.show_progress)
+                     advanced = true
+                  end
+               end
+            end
+         end
+
+         if advanced and all_objectives_done(quest, def) then
+            quest:complete()
+         end
+      end
+   end
 end
 
 -- Manually advance a "count" objective from gameplay code.
@@ -520,6 +615,13 @@ function qb.build()
       end
       db:from_table(row)
 
+      for _, spec in ipairs(def.objectives) do
+         if spec.poll ~= nil then
+            poll_defs[#poll_defs + 1] = def
+            break
+         end
+      end
+
       if def.context ~= nil then
          local q = StaticQuest.get(def.name)
          for _, item_name in ipairs(def.context) do
@@ -573,6 +675,20 @@ function qb.build()
             return
          end
          build_objectives(quest, def)
+      end)
+   end
+
+   -- 5) drive the polled objectives. The scheduler is emptied when a session
+   --    ends, so the poll is re-armed for each world the player enters, and the
+   --    anchors of the previous world go with it.
+   if spawned_handler_id == nil then
+      local es = EventSystem.get()
+      spawned_handler_id = es:sub(defines.events.on_player_spawn, function()
+         if poll_handle ~= nil then
+            sim.cancel(poll_handle)
+         end
+         poll_anchors = {}
+         poll_handle = sim.every(poll_interval_ticks, poll_tick)
       end)
    end
 
