@@ -12,7 +12,7 @@ local logic = function(self)
     acc.inventory = inv
     acc.is_input = true
     acc.channel = "Electricity"
-    acc.cover = StaticCover.get("HVInput")
+    acc.cover = StaticCover.get("ElectricityInput")
 end
 
 return function(name, tier, level)

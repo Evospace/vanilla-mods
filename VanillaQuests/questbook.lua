@@ -229,12 +229,15 @@ end
 
 -- A run of blocks wired one into the next. Every step names the block and its two
 -- ends: `inp` is the accessor the previous step feeds, `out` the accessor feeding
--- the next one. The objective answers any block of the run being placed and walks
--- outwards from it in both directions, so the run may be assembled in any order.
+-- the next one, and an end left out means every side of that block is tried. The
+-- objective answers any block of the run being placed and walks outwards from it in
+-- both directions, so the run may be assembled in any order.
 --
 -- The walk follows accessors, not cells: it repeats the test the simulation makes
 -- before moving a resource across a side, so a run that reads as built here is a
--- run that really carries its resource end to end whatever the blocks' rotations.
+-- run that really carries what it carries end to end whatever the blocks' rotations.
+-- Item sides count as well as resource ones, which is what a machine emptying itself
+-- into the chest beside it is.
 function qb.build_chain(steps, opts)
    opts = opts or {}
    local blocks = {}
@@ -242,30 +245,50 @@ function qb.build_chain(steps, opts)
       blocks[i] = to_set(step.block)
    end
 
-   local function across(block, acc_name, want_output)
+   -- A step names the accessor at each of its ends, or leaves it out and every side of the block is
+   -- tried: a chest carries one input accessor per side, and which one meets the run is up to where
+   -- the player stood the chest.
+   local function sides(block, acc_name)
+      if acc_name == nil then
+         return block:accessors()
+      end
       local side = block:find_accessor(acc_name)
-      if side == nil then
-         return nil
+      return side ~= nil and { side } or {}
+   end
+
+   -- Both ends have to agree on what crosses them: resource against resource on one channel, items
+   -- against items. `want_output` is which way the step is walking -- into this block on the way
+   -- back to the start, out of it on the way to the end.
+   local function links(near, far, want_output)
+      local rn, rf = ResourceAccessor.cast(near), ResourceAccessor.cast(far)
+      if rn ~= nil and rf ~= nil then
+         if rn.channel ~= rf.channel then
+            return false
+         end
+         if want_output then
+            return rn.is_input and rf.is_output
+         end
+         return rn.is_output and rf.is_input
       end
-      local acc = ResourceAccessor.cast(side)
-      if acc == nil then
-         return nil
+      local inn, inf = BaseInventoryAccessor.cast(near), BaseInventoryAccessor.cast(far)
+      if inn ~= nil and inf ~= nil then
+         if want_output then
+            return inn.input ~= nil and inf.output ~= nil
+         end
+         return inn.output ~= nil and inf.input ~= nil
       end
-      local facing = acc:neighbor()
-      if facing == nil then
-         return nil
+      return false
+   end
+
+   local function across(block, acc_name, want_output)
+      local found = {}
+      for _, side in ipairs(sides(block, acc_name)) do
+         local facing = side:neighbor()
+         if facing ~= nil and links(side, facing, want_output) and facing.owner ~= nil then
+            found[#found + 1] = facing.owner
+         end
       end
-      local other = ResourceAccessor.cast(facing)
-      if other == nil or other.channel ~= acc.channel then
-         return nil
-      end
-      if want_output and not other.is_output then
-         return nil
-      end
-      if not want_output and not other.is_input then
-         return nil
-      end
-      return other.owner
+      return found
    end
 
    local function is_step(index, block)
@@ -273,26 +296,30 @@ function qb.build_chain(steps, opts)
          and blocks[index][block.static_block.name:lower()] == true
    end
 
+   -- A side scanned rather than named can face more than one block that fits, so each end of the
+   -- walk tries every neighbour it found instead of following the first one.
    local function fed_back_to_start(index, block)
-      while index > 1 do
-         local prev = across(block, steps[index].inp, true)
-         if not is_step(index - 1, prev) then
-            return false
-         end
-         block, index = prev, index - 1
+      if index <= 1 then
+         return true
       end
-      return true
+      for _, prev in ipairs(across(block, steps[index].inp, true)) do
+         if is_step(index - 1, prev) and fed_back_to_start(index - 1, prev) then
+            return true
+         end
+      end
+      return false
    end
 
    local function feeds_on_to_end(index, block)
-      while index < #steps do
-         local next_block = across(block, steps[index].out, false)
-         if not is_step(index + 1, next_block) then
-            return false
-         end
-         block, index = next_block, index + 1
+      if index >= #steps then
+         return true
       end
-      return true
+      for _, next_block in ipairs(across(block, steps[index].out, false)) do
+         if is_step(index + 1, next_block) and feeds_on_to_end(index + 1, next_block) then
+            return true
+         end
+      end
+      return false
    end
 
    local function built_chain(index, block)

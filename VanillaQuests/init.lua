@@ -168,9 +168,32 @@ function VanillaQuestsMod.init()
          Loc.new("ResearchAutomaticMiningDesc2", "quests"),
       },
       context = { "CopperConveyor", "CopperRobotArm", "CopperDrillingRig" },
+      unlocks = { "BuildAutomaticMine" },
       objectives = {
          qb.research("Automatization", { label = Loc.new("ObjResearchAutomatization", "quests") }),
          qb.research("AutomaticMining", { label = Loc.new("ObjResearchAutomaticMining", "quests") }),
+      },
+   })
+
+   qb.quest("BuildAutomaticMine", {
+      chapter = "Automation",
+      label = Loc.new("BuildAutomaticMine", "quests"),
+      description = {
+         Loc.new("BuildAutomaticMineDesc1", "quests"),
+         Loc.new("BuildAutomaticMineDesc2", "quests"),
+         Loc.new("BuildAutomaticMineDesc3", "quests"),
+      },
+      context = { "CopperDrillingRig", "CopperStirlingEngine", "StoneChest" },
+      objectives = {
+         qb.build_chain({
+            { block = { "StoneFurnace", "CopperFurnace" }, out = "rao" },
+            { block = "CopperStirlingEngine", inp = "Input1", out = "Output" },
+            { block = "CopperDrillingRig", inp = "ria" },
+         }, { label = Loc.new("ObjPowerDrillingRig", "quests") }),
+         qb.build_chain({
+            { block = "CopperDrillingRig", out = "oa" },
+            { block = { "StoneChest", "CopperChest" } },
+         }, { label = Loc.new("ObjDockMineChest", "quests") }),
       },
    })
 
