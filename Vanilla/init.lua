@@ -64,6 +64,17 @@ function vanilla_mod.init()
 
       local block = StaticBlock.find("CopperSpawner")
       dim:spawn_block_identity(Vec3i.new(gen_zero.x, gen_zero.y, z_start + 1), block)
+
+      local pad_center = math.floor(platform_size / 2)
+      local pad_radius = 2
+      for i = -pad_radius, pad_radius do
+         for j = -pad_radius, pad_radius do
+            dim:set_cell(Vec3i.new(gen_zero.x + pad_center + i, gen_zero.y + pad_center + j, z_start), nil)
+         end
+      end
+
+      local pad = StaticBlock.find("LandingPad")
+      dim:spawn_block_identity(Vec3i.new(gen_zero.x + pad_center, gen_zero.y + pad_center, z_start), pad)
    end
    ss.size = Vec2i.new(10, 10)
 

@@ -10,10 +10,27 @@ function VanillaQuestsMod.init()
       label = Loc.new("OreToPowerChapter", "quests"),
    })
 
+   qb.quest("Welcome", {
+      chapter = "OreToPower",
+      label = Loc.new("Welcome", "quests"),
+      unlocks = { "GatherCopperOre", "GatherFuel" },
+      description = {
+         Loc.new("WelcomeDesc1", "quests"),
+         Loc.new("WelcomeDesc2", "quests"),
+      },
+      objectives = {
+         qb.open_gui("questbook", { label = Loc.new("ObjOpenQuestBook", "quests") }),
+         qb.close_all_gui({ label = Loc.new("ObjReturnToWorld", "quests") }),
+      },
+   })
+
    qb.quest("GatherCopperOre", {
       chapter = "OreToPower",
       label = Loc.new("GatherCopperOre", "quests"),
-      description = { Loc.new("GatherCopperOreDesc", "quests") },
+      description = {
+         Loc.new("GatherCopperOreDesc", "quests"),
+         Loc.new("GatherCopperOreDesc2", "quests"),
+      },
       context = { "ChalcopyriteOre", "MalachiteOre" },
       objectives = {
          qb.collect_item({ "ChalcopyriteOre", "MalachiteOre" }, 25,
@@ -38,7 +55,7 @@ function VanillaQuestsMod.init()
       description = { Loc.new("MineStoneDesc", "quests") },
       context = { "StoneSurface" },
       requires = { "GatherCopperOre", "GatherFuel" },
-      unlocks = { "CraftFirstBlocks", "OpenInventory" },
+      unlocks = { "ReturnHome" },
       objectives = {
          qb.collect_item({ "StoneSurface" }, 12,
             { label = Loc.new("ObjMineStone", "quests") }),
@@ -54,6 +71,19 @@ function VanillaQuestsMod.init()
       },
       objectives = {
          qb.open_gui("inventory", { label = Loc.new("ObjOpenInventory", "quests") }),
+      },
+   })
+
+   qb.quest("ReturnHome", {
+      chapter = "OreToPower",
+      label = Loc.new("ReturnHome", "quests"),
+      description = {
+         Loc.new("ReturnHomeDesc1", "quests"),
+         Loc.new("ReturnHomeDesc2", "quests"),
+      },
+      unlocks = { "CraftFirstBlocks", "OpenInventory" },
+      objectives = {
+         qb.return_home({ label = Loc.new("ObjReturnHome", "quests") }),
       },
    })
 
@@ -184,6 +214,7 @@ function VanillaQuestsMod.init()
          Loc.new("BuildAutomaticMineDesc3", "quests"),
       },
       context = { "CopperDrillingRig", "CopperStirlingEngine", "StoneChest" },
+      unlocks = { "BuildProcessingLine" },
       objectives = {
          qb.build_chain({
             { block = { "StoneFurnace", "CopperFurnace" }, out = "rao" },
@@ -194,6 +225,44 @@ function VanillaQuestsMod.init()
             { block = "CopperDrillingRig", out = "oa" },
             { block = { "StoneChest", "CopperChest" } },
          }, { label = Loc.new("ObjDockMineChest", "quests") }),
+      },
+   })
+
+   -- The plan this quest puts down: the ore line as it is meant to stand, ghost by ghost. The
+   -- rotations are the ones that bring every port to the port it feeds -- the arms take from -x and
+   -- give to +x, the hammer takes kinetic from -y -- and the furnaces and the engine lie on their
+   -- side so their heat and kinetic faces meet across the row instead of pointing into the platform.
+   local QUPRIGHT = FQuat.new(0, 0, 0, 1)
+   local QROW = FQuat.new(0, 0, 0.70710678, 0.70710678)       -- left -> -x, right -> +x, back -> -y
+   local QLYING = FQuat.new(0.5, -0.5, -0.5, -0.5)            -- up -> +y, down -> -y
+   local QFURNACE = FQuat.new(0, -0.70710678, 0, 0.70710678)  -- up -> -x
+   local QENGINE = FQuat.new(0.5, -0.5, -0.5, 0.5)            -- back -> +y, down -> +x
+
+   local line = qb.plan({
+      { block = "StoneChest", at = { 0, 0 }, rot = QUPRIGHT },
+      { block = "CopperRobotArm", at = { 1, 0 }, rot = QROW },
+      { block = "CopperAutomaticHammer", at = { 2, 0 }, rot = QROW },
+      { block = "CopperRobotArm", at = { 3, 0 }, rot = QROW },
+      { block = "StoneSmelter", at = { 4, 0 }, rot = QLYING },
+      { block = "CopperRobotArm", at = { 5, 0 }, rot = QROW },
+      { block = "StoneChest", at = { 6, 0 }, rot = QUPRIGHT },
+      { block = "CopperStirlingEngine", at = { 2, -1 }, rot = QENGINE },
+      { block = "StoneFurnace", at = { 3, -1 }, rot = QFURNACE },
+      { block = "StoneFurnace", at = { 4, -1 }, rot = QLYING },
+   })
+
+   qb.quest("BuildProcessingLine", {
+      chapter = "Automation",
+      label = Loc.new("BuildProcessingLine", "quests"),
+      description = {
+         Loc.new("BuildProcessingLineDesc1", "quests"),
+         Loc.new("BuildProcessingLineDesc2", "quests"),
+         Loc.new("BuildProcessingLineDesc3", "quests"),
+      },
+      context = { "CopperAutomaticHammer", "CopperRobotArm", "StoneSmelter" },
+      on_unlock = function() line.place() end,
+      objectives = {
+         line.objective({ label = Loc.new("ObjBuildProcessingLine", "quests") }),
       },
    })
 

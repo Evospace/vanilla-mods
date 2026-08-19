@@ -31,6 +31,8 @@
 --   qb.build_stack({top}, {bottom})  -- build one of the top blocks standing on a bottom one
 --   qb.build_chain({steps})          -- build a run of blocks actually wired one into the next
 --   qb.open_gui({names})             -- open one of the named windows
+--   qb.close_all_gui()               -- close the last window left open
+--   qb.return_home()                 -- leave the home sector and walk back into it
 --   qb.count(id, count, label)       -- generic manual counter (advance from your own code)
 
 local qb = {}
@@ -372,6 +374,47 @@ function qb.open_gui(names, opts)
    }
 end
 
+-- The player is back in the world with nothing over it.
+function qb.close_all_gui(opts)
+   opts = opts or {}
+   return {
+      kind = "close_all_gui",
+      id = opts.id or "close_all_gui",
+      event = defines.events.on_gui_closed,
+      required = 1,
+      show_progress = false,
+      label = opts.label,
+      match = function(ctx) return ctx.any_open == false end,
+      amount = function(ctx) return 1 end,
+   }
+end
+
+-- Back at the base. The spawn is the fixed point every world starts the player
+-- at, so home is sector 0,0; the player has to leave it and come back.
+function qb.return_home(opts)
+   opts = opts or {}
+   local left = false
+   return {
+      kind = "return_home",
+      id = opts.id or "return_home",
+      event = defines.events.on_player_at_sector,
+      required = 1,
+      show_progress = false,
+      label = opts.label,
+      match = function(ctx)
+         if ctx.pos == nil then
+            return false
+         end
+         if ctx.pos.x ~= 0 or ctx.pos.y ~= 0 then
+            left = true
+            return false
+         end
+         return left
+      end,
+      amount = function(ctx) return 1 end,
+   }
+end
+
 function qb.research(name, opts)
    opts = opts or {}
    return {
@@ -384,6 +427,139 @@ function qb.research(name, opts)
       match = function(ctx) return ctx.research ~= nil and ctx.research.name:lower() == name:lower() end,
       amount = function(ctx) return 1 end,
    }
+end
+
+-- ---------------------------------------------------------------------------
+-- ghost plans
+--
+-- A plan is a drawing the quest puts down: one ghost per cell, each standing for
+-- the block that belongs there, and the player builds into it. `cells` carry an
+-- offset from the plan's anchor, the block, and the rotation the block is placed
+-- at.
+--
+-- The anchor is searched for the same way every time -- outward from the spawn
+-- point, first spot that fits -- so the plan is found again after a reload with
+-- nothing stored: a spot fits when every one of its cells is either free with
+-- solid ground under it, or already holds a ghost or the block it stands for.
+-- While the columns around the spawn are unloaded nothing fits, and the plan
+-- waits until the player is back at the base.
+-- ---------------------------------------------------------------------------
+
+local plan_search_radius = 12
+local plan_search_depth = { 0, -1, -2, 1 }
+
+-- Rings outward from the anchor, so the plan lands as close to the spawn as the
+-- space allows, and always in the same order.
+local function search_offsets(radius)
+   local offsets = { { 0, 0 } }
+   for r = 1, radius do
+      for i = -r, r do
+         offsets[#offsets + 1] = { i, -r }
+         offsets[#offsets + 1] = { i, r }
+      end
+      for j = -r + 1, r - 1 do
+         offsets[#offsets + 1] = { -r, j }
+         offsets[#offsets + 1] = { r, j }
+      end
+   end
+   return offsets
+end
+
+function qb.plan(cells, opts)
+   opts = opts or {}
+   local anchor = nil
+   local offsets = search_offsets(opts.radius or plan_search_radius)
+
+   local function at(base, cell)
+      return base + Vec3i.new(cell.at[1], cell.at[2], cell.at[3] or 0)
+   end
+
+   local function standing(cell, base)
+      local block = dim:get_cell(at(base, cell))
+      return block ~= nil and block.name:lower() or nil
+   end
+
+   local function fits(cell, base)
+      local block = standing(cell, base)
+      if block ~= nil then
+         return block == "ghost" or block == cell.block:lower()
+      end
+      return dim:get_cell(at(base, cell) + Vec3i.down) ~= nil
+   end
+
+   local function find_anchor()
+      local spawn = dim ~= nil and dim:spawn_point() or nil
+      if spawn == nil then
+         return nil
+      end
+      for _, dz in ipairs(plan_search_depth) do
+         for _, off in ipairs(offsets) do
+            local base = spawn + Vec3i.new(off[1], off[2], dz)
+            local ok = true
+            for _, cell in ipairs(cells) do
+               if not fits(cell, base) then
+                  ok = false
+                  break
+               end
+            end
+            if ok then
+               return base
+            end
+         end
+      end
+      return nil
+   end
+
+   local function base()
+      if anchor == nil then
+         anchor = find_anchor()
+      end
+      return anchor
+   end
+
+   local plan = {}
+
+   -- Ghosts go only into cells that are still empty, so a plan put down again --
+   -- after a reload, or after the quest opened while the base was out of reach --
+   -- adds nothing to what the player has already built.
+   function plan.place()
+      local found = base()
+      if found == nil then
+         return false
+      end
+      for _, cell in ipairs(cells) do
+         local pos = at(found, cell)
+         if dim:get_cell(pos) == nil then
+            dim:spawn_ghost(pos, cell.rot, StaticBlock.get(cell.block))
+         end
+      end
+      return true
+   end
+
+   function plan.objective(o)
+      o = o or {}
+      return {
+         kind = "plan_built",
+         id = o.id or ("plan_" .. tostring(cells[1].block)),
+         required = #cells,
+         show_progress = true,
+         label = o.label,
+         poll = function()
+            if not plan.place() then
+               return nil
+            end
+            local built = 0
+            for _, cell in ipairs(cells) do
+               if standing(cell, anchor) == cell.block:lower() then
+                  built = built + 1
+               end
+            end
+            return built
+         end,
+      }
+   end
+
+   return plan
 end
 
 -- Generic counter with no automatic event source. Advance it yourself from
@@ -631,6 +807,7 @@ function qb.build()
          description_parts = def.description or {},
          auto_unlock = (def.auto_unlock ~= false),
          events = build_events_table(def),
+         on_unlock = def.on_unlock,
       }
       if def.chapter ~= nil then
          local chapter = StaticChapter.find(def.chapter)
