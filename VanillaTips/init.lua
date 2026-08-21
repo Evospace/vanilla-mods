@@ -56,6 +56,25 @@ function VanillaTipsMod.init()
         image = "Textures/Research.png"
     })
 
+    local i_comp = AutosizeInventory.new_simple()
+    i_comp:add(StaticItem.find("CopperComputer"), 1)
+    i_comp:add(StaticItem.find("Circuit"), 3)
+    i_comp:add(StaticItem.find("SteelComputer"), 1)
+    i_comp:add(StaticItem.find("AdvancedCircuit"), 3)
+    i_comp:add(StaticItem.find("Electricity"), 1)
+    db:from_table({
+        class = "StaticTip",
+        name = "ResearchComputers",
+        label = Loc.new("ResearchComputers", "tips"),
+        description_parts = {
+            Loc.new("ResearchComputersDescription1", "tips"),
+            Loc.new("ResearchComputersDescription2", "tips"),
+            Loc.new("ResearchComputersDescription3", "tips"),
+            Loc.new("ResearchComputersDescription4", "tips")
+        },
+        context = i_comp
+    })
+
     local i_acc = AutosizeInventory.new_simple()
     i_acc:add(StaticItem.find("CopperStirlingEngine"), 1)
     i_acc:add(StaticItem.find("CopperConnector"), 10)
@@ -71,6 +90,24 @@ function VanillaTipsMod.init()
         description_parts = {Loc.new("Accessors1Description", "tips")},
         image = "Textures/Accessors1.png",
         context = i_acc
+    })
+
+    local i_prod = AutosizeInventory.new_simple()
+    i_prod:add(StaticItem.find("CopperAutomaticHammer"), 1)
+    i_prod:add(StaticItem.find("CopperMacerator"), 1)
+    i_prod:add(StaticItem.find("ChalcopyriteOre"), 1)
+    i_prod:add(StaticItem.find("ChalcopyriteOreImpureGravel"), 1)
+    i_prod:add(StaticItem.find("ChalcopyriteOreDust"), 1)
+    i_prod:add(StaticItem.find("CopperPlate"), 1)
+    db:from_table({
+        class = "StaticTip",
+        name = "Productivity",
+        label = Loc.new("Productivity", "tips"),
+        description_parts = {
+            Loc.new("ProductivityDescription1", "tips"),
+            Loc.new("ProductivityDescription2", "tips")
+        },
+        context = i_prod
     })
 
     local i_scr = AutosizeInventory.new_simple()

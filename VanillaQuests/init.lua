@@ -214,7 +214,7 @@ function VanillaQuestsMod.init()
          Loc.new("BuildAutomaticMineDesc3", "quests"),
       },
       context = { "CopperDrillingRig", "CopperStirlingEngine", "StoneChest" },
-      unlocks = { "CraftProcessingLine" },
+      unlocks = { "CraftOreMultiplication" },
       objectives = {
          qb.build_chain({
             { block = { "StoneFurnace", "CopperFurnace" }, out = "rao" },
@@ -228,30 +228,51 @@ function VanillaQuestsMod.init()
       },
    })
 
-   -- The machines one ore line takes, counted as the line stands: chest, arm, hammer, arm, smelter,
-   -- arm, chest along the row, and behind it the engine that drives the hammer with the furnace
-   -- under it plus the furnace that heats the smelter.
-   qb.quest("CraftProcessingLine", {
+   -- The machines the line takes, counted as it stands: chest, arm, hammer, arm, each macerator,
+   -- arm, smelter, arm, chest, and behind the row the engine that drives the hammer with the
+   -- furnace under it plus the furnace that heats the smelter. Two macerators per hammer: one
+   -- macerator grinds slower than the hammer crushes.
+   qb.quest("CraftOreMultiplication", {
       chapter = "Automation",
-      label = Loc.new("CraftProcessingLine", "quests"),
+      label = Loc.new("CraftOreMultiplication", "quests"),
       description = {
-         Loc.new("CraftProcessingLineDesc1", "quests"),
-         Loc.new("CraftProcessingLineDesc2", "quests"),
+         Loc.new("CraftOreMultiplicationDesc1", "quests"),
+         Loc.new("CraftOreMultiplicationDesc2", "quests"),
       },
-      context = { "CopperAutomaticHammer", "CopperRobotArm", "StoneSmelter", "StoneChest" },
+      context = { "CopperAutomaticHammer", "CopperMacerator", "CopperRobotArm", "StoneSmelter", "StoneChest" },
+      unlocks = { "ResearchCircuits" },
       objectives = {
          qb.craft_item({ "StoneChest" }, 2,
             { label = Loc.new("ObjCraftLineChests", "quests") }),
-         qb.craft_item({ "CopperRobotArm" }, 3,
-            { label = Loc.new("ObjCraftLineArms", "quests") }),
          qb.craft_item({ "CopperAutomaticHammer" }, 1,
             { label = Loc.new("ObjCraftLineHammer", "quests") }),
-         qb.craft_item({ "StoneSmelter" }, 1,
+         qb.craft_item({ "CopperMacerator" }, 2,
+            { label = Loc.new("ObjCraftMultiplierMacerators", "quests") }),
+         qb.craft_item({ "StoneSmelter" }, 2,
             { label = Loc.new("ObjCraftLineSmelter", "quests") }),
-         qb.craft_item({ "CopperStirlingEngine" }, 1,
+         qb.craft_item({ "CopperRobotArm" }, 5,
+            { label = Loc.new("ObjCraftMultiplierArms", "quests") }),
+         qb.craft_item({ "CopperStirlingEngine" }, 3,
             { label = Loc.new("ObjCraftLineEngine", "quests") }),
-         qb.craft_item({ "StoneFurnace" }, 2,
+         qb.craft_item({ "StoneFurnace" }, 5,
             { label = Loc.new("ObjCraftLineFurnaces", "quests") }),
+      },
+   })
+
+   -- CopperWire hangs off DistributedComputing and opens the circuit branch; Constructor sits on
+   -- Automatization, which the mining quest already finished.
+   qb.quest("ResearchCircuits", {
+      chapter = "Automation",
+      label = Loc.new("ResearchCircuits", "quests"),
+      description = {
+         Loc.new("ResearchCircuitsDesc1", "quests"),
+      },
+      context = { "CircuitBoard", "Triod", "Circuit", "CopperConstructor" },
+      objectives = {
+         qb.research("CircuitBoard", { label = Loc.new("ObjResearchCircuitBoard", "quests") }),
+         qb.research("Triod", { label = Loc.new("ObjResearchTriod", "quests") }),
+         qb.research("Circuit", { label = Loc.new("ObjResearchCircuit", "quests") }),
+         qb.research("Constructor", { label = Loc.new("ObjResearchConstructor", "quests") }),
       },
    })
 
