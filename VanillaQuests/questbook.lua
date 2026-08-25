@@ -23,6 +23,13 @@
 --   })
 --   qb.build()   -- registers everything; call once at the end of your mod init()
 --
+-- A quest takes all of its objectives by default. `any = true` in the quest table
+-- makes them alternatives instead: the first one done closes the quest, and the
+-- others are the other ways of doing it.
+--
+-- An objective label carries `{count}`, which reads the amount the objective asks
+-- for, so the number is written once -- in the objective, not in the text.
+--
 -- Objective factories:
 --   qb.collect_item({names}, count)  -- mine any of the named items (OR-group)
 --   qb.craft_item({names}, count)    -- smelt/assemble any of them in a machine
@@ -110,20 +117,16 @@ end
 -- An objective whose source is a counter the engine already keeps carries
 --   poll = function() -> number|nil          -- the counter now, nil if unreadable
 -- instead of an event: the framework reads it on an interval and advances by
--- how much the counter moved since the objective started watching it.
+-- how much the counter moved since the objective started watching it. An
+-- objective also carrying `poll_absolute` takes the reading as the progress
+-- itself, for a state the engine holds outright rather than a counter to
+-- measure movement in.
 -- ---------------------------------------------------------------------------
 
--- `opts.weights` gives an item a rate other than one unit per item, which is how
--- an OR-group whose members are not worth the same is written: 20 coal or 40
--- logs is count 40 with coal weighted 2, and any mix in between counts.
 function qb.collect_item(names, count, opts)
    opts = opts or {}
    local list = to_list(names)
    local set = to_set(list)
-   local weights = {}
-   for name, weight in pairs(opts.weights or {}) do
-      weights[name:lower()] = weight
-   end
    return {
       kind = "collect_item",
       id = opts.id or ("collect_" .. names_label(list):gsub("[^%w]", "_")),
@@ -132,7 +135,7 @@ function qb.collect_item(names, count, opts)
       show_progress = true,
       label = opts.label,
       match = function(ctx) return ctx.item ~= nil and set[ctx.item.name:lower()] == true end,
-      amount = function(ctx) return (ctx.count or 1) * (weights[ctx.item.name:lower()] or 1) end,
+      amount = function(ctx) return ctx.count or 1 end,
    }
 end
 
@@ -415,17 +418,25 @@ function qb.return_home(opts)
    }
 end
 
+-- Completion as the research tree holds it rather than as the moment it happened:
+-- a research finished before its quest was ever unlocked closes the objective all
+-- the same, and so does a world that starts with the whole tree complete.
 function qb.research(name, opts)
    opts = opts or {}
    return {
       kind = "research",
       id = opts.id or ("research_" .. tostring(name)),
-      event = defines.events.on_research_finished,
       required = 1,
       show_progress = false,
       label = opts.label,
-      match = function(ctx) return ctx.research ~= nil and ctx.research.name:lower() == name:lower() end,
-      amount = function(ctx) return 1 end,
+      poll_absolute = true,
+      poll = function()
+         local res = StaticResearch.find(name)
+         if res == nil then
+            return nil
+         end
+         return res.completed and 1 or 0
+      end,
    }
 end
 
@@ -485,17 +496,25 @@ local function build_objectives(quest, def)
    end
 end
 
-local function all_objectives_done(quest, def)
+-- A quest declared with `any = true` is closed by one of its objectives, and the
+-- rest are the other ways of closing it: twenty coal or forty logs, whichever the
+-- player brings.
+local function objectives_done(quest, def)
    if #def.objectives == 0 then
       return false
    end
    for _, spec in ipairs(def.objectives) do
       local obj = quest:find_objective_by_id(spec.id)
-      if obj == nil or not obj.completed then
+      local done = obj ~= nil and obj.completed
+      if def.any then
+         if done then
+            return true
+         end
+      elseif not done then
          return false
       end
    end
-   return true
+   return not def.any
 end
 
 -- Build the per-quest `events` table the engine subscribes to while the quest is
@@ -526,7 +545,7 @@ local function build_events_table(def)
                end
             end
          end
-         if all_objectives_done(quest, def) then
+         if objectives_done(quest, def) then
             quest:complete()
          end
       end
@@ -559,20 +578,25 @@ local function poll_tick()
             if obj ~= nil and not obj.completed then
                local now = spec.poll()
                if now ~= nil then
-                  if anchors == nil then
-                     anchors = {}
-                     poll_anchors[def.name] = anchors
-                  end
-                  if anchors[spec.id] == nil then
-                     anchors[spec.id] = { base = obj.current, from = now }
-                  end
+                  local newcur
+                  if spec.poll_absolute then
+                     newcur = now
+                  else
+                     if anchors == nil then
+                        anchors = {}
+                        poll_anchors[def.name] = anchors
+                     end
+                     if anchors[spec.id] == nil then
+                        anchors[spec.id] = { base = obj.current, from = now }
+                     end
 
-                  local anchor = anchors[spec.id]
-                  local gained = now - anchor.from
-                  if gained < 0 then
-                     gained = 0
+                     local anchor = anchors[spec.id]
+                     local gained = now - anchor.from
+                     if gained < 0 then
+                        gained = 0
+                     end
+                     newcur = anchor.base + gained
                   end
-                  local newcur = anchor.base + gained
                   if newcur > spec.required then
                      newcur = spec.required
                   end
@@ -584,7 +608,7 @@ local function poll_tick()
             end
          end
 
-         if advanced and all_objectives_done(quest, def) then
+         if advanced and objectives_done(quest, def) then
             quest:complete()
          end
       end
@@ -609,7 +633,7 @@ function qb.advance(quest_name, objective_id, amount)
       newcur = obj.required
    end
    obj:set_progress(newcur, obj.required, obj.show_progress)
-   if all_objectives_done(q, def) then
+   if objectives_done(q, def) then
       q:complete()
    end
 end
@@ -672,7 +696,7 @@ function qb.build()
          name = def.name,
          label = def.label,
          description_parts = def.description or {},
-         auto_unlock = (def.auto_unlock ~= false),
+         any_objective = (def.any == true),
          events = build_events_table(def),
          on_unlock = def.on_unlock,
       }

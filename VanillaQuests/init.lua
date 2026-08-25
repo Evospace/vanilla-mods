@@ -43,9 +43,12 @@ function VanillaQuestsMod.init()
       label = Loc.new("GatherFuel", "quests"),
       description = { Loc.new("GatherFuelDesc", "quests") },
       context = { "CoalOre", "Log" },
+      any = true,
       objectives = {
-         qb.collect_item({ "CoalOre", "Log" }, 40,
-            { label = Loc.new("ObjGatherFuel", "quests"), weights = { CoalOre = 2 } }),
+         qb.collect_item({ "CoalOre" }, 20,
+            { label = Loc.new("ObjGatherCoal", "quests") }),
+         qb.collect_item({ "Log" }, 40,
+            { label = Loc.new("ObjGatherLogs", "quests") }),
       },
    })
 
