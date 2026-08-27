@@ -9,7 +9,6 @@ local logic = function(self)
     Vlib.add_single_slot_invs(crafter.crafter_output_container, crafter, "io", 3)
         
     local inv = ResourceInventory.new(crafter, "rii")
-    inv.item = StaticItem.get("Kinetic")
     crafter.energy_input_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "rai")

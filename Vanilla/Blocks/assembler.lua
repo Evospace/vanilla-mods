@@ -6,7 +6,6 @@ local logic = function(self)
     --crafter.map_register = true
             
     local inv = ResourceInventory.new(crafter, "rii")
-    inv.item = StaticItem.get("Electricity")
     crafter.energy_input_inventory = inv
 
     Vlib.add_single_slot_invs(crafter.crafter_input_container, crafter, "ii", 1)

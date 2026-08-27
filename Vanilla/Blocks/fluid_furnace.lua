@@ -7,7 +7,6 @@ local logic = function(self)
     --crafter.map_register = true
             
     local inv = ResourceInventory.new(crafter, "rio")
-    inv.item = StaticItem.get("Heat")
     crafter.energy_output_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "rao")

@@ -5,7 +5,6 @@ local logic = function(self)
     crafter.speed = Vlib.get_speed(crafter)
 
     local inv = ResourceInventory.new(crafter, "rii")
-    inv.item = StaticItem.get("Electricity")
     crafter.energy_input_inventory = inv
     
     local acc = ResourceAccessor.new(crafter, "rai")

@@ -6,7 +6,6 @@ local logic = function(self)
     crafter.stable_supply = false
         
     local inv = ResourceInventory.new(crafter, "rii")
-    inv.item = StaticItem.get("Kinetic")
     crafter.energy_input_inventory = inv
 
     local acc = ResourceAccessor.new(crafter, "rai")
@@ -17,7 +16,6 @@ local logic = function(self)
     acc.cover = StaticCover.get("KineticInput")
 
     local inv = ResourceInventory.new(crafter, "rio")
-    inv.item = StaticItem.get("Electricity")
     crafter.energy_output_inventory = inv
 
     local acc = ResourceAccessor.new(crafter, "rao")

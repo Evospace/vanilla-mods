@@ -10,7 +10,6 @@ local logic = function(self)
     env.rated_wind_speed = 14.0
 
     local inv = ResourceInventory.new(crafter, "rio")
-    inv.item = StaticItem.get("Electricity")
     crafter.energy_output_inventory = inv
 
     local acc = ResourceAccessor.new(crafter, "rao")
