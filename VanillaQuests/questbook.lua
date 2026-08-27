@@ -1,16 +1,5 @@
--- questbook.lua
---
--- Declarative questbook framework for Evospace.
---
--- The engine (C++) provides the primitives:
---   * StaticChapter / StaticQuest / QuestObjective prototypes,
---   * QuestSubsystem (Locked -> Active -> Completed state, prerequisite unlocks,
---     save/load, per-quest event subscription groups),
---   * the event bus (EventSystem) with gameplay events.
---
--- This module lets a mod *declare* chapters, quests and objectives, and wires the
--- engine primitives together so objectives auto-track game events. All questbook
--- content/logic therefore lives in Lua (./Content/Mods).
+-- Declarative questbook: a mod declares chapters, quests and objectives, and the objectives track
+-- the event bus themselves.
 --
 -- Usage:
 --   local qb = require('questbook')
@@ -23,12 +12,8 @@
 --   })
 --   qb.build()   -- registers everything; call once at the end of your mod init()
 --
--- A quest takes all of its objectives by default. `any = true` in the quest table
--- makes them alternatives instead: the first one done closes the quest, and the
--- others are the other ways of doing it.
---
--- An objective label carries `{count}`, which reads the amount the objective asks
--- for, so the number is written once -- in the objective, not in the text.
+-- A quest takes all of its objectives; `any = true` makes them alternatives instead.
+-- An objective label may carry `{count}`, the amount the objective asks for.
 --
 -- Objective factories:
 --   qb.collect_item({names}, count)  -- mine any of the named items (OR-group)
@@ -54,9 +39,8 @@ local quest_by_name = {}   -- lower-cased name -> quest definition (runtime regi
 local activated_handler_id = nil
 local spawned_handler_id = nil
 
--- Polled objectives: the quest defs carrying at least one, the scheduler handle
--- the poll runs on, and per quest the counter reading each objective started
--- from. See the poll driver below.
+-- Polled objectives: the quest defs carrying one, the scheduler handle, and the counter each
+-- objective started from.
 local poll_defs = {}
 local poll_handle = nil
 local poll_anchors = {}
@@ -73,10 +57,7 @@ local function to_list(names)
    return list
 end
 
--- A prototype name reaches Lua as the display form of an FName, and outside the
--- editor that form is whatever registered the name first: the Log item comes back
--- as "log" in a packaged build. Every name matched against an event is therefore
--- folded to lower case, on both sides of the comparison.
+-- An FName reaches Lua in whatever case registered it first, so names are matched folded.
 local function to_set(names)
    local set = {}
    for _, n in ipairs(to_list(names)) do
@@ -108,19 +89,15 @@ end
 -- ---------------------------------------------------------------------------
 -- objective factories
 --
--- Each returns a plain spec table consumed by the framework:
+-- Each returns a spec table:
 --   { kind, id, event, required, show_progress, label,
 --     match  = function(ctx) -> bool,        -- does this event advance us?
 --     amount = function(ctx) -> number }     -- how much to advance by
--- `event` may be nil for purely manual objectives (kind == "count").
 --
--- An objective whose source is a counter the engine already keeps carries
+-- Instead of `event` an objective may carry
 --   poll = function() -> number|nil          -- the counter now, nil if unreadable
--- instead of an event: the framework reads it on an interval and advances by
--- how much the counter moved since the objective started watching it. An
--- objective also carrying `poll_absolute` takes the reading as the progress
--- itself, for a state the engine holds outright rather than a counter to
--- measure movement in.
+-- read on an interval and advanced by how much it moved, or by its reading outright with
+-- `poll_absolute`.
 -- ---------------------------------------------------------------------------
 
 function qb.collect_item(names, count, opts)
@@ -139,15 +116,8 @@ function qb.collect_item(names, count, opts)
    }
 end
 
--- Items as they are produced rather than as they sit in an inventory: a player
--- who smelts the required amount and then spends it still closes the objective.
--- A machine craft and a hand craft both count, so the objective does not care
--- whether the recipe was run in a block or in the player's own crafter.
---
--- Production is a counter the surface already keeps, so this objective reads it
--- rather than answering an event: a craft is the hottest thing the simulation
--- does, and every machine on the map would otherwise call into lua for output
--- no quest asked about.
+-- Items as produced, not as held: machine and hand crafts both count, and spending them after
+-- still closes the objective. Polled off the surface counter rather than driven by an event.
 function qb.craft_item(names, count, opts)
    opts = opts or {}
    local list = to_list(names)
@@ -198,10 +168,7 @@ function qb.build_block(names, count, opts)
    }
 end
 
--- One block standing directly on another, in either build order: the objective
--- answers the top block being placed over a bottom one and the bottom block
--- being placed under a top one, so a player who builds the stack upside down is
--- not left with a quest that cannot close.
+-- One block standing directly on another, in either build order.
 function qb.build_stack(top_names, bottom_names, opts)
    opts = opts or {}
    local top_list = to_list(top_names)
@@ -232,17 +199,9 @@ function qb.build_stack(top_names, bottom_names, opts)
    }
 end
 
--- A run of blocks wired one into the next. Every step names the block and its two
--- ends: `inp` is the accessor the previous step feeds, `out` the accessor feeding
--- the next one, and an end left out means every side of that block is tried. The
--- objective answers any block of the run being placed and walks outwards from it in
--- both directions, so the run may be assembled in any order.
---
--- The walk follows accessors, not cells: it repeats the test the simulation makes
--- before moving a resource across a side, so a run that reads as built here is a
--- run that really carries what it carries end to end whatever the blocks' rotations.
--- Item sides count as well as resource ones, which is what a machine emptying itself
--- into the chest beside it is.
+-- A run of blocks wired one into the next. A step names the block, the accessor the previous step
+-- feeds (`inp`) and the one feeding the next (`out`); an end left out tries every side. The walk
+-- follows accessors, not cells, and runs outwards from any placed block of the run.
 function qb.build_chain(steps, opts)
    opts = opts or {}
    local blocks = {}
@@ -261,9 +220,7 @@ function qb.build_chain(steps, opts)
       return side ~= nil and { side } or {}
    end
 
-   -- Both ends have to agree on what crosses them: resource against resource on one channel, items
-   -- against items. `want_output` is which way the step is walking -- into this block on the way
-   -- back to the start, out of it on the way to the end.
+   -- Both ends have to agree on what crosses them. `want_output` is the direction of the walk.
    local function links(near, far, want_output)
       local rn, rf = ResourceAccessor.cast(near), ResourceAccessor.cast(far)
       if rn ~= nil and rf ~= nil then
@@ -301,8 +258,7 @@ function qb.build_chain(steps, opts)
          and blocks[index][block.static_block.name:lower()] == true
    end
 
-   -- A side scanned rather than named can face more than one block that fits, so each end of the
-   -- walk tries every neighbour it found instead of following the first one.
+   -- A scanned side can face several blocks that fit, so every neighbour is tried.
    local function fed_back_to_start(index, block)
       if index <= 1 then
          return true
@@ -392,8 +348,7 @@ function qb.close_all_gui(opts)
    }
 end
 
--- Back at the base. The spawn is the fixed point every world starts the player
--- at, so home is sector 0,0; the player has to leave it and come back.
+-- Home is sector 0,0; the player has to leave it and come back.
 function qb.return_home(opts)
    opts = opts or {}
    local left = false
@@ -496,9 +451,7 @@ local function build_objectives(quest, def)
    end
 end
 
--- A quest declared with `any = true` is closed by one of its objectives, and the
--- rest are the other ways of closing it: twenty coal or forty logs, whichever the
--- player brings.
+-- `any = true`: one objective closes the quest.
 local function objectives_done(quest, def)
    if #def.objectives == 0 then
       return false
@@ -517,9 +470,7 @@ local function objectives_done(quest, def)
    return not def.any
 end
 
--- Build the per-quest `events` table the engine subscribes to while the quest is
--- Active. Objectives are grouped by their source event; one handler per event
--- advances every matching objective and completes the quest when all are done.
+-- The `events` table the engine subscribes to while the quest is Active: one handler per event.
 local function build_events_table(def)
    local by_event = {}
    for _, spec in ipairs(def.objectives) do
@@ -553,14 +504,11 @@ local function build_events_table(def)
    return events
 end
 
--- Read every polled objective of every active quest and advance it by how much
+-- Advance every polled objective of every active quest by how much
 -- its counter moved.
 --
--- An objective anchors itself the first time it is read: the counter it starts
--- from and the progress it starts at. That is taken on the first poll rather
--- than when the quest activates, because a save restores an objective's
--- progress after activating its quest -- by the first simulation tick the
--- restored value is in place, and the objective goes on counting from it.
+-- An objective anchors on its first poll, not on activation: a save restores progress after
+-- activating the quest.
 local function poll_tick()
    for _, def in ipairs(poll_defs) do
       local quest = StaticQuest.find(def.name)
@@ -668,12 +616,8 @@ local function resolve_relations(defs)
    return required
 end
 
--- Every mod calling require('questbook') shares one instance of this module: the
--- module cache is keyed by resolved path for the whole lua state. So build()
--- registers the batch declared since the last call and hands the lists back
--- empty rather than latching -- a second mod's build() must not re-register the
--- first mod's chapters, and must not be a no-op. `quest_by_name` is the runtime
--- registry the on_quest_activated handler reads and keeps every mod's quests.
+-- Every mod shares one instance of this module, so build() registers the batch declared since the
+-- last call and empties the lists. `quest_by_name` keeps every mod's quests for the handler.
 function qb.build()
    local chapters = chapter_defs
    local quests = quest_defs
@@ -756,8 +700,7 @@ function qb.build()
       end
    end
 
-   -- 4) (re)build objectives whenever a quest becomes Active (fresh unlock or
-   --    when a save loads a quest as Active), so objectives survive reload.
+   -- 4) (re)build objectives whenever a quest becomes Active, so they survive a reload
    if activated_handler_id == nil then
       local es = EventSystem.get()
       activated_handler_id = es:sub(defines.events.on_quest_activated, function(ctx)
@@ -773,9 +716,7 @@ function qb.build()
       end)
    end
 
-   -- 5) drive the polled objectives. The scheduler is emptied when a session
-   --    ends, so the poll is re-armed for each world the player enters, and the
-   --    anchors of the previous world go with it.
+   -- 5) drive the polled objectives; the scheduler is emptied when a session ends
    if spawned_handler_id == nil then
       local es = EventSystem.get()
       spawned_handler_id = es:sub(defines.events.on_player_spawn, function()
