@@ -435,6 +435,7 @@ end
 -- ---------------------------------------------------------------------------
 
 local function build_objectives(quest, def)
+   local done = quest.state == defines.quest_state.completed
    quest:clear_objectives()
    poll_anchors[def.name] = nil
    for _, spec in ipairs(def.objectives) do
@@ -445,8 +446,8 @@ local function build_objectives(quest, def)
          end
          obj.show_progress = spec.show_progress
          obj.required = spec.required
-         obj.current = 0
-         obj.completed = (spec.required <= 0)
+         obj.current = done and spec.required or 0
+         obj.completed = done or (spec.required <= 0)
       end
    end
 end
@@ -512,9 +513,7 @@ end
 local function poll_tick()
    for _, def in ipairs(poll_defs) do
       local quest = StaticQuest.find(def.name)
-      -- Objectives only exist while the quest is Active, so a nil lookup also
-      -- covers the Locked/Completed cases.
-      if quest ~= nil then
+      if quest ~= nil and quest.state == defines.quest_state.active then
          local anchors = poll_anchors[def.name]
          local advanced = false
 
@@ -570,8 +569,9 @@ function qb.advance(quest_name, objective_id, amount)
    if q == nil or def == nil then
       return
    end
-   -- Objectives only exist while the quest is Active, so a nil lookup also covers
-   -- the Locked/Completed cases.
+   if q.state ~= defines.quest_state.active then
+      return
+   end
    local obj = q:find_objective_by_id(objective_id)
    if obj == nil or obj.completed then
       return
@@ -700,7 +700,7 @@ function qb.build()
       end
    end
 
-   -- 4) (re)build objectives whenever a quest becomes Active, so they survive a reload
+   -- 4) (re)build objectives whenever a quest is activated or restored, so they survive a reload
    if activated_handler_id == nil then
       local es = EventSystem.get()
       activated_handler_id = es:sub(defines.events.on_quest_activated, function(ctx)
