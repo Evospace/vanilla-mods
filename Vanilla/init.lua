@@ -38,7 +38,7 @@ function vanilla_mod.init()
 
    local ss = StaticStructure.reg("StartPlatform")
 
-   -- @param context table
+   -- @param context GenContext
    ss.generate = function(context)
       local block = StaticBlock.find("BasicPlatform")
       local gen_zero = context.pos * Vec2i.new(cs.sector_size.x, cs.sector_size.y)
@@ -47,34 +47,34 @@ function vanilla_mod.init()
       for i=0, platform_size - 1 do
          for j=0, platform_size - 1 do
 
-            dim:set_cell(Vec3i.new(i + gen_zero.x, j + gen_zero.y, z_start), block)
+            context:set_cell(Vec3i.new(i + gen_zero.x, j + gen_zero.y, z_start), block)
             for k=0, 20 do
-               dim:set_cell(Vec3i.new(i + gen_zero.x, j + gen_zero.y, z_start + 1 + k), nil)
-               dim:clear_props(Vec3i.new(i + gen_zero.x, j + gen_zero.y, z_start + k))
+               context:set_cell(Vec3i.new(i + gen_zero.x, j + gen_zero.y, z_start + 1 + k), nil)
+               context:clear_props(Vec3i.new(i + gen_zero.x, j + gen_zero.y, z_start + k))
             end
 
             for k=0, 10 do
-               dim:set_cell(Vec3i.new(gen_zero.x, gen_zero.y, z_start - 1 - k), block)
-               dim:set_cell(Vec3i.new(gen_zero.x + platform_size - 1, gen_zero.y, z_start - 1 - k), block)
-               dim:set_cell(Vec3i.new(gen_zero.x, gen_zero.y + platform_size - 1, z_start - 1 - k), block)
-               dim:set_cell(Vec3i.new(gen_zero.x + platform_size - 1, gen_zero.y + platform_size - 1, z_start - 1 - k), block)
+               context:set_cell(Vec3i.new(gen_zero.x, gen_zero.y, z_start - 1 - k), block)
+               context:set_cell(Vec3i.new(gen_zero.x + platform_size - 1, gen_zero.y, z_start - 1 - k), block)
+               context:set_cell(Vec3i.new(gen_zero.x, gen_zero.y + platform_size - 1, z_start - 1 - k), block)
+               context:set_cell(Vec3i.new(gen_zero.x + platform_size - 1, gen_zero.y + platform_size - 1, z_start - 1 - k), block)
             end
          end
       end
 
       local block = StaticBlock.find("CopperSpawner")
-      dim:spawn_block_identity(Vec3i.new(gen_zero.x, gen_zero.y, z_start + 1), block)
+      context:spawn_block(Vec3i.new(gen_zero.x, gen_zero.y, z_start + 1), block)
 
       local pad_center = math.floor(platform_size / 2)
       local pad_radius = 2
       for i = -pad_radius, pad_radius do
          for j = -pad_radius, pad_radius do
-            dim:set_cell(Vec3i.new(gen_zero.x + pad_center + i, gen_zero.y + pad_center + j, z_start), nil)
+            context:set_cell(Vec3i.new(gen_zero.x + pad_center + i, gen_zero.y + pad_center + j, z_start), nil)
          end
       end
 
       local pad = StaticBlock.find("LandingPad")
-      dim:spawn_block_identity(Vec3i.new(gen_zero.x + pad_center, gen_zero.y + pad_center, z_start), pad)
+      context:spawn_block(Vec3i.new(gen_zero.x + pad_center, gen_zero.y + pad_center, z_start), pad)
    end
    ss.size = Vec2i.new(10, 10)
 
@@ -188,7 +188,7 @@ function vanilla_mod.init()
    -- === Вспомогательные функции ===
 
    -- Создаём квадратную платформу
-   local function generate_platform(pos)
+   local function generate_platform(ctx, pos)
    local size = rand(4, 7)           -- размер платформы (4-7)
    local h    = dim:sample_height(pos.x, pos.y)
    local z    = math.floor(h)  -- высота платформы по рельефу
@@ -196,16 +196,16 @@ function vanilla_mod.init()
       for j = 0, size-1 do
          local p = Vec3i.new(pos.x + i, pos.y + j, z)
          for k = 0, 2 do
-            dim:set_cell(p - Vec3i.new(0, 0, k), BLOCK_PLAT)
+            ctx:set_cell(p - Vec3i.new(0, 0, k), BLOCK_PLAT)
          end
 
          for k = 1, 4 do
-            dim:set_cell(p + Vec3i.new(0, 0, k), BLOCK_WALL)
+            ctx:set_cell(p + Vec3i.new(0, 0, k), BLOCK_WALL)
          end
          -- создаём свободный воздух над платформой
          for k = 4, 6 do
-            dim:set_cell(p + Vec3i.new(0, 0, k), nil)
-            dim:clear_props(p + Vec3i.new(0, 0, k))
+            ctx:set_cell(p + Vec3i.new(0, 0, k), nil)
+            ctx:clear_props(p + Vec3i.new(0, 0, k))
          end
       end
    end
@@ -229,7 +229,7 @@ function vanilla_mod.init()
          local offset = Vec2i.new(rand(0, 50), rand(0, 50))
          local pos = gen_zero + offset
 
-         generate_platform(pos)
+         generate_platform(ctx, pos)
       end
    end
 
