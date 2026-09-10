@@ -124,6 +124,30 @@ Vlib = {
         Vec3i.back, Vec3i.front, Vec3i.right, Vec3i.left, Vec3i.down, Vec3i.up
     },
 
+    mining = {
+        drill = {
+            ticks = 60,
+            production = 1,
+            productivity_per_level = 15,
+            modifier = "DrillingRigProductivity",
+            research = "DrillingRigProductivity",
+            research_bonus = 5,
+            research_levels = 8,
+            machine = "DrillingRig",
+        },
+        pumpjack = {
+            ticks = 100,
+            production = 500,
+            output = "RawOil",
+            productivity_per_level = 20,
+            modifier = "PumpjackProductivity",
+            research = "PumpjackProductivity",
+            research_bonus = 5,
+            research_levels = 8,
+            machine = "Pumpjack",
+        },
+    },
+
     --- @param names string[]
     --- @param register_fn function
     FillBlockCustom = function(names, register_fn)

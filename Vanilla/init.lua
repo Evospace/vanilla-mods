@@ -36,6 +36,8 @@ function vanilla_mod.init()
 
    require('Blocks/all')
 
+   require('panels')()
+
    local ss = StaticStructure.reg("StartPlatform")
 
    -- @param context GenContext

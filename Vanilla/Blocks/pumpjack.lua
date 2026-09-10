@@ -1,8 +1,9 @@
 local logic = function(self)
     local crafter = DrillingMachineBase.cast(self)
-    crafter.production = 500
+    crafter.ticks_per_item = Vlib.mining.pumpjack.ticks
+    crafter.production = Vlib.mining.pumpjack.production
     crafter.map_register = true
-    crafter.productivity = 20 * crafter.static_block.level
+    crafter.productivity = Vlib.mining.pumpjack.productivity_per_level * crafter.static_block.level
 
     local inv = ResourceInventory.new(crafter, "energy")
     crafter.energy = inv

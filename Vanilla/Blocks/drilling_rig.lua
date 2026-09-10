@@ -2,9 +2,9 @@ local logic = function(self)
     local crafter = DrillingMachineBase.cast(self)
     crafter.map_register = true
 
-    crafter.ticks_per_item = 60
-    -- Base 96: one Copper Stirling outputs ~50 kinetic/tick → ~52% load (was 60 → ~83%)
-    crafter.productivity = 15 * crafter.static_block.level
+    crafter.ticks_per_item = Vlib.mining.drill.ticks
+    crafter.production = Vlib.mining.drill.production
+    crafter.productivity = Vlib.mining.drill.productivity_per_level * crafter.static_block.level
 
     local inv = ResourceInventory.new(crafter, "energy")
     crafter.energy = inv
