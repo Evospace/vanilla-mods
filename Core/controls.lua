@@ -301,7 +301,7 @@ return function()
       key_binding = "Recipe",
       label = "Recipe",
       name = "Recipe",
-      default_key = "R",
+      default_key = "U",
    })
    db:from_table({
       class = "Setting",
