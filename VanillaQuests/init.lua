@@ -17,6 +17,8 @@ function VanillaQuestsMod.init()
       description = {
          Loc.new("WelcomeDesc1", "quests"),
          Loc.new("WelcomeDesc2", "quests"),
+         Loc.new("WelcomeDesc3", "quests"),
+         Loc.new("WelcomeDesc4", "quests"),
       },
       objectives = {
          qb.open_gui("questbook", { label = Loc.new("ObjOpenQuestBook", "quests") }),
