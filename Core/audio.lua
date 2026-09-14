@@ -34,4 +34,20 @@ return function()
    make_audio("Weather", { uds .. "UDS_Weather_Mixer" }, 50)
    make_audio("Footsteps", { audio .. "Footsteps" }, 75)
    make_audio("UI", { audio .. "UI" }, 100)
+
+   db:from_table({
+      class = "Setting",
+      category = "Audio",
+      type = "Bool",
+      bool_default_value = true,
+      ---@param setting Setting
+      set_action = function(setting)
+         local value = setting.bool_value
+         engine.mute_on_focus_loss = value
+         print_info("set MuteOnFocusLoss "..tostring(value))
+         engine:apply()
+      end,
+      label = "MuteOnFocusLoss",
+      name = "MuteOnFocusLoss",
+   })
  end
