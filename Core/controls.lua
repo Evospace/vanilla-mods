@@ -253,6 +253,15 @@ return function()
       class = "Setting",
       category = "Controls",
       type = "Key",
+      key_binding = "Blueprints",
+      label = "Blueprints",
+      name = "Blueprints",
+      default_key = "N",
+   })
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Key",
       key_binding = "Jump",
       label = "Jump",
       name = "Jump",
