@@ -121,6 +121,24 @@ function VanillaTipsMod.init()
         context = i_scr
     })
 
+    local i_modes = AutosizeInventory.new_simple()
+    i_modes:add(StaticItem.find("StoneFurnace"), 1)
+    i_modes:add(StaticItem.find("BasicPlatform"), 1)
+    i_modes:add(StaticItem.find("CopperConveyor"), 1)
+    i_modes:add(StaticItem.find("CopperPipe"), 1)
+    i_modes:add(StaticItem.find("CopperConnector"), 1)
+    db:from_table({
+        class = "StaticTip",
+        name = "BuildingModes",
+        label = Loc.new("BuildingModes", "tips"),
+        description_parts = {
+            Loc.new("BuildingModesDescription1", "tips"),
+            Loc.new("BuildingModesDescription2", "tips"),
+            Loc.new("BuildingModesDescription3", "tips")
+        },
+        context = i_modes
+    })
+
     db:from_table({
         class = "StaticTip",
         name = "RotationWhileBuilding",
