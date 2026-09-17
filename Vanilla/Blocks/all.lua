@@ -76,6 +76,10 @@ Vlib.FillBlock("Container", require('Blocks/container'))
 
 Vlib.FillBlock("Chest", require('Blocks/chest'))
 
+Vlib.FillBlock("Conveyor", require('Blocks/conveyor'))
+Vlib.FillBlock("Splitter", require('Blocks/splitter'))
+Vlib.FillBlock("Sorter", require('Blocks/splitter'))
+
 Vlib.FillBlock("TeslaTower", require('Blocks/tesla_tower'))
 
 Vlib.FillBlock("KineticHeater", require('Blocks/kinetic_heater'))
