@@ -1,9 +1,9 @@
 {
     "name": "Vanilla",
-    "version": "0.20.1",
+    "version": "0.22.0",
     "title": "Vanilla",
     "author": "evospace",
-    "evospace_version": "0.20.1",
-    "dependencies": ["Core>=0.20.1", "VanillaLib>=0.20.1"],
+    "evospace_version": "0.22.0",
+    "dependencies": ["Core>=0.22.0", "VanillaLib>=0.22.0"],
     "description": "Vanilla"
 }

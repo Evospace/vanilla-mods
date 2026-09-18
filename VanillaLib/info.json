@@ -1,9 +1,9 @@
 {
     "name": "VanillaLib",
-    "version": "0.20.1",
+    "version": "0.22.0",
     "title": "Vanilla Lib",
     "author": "evospace",
-    "evospace_version": "0.20.1",
+    "evospace_version": "0.22.0",
     "dependencies": [],
     "description": "Basic helper lua functions"
 }

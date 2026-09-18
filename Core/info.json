@@ -1,9 +1,9 @@
 {
     "name": "Core",
-    "version": "0.20.1",
+    "version": "0.22.0",
     "title": "Core",
     "author": "evospace",
-    "evospace_version": "0.20.1",
+    "evospace_version": "0.22.0",
     "dependencies": [],
     "description": "Core"
 }
