@@ -10,9 +10,16 @@ local logic = function(self)
         conductor:add_wire(acc)
     end
 
+    local tier = Vlib.tier_material[t+1]
+
     conductor.capacity = 100
-    conductor.side_cover = StaticCover.get(Vlib.tier_material[t+1].."PipeSide")
-    conductor.center_cover = StaticCover.get(Vlib.tier_material[t+1].."PipeCenter")
+    conductor.side_cover = StaticCover.get(tier.."PipeArm")
+    conductor.center_cover = StaticCover.get(tier.."PipeCenter")
+    conductor.straight_cover = StaticCover.get(tier.."PipeStraightSingleFlange")
+    conductor.straight_plain_cover = StaticCover.get(tier.."PipeStraightNoFlanges")
+    conductor.elbow_cover = StaticCover.get(tier.."PipeElbow")
+    conductor.dead_end_cover = StaticCover.get(tier.."PipeDeadEnd")
+    conductor.isolated_cover = StaticCover.get(tier.."PipeIsolated")
     conductor.conductor_channel = 2000 + conductor.static_block.tier
     conductor.channel = "Fluid"
 end

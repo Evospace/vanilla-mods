@@ -14,9 +14,16 @@ local logic = function(self)
         conductor:add_wire(acc)
     end
 
+    local tier = Vlib.tier_material[conductor.static_block.tier + 1]
+
     conductor.capacity = 256000 * (level + 1)
     conductor.conductor_channel = 1000
     conductor.channel = "Electricity"
+    conductor.single_cover = StaticCover.get(tier.."BatteryBoxSingle")
+    conductor.bottom_cover = StaticCover.get(tier.."BatteryBoxBottom")
+    conductor.middle_cover = StaticCover.get(tier.."BatteryBoxMiddle")
+    conductor.top_cover = StaticCover.get(tier.."BatteryBoxTop")
+    conductor.connector_cover = StaticCover.get("ElectricityInput")
 end
 
 return function(name, tier, level)
