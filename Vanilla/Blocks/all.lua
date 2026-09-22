@@ -75,6 +75,8 @@ Vlib.FillBlock("Flywheel", require('Blocks/flywheel'))
 Vlib.FillBlock("Container", require('Blocks/container'))
 
 Vlib.FillBlock("Chest", require('Blocks/chest'))
+Vlib.FillBlock("ItemRack", require('Blocks/item_rack'))
+Vlib.FillBlock("DeepStorage", require('Blocks/deep_storage'))
 
 Vlib.FillBlock("Conveyor", require('Blocks/conveyor'))
 Vlib.FillBlock("Splitter", require('Blocks/splitter'))
