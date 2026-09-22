@@ -262,6 +262,24 @@ return function()
       class = "Setting",
       category = "Controls",
       type = "Key",
+      key_binding = "Trains",
+      label = "Trains",
+      name = "Trains",
+      default_key = "K",
+   })
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Key",
+      key_binding = "Production",
+      label = "Production",
+      name = "Production",
+      default_key = "P",
+   })
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Key",
       key_binding = "Jump",
       label = "Jump",
       name = "Jump",
