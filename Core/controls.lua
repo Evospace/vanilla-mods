@@ -280,6 +280,15 @@ return function()
       class = "Setting",
       category = "Controls",
       type = "Key",
+      key_binding = "Decor",
+      label = "Decor",
+      name = "Decor",
+      default_key = "V",
+   })
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Key",
       key_binding = "Jump",
       label = "Jump",
       name = "Jump",
