@@ -2,7 +2,6 @@ local mining_widget = "/Script/Evospace.MiningPanelWidget"
 local plate_widget = "/Script/Evospace.PlatePanelWidget"
 
 local surface_names = {
-    "Stone",
     "StoneSurface",
     "GravelSurface",
     "SandSurface",
