@@ -143,4 +143,21 @@ return function()
         name = "AutosavePeriod",
      })
 
+    db:from_table({
+        class = "Setting",
+        category = "Game",
+        type = "Slider",
+        max_value = 5,
+        min_value = 0,
+        int_default_value = 1,
+        ---@param setting Setting
+        set_action = function(setting)
+           local value = setting.int_value
+           engine.undo_confirm_minutes = value
+           print_info("set UndoConfirmMinutes "..value)
+        end,
+        label = "UndoConfirmMinutes",
+        name = "UndoConfirmMinutes",
+     })
+
 end
