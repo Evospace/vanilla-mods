@@ -3,7 +3,6 @@ local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.get("IndustrialSmelterRecipeDictionary")
     crafter.speed = Vlib.get_speed(crafter)
-    --crafter.map_register = true
         
     local input = ResourceInventory.new(crafter, "rii")
     crafter.energy_input_inventory = input

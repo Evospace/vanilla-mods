@@ -1,46 +1,11 @@
--- Declarative questbook: a mod declares chapters, quests and objectives, and the objectives track
--- the event bus themselves.
---
--- Usage:
---   local qb = require('questbook')
---   qb.chapter("CopperProduction", { label = ..., description = { ... } })
---   qb.quest("GatherCopperOre", {
---       chapter     = "CopperProduction",
---       label       = ..., description = { ... },
---       unlocks     = { "SmeltCopper" },
---       objectives  = { qb.collect_item({ "ChalcopyriteOre", "MalachiteOre" }, 20) },
---   })
---   qb.build()   -- registers everything; call once at the end of your mod init()
---
--- A quest takes all of its objectives; `any = true` makes them alternatives instead.
--- An objective label may carry `{count}`, the amount the objective asks for.
---
--- Objective factories:
---   qb.collect_item({names}, count)  -- mine any of the named items (OR-group)
---   qb.craft_item({names}, count)    -- smelt/assemble any of them in a machine
---   qb.research(name)                -- finish the named research
---   qb.build_block({names}, count)   -- build any of the named blocks (OR-group)
---   qb.build_stack({top}, {bottom})  -- build one of the top blocks standing on a bottom one
---   qb.build_chain({steps})          -- build a run of blocks actually wired one into the next
---   qb.open_gui({names})             -- open one of the named windows
---   qb.close_all_gui()               -- close the last window left open
---   qb.return_home()                 -- leave the home sector and walk back into it
---   qb.count(id, count, label)       -- generic manual counter (advance from your own code)
-
 local qb = {}
 
--- ---------------------------------------------------------------------------
--- internal state
--- ---------------------------------------------------------------------------
-
-local chapter_defs = {}   -- chapters declared since the last qb.build()
-local quest_defs = {}      -- quests declared since the last qb.build()
-local quest_by_name = {}   -- lower-cased name -> quest definition (runtime registry, every mod's)
+local chapter_defs = {}
+local quest_defs = {}
+local quest_by_name = {}
 local activated_handler_id = nil
 local spawned_handler_id = nil
 
--- Polled objectives: the quest defs carrying one, the scheduler handle, and the counter each
--- objective started from.
 local poll_defs = {}
 local poll_handle = nil
 local poll_anchors = {}
@@ -57,7 +22,6 @@ local function to_list(names)
    return list
 end
 
--- An FName reaches Lua in whatever case registered it first, so names are matched folded.
 local function to_set(names)
    local set = {}
    for _, n in ipairs(to_list(names)) do
@@ -66,8 +30,6 @@ local function to_set(names)
    return set
 end
 
--- An objective's `event` is one event id, several of them, or none at all for a
--- purely manual counter.
 local function to_event_list(event)
    if event == nil then
       return {}
@@ -86,20 +48,6 @@ local function names_label(list)
    return table.concat(parts, " / ")
 end
 
--- ---------------------------------------------------------------------------
--- objective factories
---
--- Each returns a spec table:
---   { kind, id, event, required, show_progress, label,
---     match  = function(ctx) -> bool,        -- does this event advance us?
---     amount = function(ctx) -> number }     -- how much to advance by
---
--- Instead of `event` an objective may carry
---   poll = function() -> number|nil          -- the counter now, nil if unreadable
--- read on an interval and advanced by how much it moved, or by its reading outright with
--- `poll_absolute`.
--- ---------------------------------------------------------------------------
-
 function qb.collect_item(names, count, opts)
    opts = opts or {}
    local list = to_list(names)
@@ -116,8 +64,6 @@ function qb.collect_item(names, count, opts)
    }
 end
 
--- Items as produced, not as held: machine and hand crafts both count, and spending them after
--- still closes the objective. Polled off the surface counter rather than driven by an event.
 function qb.craft_item(names, count, opts)
    opts = opts or {}
    local list = to_list(names)
@@ -168,7 +114,6 @@ function qb.build_block(names, count, opts)
    }
 end
 
--- One block standing directly on another, in either build order.
 function qb.build_stack(top_names, bottom_names, opts)
    opts = opts or {}
    local top_list = to_list(top_names)
@@ -199,9 +144,6 @@ function qb.build_stack(top_names, bottom_names, opts)
    }
 end
 
--- A run of blocks wired one into the next. A step names the block, the accessor the previous step
--- feeds (`inp`) and the one feeding the next (`out`); an end left out tries every side. The walk
--- follows accessors, not cells, and runs outwards from any placed block of the run.
 function qb.build_chain(steps, opts)
    opts = opts or {}
    local blocks = {}
@@ -209,9 +151,6 @@ function qb.build_chain(steps, opts)
       blocks[i] = to_set(step.block)
    end
 
-   -- A step names the accessor at each of its ends, or leaves it out and every side of the block is
-   -- tried: a chest carries one input accessor per side, and which one meets the run is up to where
-   -- the player stood the chest.
    local function sides(block, acc_name)
       if acc_name == nil then
          return block:accessors()
@@ -220,7 +159,6 @@ function qb.build_chain(steps, opts)
       return side ~= nil and { side } or {}
    end
 
-   -- Both ends have to agree on what crosses them. `want_output` is the direction of the walk.
    local function links(near, far, want_output)
       local rn, rf = ResourceAccessor.cast(near), ResourceAccessor.cast(far)
       if rn ~= nil and rf ~= nil then
@@ -258,7 +196,6 @@ function qb.build_chain(steps, opts)
          and blocks[index][block.static_block.name:lower()] == true
    end
 
-   -- A scanned side can face several blocks that fit, so every neighbour is tried.
    local function fed_back_to_start(index, block)
       if index <= 1 then
          return true
@@ -315,8 +252,6 @@ function qb.build_chain(steps, opts)
    }
 end
 
--- Window names as the engine emits them: "inventory", "recipes", "map", "research",
--- "questbook", "pause", "spawn", "saves".
 function qb.open_gui(names, opts)
    opts = opts or {}
    local list = to_list(names)
@@ -333,7 +268,6 @@ function qb.open_gui(names, opts)
    }
 end
 
--- The player is back in the world with nothing over it.
 function qb.close_all_gui(opts)
    opts = opts or {}
    return {
@@ -348,7 +282,6 @@ function qb.close_all_gui(opts)
    }
 end
 
--- Home is sector 0,0; the player has to leave it and come back.
 function qb.return_home(opts)
    opts = opts or {}
    local left = false
@@ -373,9 +306,6 @@ function qb.return_home(opts)
    }
 end
 
--- Completion as the research tree holds it rather than as the moment it happened:
--- a research finished before its quest was ever unlocked closes the objective all
--- the same, and so does a world that starts with the whole tree complete.
 function qb.research(name, opts)
    opts = opts or {}
    return {
@@ -395,8 +325,6 @@ function qb.research(name, opts)
    }
 end
 
--- Generic counter with no automatic event source. Advance it yourself from
--- gameplay code via qb.advance(quest_name, objective_id, amount).
 function qb.count(id, count, label)
    return {
       kind = "count",
@@ -409,10 +337,6 @@ function qb.count(id, count, label)
       amount = function() return 0 end,
    }
 end
-
--- ---------------------------------------------------------------------------
--- declaration
--- ---------------------------------------------------------------------------
 
 function qb.chapter(name, def)
    def = def or {}
@@ -429,10 +353,6 @@ function qb.quest(name, def)
    quest_by_name[name:lower()] = def
    return def
 end
-
--- ---------------------------------------------------------------------------
--- runtime: objective creation + progress tracking
--- ---------------------------------------------------------------------------
 
 local function build_objectives(quest, def)
    local done = quest.state == defines.quest_state.completed
@@ -452,7 +372,6 @@ local function build_objectives(quest, def)
    end
 end
 
--- `any = true`: one objective closes the quest.
 local function objectives_done(quest, def)
    if #def.objectives == 0 then
       return false
@@ -471,7 +390,6 @@ local function objectives_done(quest, def)
    return not def.any
 end
 
--- The `events` table the engine subscribes to while the quest is Active: one handler per event.
 local function build_events_table(def)
    local by_event = {}
    for _, spec in ipairs(def.objectives) do
@@ -505,11 +423,6 @@ local function build_events_table(def)
    return events
 end
 
--- Advance every polled objective of every active quest by how much
--- its counter moved.
---
--- An objective anchors on its first poll, not on activation: a save restores progress after
--- activating the quest.
 local function poll_tick()
    for _, def in ipairs(poll_defs) do
       local quest = StaticQuest.find(def.name)
@@ -562,7 +475,6 @@ local function poll_tick()
    end
 end
 
--- Manually advance a "count" objective from gameplay code.
 function qb.advance(quest_name, objective_id, amount)
    local q = StaticQuest.find(quest_name)
    local def = quest_by_name[quest_name:lower()]
@@ -586,12 +498,7 @@ function qb.advance(quest_name, objective_id, amount)
    end
 end
 
--- ---------------------------------------------------------------------------
--- registration (call qb.build() once at the end of your mod init)
--- ---------------------------------------------------------------------------
-
 local function resolve_relations(defs)
-   -- accumulate required-quest names per quest
    local required = {}
    for _, def in ipairs(defs) do
       required[def.name] = {}
@@ -601,7 +508,6 @@ local function resolve_relations(defs)
          end
       end
    end
-   -- "A unlocks {B,C}" means B and C require A
    for _, def in ipairs(defs) do
       if def.unlocks ~= nil then
          for _, target in ipairs(def.unlocks) do
@@ -616,15 +522,12 @@ local function resolve_relations(defs)
    return required
 end
 
--- Every mod shares one instance of this module, so build() registers the batch declared since the
--- last call and empties the lists. `quest_by_name` keeps every mod's quests for the handler.
 function qb.build()
    local chapters = chapter_defs
    local quests = quest_defs
    chapter_defs = {}
    quest_defs = {}
 
-   -- 1) chapters
    for _, def in ipairs(chapters) do
       db:from_table({
          class = "StaticChapter",
@@ -633,7 +536,6 @@ function qb.build()
       })
    end
 
-   -- 2) quests (objectives are created later, on activation)
    for _, def in ipairs(quests) do
       local row = {
          class = "StaticQuest",
@@ -672,7 +574,6 @@ function qb.build()
       end
    end
 
-   -- 3) relations: required_quests (quest graph) + chapter gating
    local required = resolve_relations(quests)
    for _, def in ipairs(quests) do
       local names = required[def.name]
@@ -700,7 +601,6 @@ function qb.build()
       end
    end
 
-   -- 4) (re)build objectives whenever a quest is activated or restored, so they survive a reload
    if activated_handler_id == nil then
       local es = EventSystem.get()
       activated_handler_id = es:sub(defines.events.on_quest_activated, function(ctx)
@@ -716,7 +616,6 @@ function qb.build()
       end)
    end
 
-   -- 5) drive the polled objectives; the scheduler is emptied when a session ends
    if spawned_handler_id == nil then
       local es = EventSystem.get()
       spawned_handler_id = es:sub(defines.events.on_player_spawn, function()

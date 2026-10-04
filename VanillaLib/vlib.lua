@@ -1,7 +1,6 @@
 local Vlib = {}
 
 Vlib = {
-    ---Create count inventories
     ---@param parent Object
     ---@param name string
     ---@param count integer
@@ -16,7 +15,6 @@ Vlib = {
         return inventories
     end,
 
-    ---Create count inventories
     ---@param inventory_container InventoryContainer
     ---@param parent Object
     ---@param name string
@@ -54,8 +52,6 @@ Vlib = {
         if LuaLogFlag then print(str) end
     end,
 
-    --- Build localized tooltip lines from StaticBlock prototype data (energy).
-    --- Optional extra_lines: array of already-localized strings (e.g. crafter runtime stats), shown first.
     --- @param sb StaticBlock|nil
     --- @param extra_lines string[]|nil
     --- @return string

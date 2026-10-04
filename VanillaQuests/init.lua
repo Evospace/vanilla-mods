@@ -177,10 +177,6 @@ function VanillaQuestsMod.init()
       requires = { "BuildFirstPowerPlant" },
    })
 
-   -- Three nodes still stand between the running computer and the drill; everything under them, up
-   -- to Metalwork and DistributedComputing, gates a recipe the first chapter already had the player
-   -- build, so it is complete before this chapter is ever offered. The first of the three carries
-   -- the research window itself, which nothing has asked the player to open until now.
    qb.quest("ResearchBasicMachines", {
       chapter = "Automation",
       label = Loc.new("ResearchBasicMachines", "quests"),
@@ -233,10 +229,6 @@ function VanillaQuestsMod.init()
       },
    })
 
-   -- The machines the line takes, counted as it stands: chest, arm, hammer, arm, each macerator,
-   -- arm, smelter, arm, chest, and behind the row the engine that drives the hammer with the
-   -- furnace under it plus the furnace that heats the smelter. Two macerators per hammer: one
-   -- macerator grinds slower than the hammer crushes.
    qb.quest("CraftOreMultiplication", {
       chapter = "Automation",
       label = Loc.new("CraftOreMultiplication", "quests"),
@@ -264,8 +256,6 @@ function VanillaQuestsMod.init()
       },
    })
 
-   -- CopperWire hangs off DistributedComputing and opens the circuit branch; Constructor sits on
-   -- Automatization, which the mining quest already finished.
    qb.quest("ResearchCircuits", {
       chapter = "Automation",
       label = Loc.new("ResearchCircuits", "quests"),

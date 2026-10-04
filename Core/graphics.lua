@@ -540,7 +540,4 @@ return function()
 
     generate_setting_on_off("VSync", "r.Vsync")
 
-    --r.DynamicRes.OperationMode
-    --r.AntiAliasingMethod
-    --sg.AntiAliasingQuality
 end

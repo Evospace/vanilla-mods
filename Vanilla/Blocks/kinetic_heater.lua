@@ -4,7 +4,6 @@ local logic = function(self)
     crafter.recipes = RecipeDictionary.get("GeneratorRecipeDictionary")
     crafter.speed = 100
     crafter.stable_supply = false
-    --crafter.map_register = true
         
     local inv = ResourceInventory.new(crafter, "rii")
     crafter.energy_input_inventory = inv
