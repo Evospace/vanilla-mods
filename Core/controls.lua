@@ -424,6 +424,15 @@ return function()
       class = "Setting",
       category = "Controls",
       type = "Key",
+      key_binding = "Ping",
+      label = "Ping",
+      name = "Ping",
+      default_key = "Z",
+   })
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Key",
       key_binding = "SelectToolMultitool",
       label = "SelectToolMultitool",
       name = "SelectToolMultitool",
