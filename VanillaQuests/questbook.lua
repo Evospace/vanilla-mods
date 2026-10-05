@@ -67,10 +67,26 @@ end
 function qb.craft_item(names, count, opts)
    opts = opts or {}
    local list = to_list(names)
-   local items = nil
+   local set = to_set(list)
    return {
       kind = "craft_item",
       id = opts.id or ("craft_" .. names_label(list):gsub("[^%w]", "_")),
+      event = defines.events.on_player_crafted,
+      required = count or 1,
+      show_progress = true,
+      label = opts.label,
+      match = function(ctx) return ctx.item ~= nil and set[ctx.item.name:lower()] == true end,
+      amount = function(ctx) return ctx.count or 1 end,
+   }
+end
+
+function qb.produce_item(names, count, opts)
+   opts = opts or {}
+   local list = to_list(names)
+   local items = nil
+   return {
+      kind = "produce_item",
+      id = opts.id or ("produce_" .. names_label(list):gsub("[^%w]", "_")),
       required = count or 1,
       show_progress = true,
       label = opts.label,
@@ -83,7 +99,7 @@ function qb.craft_item(names, count, opts)
             for _, name in ipairs(list) do
                local item = StaticItem.find(name)
                if item == nil then
-                  print_err("questbook: craft_item references unknown item '" .. name .. "'")
+                  print_err("questbook: produce_item references unknown item '" .. name .. "'")
                else
                   items[#items + 1] = item
                end

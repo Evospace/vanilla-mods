@@ -173,7 +173,7 @@ function VanillaQuestsMod.init()
       context = { "CopperPlate" },
       unlocks = { "CraftMachines" },
       objectives = {
-         qb.craft_item({ "CopperPlate" }, 25,
+         qb.produce_item({ "CopperPlate" }, 25,
             { label = Loc.new("ObjSmeltCopperPlates", "quests") }),
       },
    })
