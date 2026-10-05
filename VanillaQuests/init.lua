@@ -67,15 +67,20 @@ function VanillaQuestsMod.init()
       },
    })
 
-   qb.quest("OpenInventory", {
+   qb.quest("ItemDatabase", {
       chapter = "OreToPower",
-      label = Loc.new("OpenInventory", "quests"),
+      label = Loc.new("ItemDatabase", "quests"),
       description = {
          Loc.new("OpenInventoryDesc1", "quests"),
-         Loc.new("OpenInventoryDesc2", "quests"),
+         Loc.new("ItemDatabaseDesc1", "quests"),
+         Loc.new("ItemDatabaseDesc2", "quests"),
       },
+      context = { "StoneFurnace", "CopperPlate" },
       objectives = {
          qb.open_gui("inventory", { label = Loc.new("ObjOpenInventory", "quests") }),
+         qb.search_item({ "StoneFurnace" }, { label = Loc.new("ObjSearchStoneFurnace", "quests") }),
+         qb.view_recipes({ "StoneFurnace" }, { label = Loc.new("ObjRecipesStoneFurnace", "quests") }),
+         qb.view_recipes({ "CopperPlate" }, { label = Loc.new("ObjUsagesCopperPlate", "quests") }),
       },
    })
 
@@ -86,23 +91,58 @@ function VanillaQuestsMod.init()
          Loc.new("ReturnHomeDesc1", "quests"),
          Loc.new("ReturnHomeDesc2", "quests"),
       },
-      unlocks = { "CraftFirstBlocks", "OpenInventory" },
+      unlocks = { "CraftFirstBlocks", "ItemDatabase", "BuildPlatforms" },
       objectives = {
          qb.return_home({ label = Loc.new("ObjReturnHome", "quests") }),
+      },
+   })
+
+   qb.quest("BuildPlatforms", {
+      chapter = "OreToPower",
+      label = Loc.new("BuildPlatforms", "quests"),
+      description = {
+         Loc.new("BuildPlatformsDesc1", "quests"),
+         Loc.new("BuildPlatformsDesc2", "quests"),
+         Loc.new("BuildPlatformsDesc3", "quests"),
+      },
+      context = { "BasicPlatform", "BuildingMaterial", "StoneSurface" },
+      objectives = {
+         qb.open_gui("decor", { label = Loc.new("ObjOpenDecor", "quests") }),
+         qb.build_block({ "BasicPlatform" }, 20,
+            { label = Loc.new("ObjBuildPlatforms", "quests") }),
+         qb.craft_item({ "BuildingMaterial" }, 10,
+            { label = Loc.new("ObjOrderBuildingMaterial", "quests") }),
       },
    })
 
    qb.quest("CraftFirstBlocks", {
       chapter = "OreToPower",
       label = Loc.new("CraftFirstBlocks", "quests"),
-      description = { Loc.new("CraftFirstBlocksDesc", "quests") },
+      description = {
+         Loc.new("CraftFirstBlocksDesc", "quests"),
+         Loc.new("CraftFirstBlocksDesc2", "quests"),
+      },
       context = { "StoneFurnace", "StoneSmelter" },
-      unlocks = { "BuildFirstSmelter" },
+      unlocks = { "PinToHotbar" },
       objectives = {
          qb.craft_item({ "StoneFurnace" }, 2,
             { label = Loc.new("ObjCraftStoneFurnace", "quests") }),
          qb.craft_item({ "StoneSmelter" }, 1,
             { label = Loc.new("ObjCraftStoneSmelter", "quests") }),
+      },
+   })
+
+   qb.quest("PinToHotbar", {
+      chapter = "OreToPower",
+      label = Loc.new("PinToHotbar", "quests"),
+      description = {
+         Loc.new("PinToHotbarDesc1", "quests"),
+         Loc.new("PinToHotbarDesc2", "quests"),
+      },
+      context = { "StoneFurnace", "StoneSmelter" },
+      unlocks = { "BuildFirstSmelter" },
+      objectives = {
+         qb.hotbar_item({ "StoneFurnace", "StoneSmelter" }, { label = Loc.new("ObjPinToHotbar", "quests") }),
       },
    })
 
@@ -154,6 +194,13 @@ function VanillaQuestsMod.init()
       },
    })
 
+   local power_plant = qb.chain("PowerPlant", {
+      { block = { "StoneFurnace", "CopperFurnace" }, out = "rao" },
+      { block = "CopperStirlingEngine", inp = "Input1", out = "Output" },
+      { block = "CopperCompactGenerator", inp = "rai", out = "rao" },
+      { block = "CopperComputer", inp = "rai" },
+   })
+
    qb.quest("BuildFirstPowerPlant", {
       chapter = "OreToPower",
       label = Loc.new("BuildFirstPowerPlant", "quests"),
@@ -162,19 +209,31 @@ function VanillaQuestsMod.init()
          Loc.new("BuildFirstPowerPlantDesc2", "quests"),
       },
       context = { "StoneFurnace", "CopperStirlingEngine", "CopperCompactGenerator", "CopperComputer" },
+      unlocks = { "StartPowerPlant" },
       objectives = {
-         qb.build_chain({
-            { block = { "StoneFurnace", "CopperFurnace" }, out = "rao" },
-            { block = "CopperStirlingEngine", inp = "Input1", out = "Output" },
-            { block = "CopperCompactGenerator", inp = "rai", out = "rao" },
-            { block = "CopperComputer", inp = "rai" },
-         }, { label = Loc.new("ObjBuildPowerPlant", "quests") }),
+         qb.build_chain(power_plant, { label = Loc.new("ObjBuildPowerPlant", "quests") }),
+      },
+   })
+
+   qb.quest("StartPowerPlant", {
+      chapter = "OreToPower",
+      label = Loc.new("StartPowerPlant", "quests"),
+      description = {
+         Loc.new("StartPowerPlantDesc1", "quests"),
+         Loc.new("StartPowerPlantDesc2", "quests"),
+      },
+      context = { "StoneFurnace", "CopperStirlingEngine", "CopperCompactGenerator", "CopperComputer" },
+      objectives = {
+         qb.chain_running(power_plant, 1, { label = Loc.new("ObjPlantFurnace", "quests") }),
+         qb.chain_running(power_plant, 2, { label = Loc.new("ObjPlantEngine", "quests") }),
+         qb.chain_running(power_plant, 3, { label = Loc.new("ObjPlantGenerator", "quests") }),
+         qb.chain_running(power_plant, 4, { states = { "working", "idle" }, label = Loc.new("ObjPlantComputer", "quests") }),
       },
    })
 
    qb.chapter("Automation", {
       label = Loc.new("AutomationChapter", "quests"),
-      requires = { "BuildFirstPowerPlant" },
+      requires = { "StartPowerPlant" },
    })
 
    qb.quest("ResearchBasicMachines", {
@@ -187,6 +246,7 @@ function VanillaQuestsMod.init()
       context = { "CopperMacerator", "CopperAutomaticHammer" },
       unlocks = { "ResearchAutomaticMining" },
       objectives = {
+         qb.open_gui("research", { label = Loc.new("ObjOpenResearch", "quests") }),
          qb.research("BasicMachines", { label = Loc.new("ObjResearchBasicMachines", "quests") }),
       },
    })
