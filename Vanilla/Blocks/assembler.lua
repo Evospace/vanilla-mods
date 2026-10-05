@@ -16,6 +16,12 @@ local logic = function(self)
     acc.is_input = true
     acc.channel = "Electricity"
     acc.cover = StaticCover.get("ElectricityInput")
+
+    local acc = ResourceAccessor.new(crafter, "rai_")
+    acc.side, acc.pos = Vec3i.back, Vec3i.new(-2,-2,1)
+    acc.is_input = true
+    acc.channel = "Fluid"
+    acc.cover = StaticCover.get("FluidInput")
 end
 
 return function(name, tier, level)
