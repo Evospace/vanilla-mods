@@ -48,14 +48,6 @@ function VanillaTipsMod.init()
         context = i_first
     })
 
-    db:from_table({
-        class = "StaticTip",
-        name = "Research",
-        label = Loc.new("Research", "tips"),
-        description_parts = {Loc.new("ResearchDescription", "tips")},
-        image = "Textures/Research.png"
-    })
-
     local i_comp = AutosizeInventory.new_simple()
     i_comp:add(StaticItem.find("CopperComputer"), 1)
     i_comp:add(StaticItem.find("Circuit"), 3)
@@ -64,32 +56,21 @@ function VanillaTipsMod.init()
     i_comp:add(StaticItem.find("Electricity"), 1)
     db:from_table({
         class = "StaticTip",
-        name = "ResearchComputers",
-        label = Loc.new("ResearchComputers", "tips"),
+        name = "Research",
+        label = Loc.new("Research", "tips"),
         description_parts = {
+            Loc.new("ResearchDescription", "tips"),
+            Loc.new("ResearchDescription1", "tips"),
+            Loc.new("ResearchDescription2", "tips"),
+            Loc.new("ResearchDescription3", "tips"),
             Loc.new("ResearchComputersDescription1", "tips"),
             Loc.new("ResearchComputersDescription2", "tips"),
             Loc.new("ResearchComputersDescription3", "tips"),
-            Loc.new("ResearchComputersDescription4", "tips")
+            Loc.new("ResearchComputersDescription4", "tips"),
+            Loc.new("ResearchComputersDescription5", "tips")
         },
+        image = "Textures/Research.png",
         context = i_comp
-    })
-
-    local i_acc = AutosizeInventory.new_simple()
-    i_acc:add(StaticItem.find("CopperStirlingEngine"), 1)
-    i_acc:add(StaticItem.find("CopperConnector"), 10)
-    i_acc:add(StaticItem.find("CopperHeatPipe"), 1)
-    i_acc:add(StaticItem.find("SteelFlywheel"), 1)
-    i_acc:add(StaticItem.find("Electricity"), 1)
-    i_acc:add(StaticItem.find("Kinetic"), 1)
-    i_acc:add(StaticItem.find("Heat"), 1)
-    db:from_table({
-        class = "StaticTip",
-        name = "Accessors1",
-        label = Loc.new("Accessors1", "tips"),
-        description_parts = {Loc.new("Accessors1Description", "tips")},
-        image = "Textures/Accessors1.png",
-        context = i_acc
     })
 
     local i_prod = AutosizeInventory.new_simple()
@@ -173,8 +154,10 @@ function VanillaTipsMod.init()
         description_parts = {
             Loc.new("ItemDatabaseDescription1", "tips"),
             Loc.new("ItemDatabaseDescription2", "tips"),
-            Loc.new("ItemDatabaseDescription3", "tips")
+            Loc.new("ItemDatabaseDescription3", "tips"),
+            Loc.new("ItemDatabaseDescription4", "tips")
         },
+        image = "Textures/ItemDatabase.png",
         context = i_db
     })
 
@@ -203,18 +186,14 @@ function VanillaTipsMod.init()
         }
     })
 
-    db:from_table({
-        class = "StaticTip",
-        name = "Favorites",
-        label = Loc.new("Favorites", "tips"),
-        description_parts = {Loc.new("FavoritesDescription", "tips")}
-    })
-
     local i_energy = AutosizeInventory.new_simple()
     i_energy:add(StaticItem.find("StoneFurnace"), 1)
     i_energy:add(StaticItem.find("CopperStirlingEngine"), 1)
     i_energy:add(StaticItem.find("CopperCompactGenerator"), 1)
     i_energy:add(StaticItem.find("CopperComputer"), 1)
+    i_energy:add(StaticItem.find("CopperConnector"), 1)
+    i_energy:add(StaticItem.find("CopperHeatPipe"), 1)
+    i_energy:add(StaticItem.find("SteelFlywheel"), 1)
     i_energy:add(StaticItem.find("Heat"), 1)
     i_energy:add(StaticItem.find("Kinetic"), 1)
     i_energy:add(StaticItem.find("Electricity"), 1)
@@ -224,27 +203,13 @@ function VanillaTipsMod.init()
         label = Loc.new("Energy", "tips"),
         description_parts = {
             Loc.new("EnergyDescription1", "tips"),
-            Loc.new("EnergyDescription2", "tips")
-        },
-        context = i_energy
-    })
-
-    local i_docking = AutosizeInventory.new_simple()
-    i_docking:add(StaticItem.find("CopperStirlingEngine"), 1)
-    i_docking:add(StaticItem.find("CopperCompactGenerator"), 1)
-    i_docking:add(StaticItem.find("Heat"), 1)
-    i_docking:add(StaticItem.find("Kinetic"), 1)
-    i_docking:add(StaticItem.find("Electricity"), 1)
-    db:from_table({
-        class = "StaticTip",
-        name = "Docking",
-        label = Loc.new("Docking", "tips"),
-        description_parts = {
+            Loc.new("EnergyDescription2", "tips"),
             Loc.new("DockingDescription1", "tips"),
             Loc.new("DockingDescription2", "tips"),
             Loc.new("DockingDescription3", "tips")
         },
-        context = i_docking
+        image = "Textures/Energy.png",
+        context = i_energy
     })
 
     local i_power = AutosizeInventory.new_simple()
@@ -260,6 +225,30 @@ function VanillaTipsMod.init()
             Loc.new("NoPowerDescription3", "tips")
         },
         context = i_power
+    })
+
+    local i_ctor = AutosizeInventory.new_simple()
+    i_ctor:add(StaticItem.find("CopperConstructor"), 1)
+    i_ctor:add(StaticItem.find("CopperRobotArm"), 1)
+    i_ctor:add(StaticItem.find("CopperWire"), 1)
+    i_ctor:add(StaticItem.find("Triod"), 1)
+    i_ctor:add(StaticItem.find("CircuitBoard"), 1)
+    i_ctor:add(StaticItem.find("Circuit"), 1)
+    db:from_table({
+        class = "StaticTip",
+        name = "Constructor",
+        label = Loc.new("Constructor", "tips"),
+        description_parts = {
+            Loc.new("ConstructorDescription1", "tips"),
+            Loc.new("ConstructorDescription2", "tips"),
+            Loc.new("ConstructorDescription3", "tips"),
+            Loc.new("ConstructorDescription4", "tips"),
+            Loc.new("ConstructorDescription5", "tips"),
+            Loc.new("ConstructorDescription6", "tips"),
+            Loc.new("ConstructorDescription7", "tips")
+        },
+        image = "Textures/Constructor.png",
+        context = i_ctor
     })
 end
 
