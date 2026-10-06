@@ -331,6 +331,90 @@ function VanillaQuestsMod.init()
       },
    })
 
+   qb.chapter("Circuits", {
+      label = Loc.new("CircuitsChapter", "quests"),
+      requires = { "ResearchCircuits" },
+   })
+
+   qb.quest("BuildConstructor", {
+      chapter = "Circuits",
+      label = Loc.new("BuildConstructor", "quests"),
+      description = {
+         Loc.new("BuildConstructorDesc1", "quests"),
+         Loc.new("BuildConstructorDesc2", "quests"),
+      },
+      context = { "CopperConstructor", "CopperWire", "CopperCompactGenerator" },
+      unlocks = { "SmeltGlass" },
+      objectives = {
+         qb.craft_item({ "CopperConstructor" }, 1,
+            { label = Loc.new("ObjCraftConstructor", "quests") }),
+         qb.build_block({ "CopperConstructor" }, 1,
+            { label = Loc.new("ObjBuildConstructor", "quests") }),
+         qb.produce_item({ "CopperWire" }, 20,
+            { label = Loc.new("ObjProduceCopperWire", "quests") }),
+      },
+   })
+
+   qb.quest("SmeltGlass", {
+      chapter = "Circuits",
+      label = Loc.new("SmeltGlass", "quests"),
+      description = { Loc.new("SmeltGlassDesc", "quests") },
+      context = { "SandSurface", "Glass", "StoneSmelter" },
+      unlocks = { "MachineCircuits" },
+      objectives = {
+         qb.collect_item({ "SandSurface" }, 20,
+            { label = Loc.new("ObjMineSand", "quests") }),
+         qb.produce_item({ "Glass" }, 9,
+            { label = Loc.new("ObjSmeltGlass", "quests") }),
+      },
+   })
+
+   qb.quest("MachineCircuits", {
+      chapter = "Circuits",
+      label = Loc.new("MachineCircuits", "quests"),
+      description = {
+         Loc.new("MachineCircuitsDesc1", "quests"),
+         Loc.new("MachineCircuitsDesc2", "quests"),
+      },
+      context = { "CopperWire", "Triod", "CircuitBoard", "Circuit", "CopperRobotArm" },
+      unlocks = { "BoostResearch" },
+      objectives = {
+         qb.produce_item({ "Triod" }, 9,
+            { label = Loc.new("ObjProduceTriod", "quests") }),
+         qb.produce_item({ "Circuit" }, 3,
+            { label = Loc.new("ObjProduceCircuit", "quests") }),
+      },
+   })
+
+   qb.quest("BoostResearch", {
+      chapter = "Circuits",
+      label = Loc.new("BoostResearch", "quests"),
+      description = {
+         Loc.new("BoostResearchDesc1", "quests"),
+         Loc.new("BoostResearchDesc2", "quests"),
+      },
+      context = { "CopperComputer", "Circuit", "CopperRobotArm" },
+      unlocks = { "QueueResearch" },
+      objectives = {
+         qb.consume_item({ "Circuit" }, 3,
+            { label = Loc.new("ObjBoostComputer", "quests") }),
+      },
+   })
+
+   qb.quest("QueueResearch", {
+      chapter = "Circuits",
+      label = Loc.new("QueueResearch", "quests"),
+      description = {
+         Loc.new("QueueResearchDesc1", "quests"),
+         Loc.new("QueueResearchDesc2", "quests"),
+      },
+      context = { "CopperOven", "CopperBlastFurnace" },
+      objectives = {
+         qb.research("Oven", { label = Loc.new("ObjResearchOven", "quests") }),
+         qb.research("SteelProduction", { label = Loc.new("ObjResearchSteelProduction", "quests") }),
+      },
+   })
+
    qb.build()
 end
 

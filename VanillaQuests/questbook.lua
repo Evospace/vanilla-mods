@@ -80,13 +80,13 @@ function qb.craft_item(names, count, opts)
    }
 end
 
-function qb.produce_item(names, count, opts)
+local function surface_count(kind, prefix, read, names, count, opts)
    opts = opts or {}
    local list = to_list(names)
    local items = nil
    return {
-      kind = "produce_item",
-      id = opts.id or ("produce_" .. names_label(list):gsub("[^%w]", "_")),
+      kind = kind,
+      id = opts.id or (prefix .. names_label(list):gsub("[^%w]", "_")),
       required = count or 1,
       show_progress = true,
       label = opts.label,
@@ -99,7 +99,7 @@ function qb.produce_item(names, count, opts)
             for _, name in ipairs(list) do
                local item = StaticItem.find(name)
                if item == nil then
-                  print_err("questbook: produce_item references unknown item '" .. name .. "'")
+                  print_err("questbook: " .. kind .. " references unknown item '" .. name .. "'")
                else
                   items[#items + 1] = item
                end
@@ -107,11 +107,19 @@ function qb.produce_item(names, count, opts)
          end
          local total = 0
          for _, item in ipairs(items) do
-            total = total + dim:get_produced(item)
+            total = total + read(item)
          end
          return total
       end,
    }
+end
+
+function qb.produce_item(names, count, opts)
+   return surface_count("produce_item", "produce_", function(item) return dim:get_produced(item) end, names, count, opts)
+end
+
+function qb.consume_item(names, count, opts)
+   return surface_count("consume_item", "consume_", function(item) return dim:get_consumed(item) end, names, count, opts)
 end
 
 function qb.build_block(names, count, opts)
