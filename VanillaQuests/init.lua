@@ -75,12 +75,10 @@ function VanillaQuestsMod.init()
          Loc.new("ItemDatabaseDesc1", "quests"),
          Loc.new("ItemDatabaseDesc2", "quests"),
       },
-      context = { "StoneFurnace", "CopperPlate" },
+      context = { "StoneFurnace" },
       objectives = {
          qb.open_gui("inventory", { label = Loc.new("ObjOpenInventory", "quests") }),
-         qb.search_item({ "StoneFurnace" }, { label = Loc.new("ObjSearchStoneFurnace", "quests") }),
          qb.view_recipes({ "StoneFurnace" }, { label = Loc.new("ObjRecipesStoneFurnace", "quests") }),
-         qb.view_recipes({ "CopperPlate" }, { label = Loc.new("ObjUsagesCopperPlate", "quests") }),
       },
    })
 
