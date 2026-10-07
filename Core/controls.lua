@@ -397,6 +397,15 @@ return function()
       class = "Setting",
       category = "Controls",
       type = "Key",
+      key_binding = "ToggleFoundation",
+      label = "ToggleFoundation",
+      name = "ToggleFoundation",
+      default_key = "H",
+   })
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Key",
       key_binding = "ToggleSideIcons",
       label = "ToggleSideIcons",
       name = "ToggleSideIcons",
