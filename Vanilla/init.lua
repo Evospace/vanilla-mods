@@ -18,7 +18,7 @@ function vanilla_mod.init()
 
    require('Blocks/all')
 
-   require('panels')()
+   require('panels').register()
 
    local ss = StaticStructure.reg("StartPlatform")
 
@@ -141,6 +141,7 @@ function vanilla_mod.init()
 end
 
 function vanilla_mod.post_init()
+   require('panels').fill_defaults()
 end
 
 db:mod(vanilla_mod)

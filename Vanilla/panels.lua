@@ -104,6 +104,31 @@ local function build_decor(item, panel)
     return root
 end
 
+local function build_text(item, panel)
+    local root = ui.VBox { gap = 6 }
+
+    local label = panel.label:get()
+    if label ~= "" then
+        root:add(ui.RichText { text = label, font_size = 16 })
+    end
+
+    local body = ui.VBox { gap = 8 }
+    local parts = {}
+    for _, part in ipairs(panel.description_parts) do
+        parts[#parts + 1] = part:raw()
+    end
+    local text = table.concat(parts, "\n\n"):match("^%s*(.-)%s*$")
+    if text ~= "" then
+        body:add(ui.RichText { text = text })
+    end
+    if panel.context.size > 0 then
+        body:add(ui.Inventory { inventory = panel.context, numbers = false })
+    end
+    root:add(body)
+
+    return root
+end
+
 local function fill(panel, title, items, data)
     panel.widget = mining_widget
     panel.label = Loc.new(title, "panels")
@@ -117,7 +142,16 @@ local function fill(panel, title, items, data)
     panel:set_string("output", data.output or "")
 end
 
-return function()
+local function fill_defaults()
+    for _, proto in pairs(db:objects()) do
+        local panel = StaticItemPanel.cast(proto)
+        if panel ~= nil and panel.widget == "" and panel.build == nil then
+            panel.build = build_text
+        end
+    end
+end
+
+local function register()
     local resources = deposit_items()
     for _, item in ipairs(find_items(surface_names)) do
         table.insert(resources, item)
@@ -143,3 +177,5 @@ return function()
     decor_panel.label = Loc.new("DecorPanelTitle", "panels")
     decor_panel.items = decor
 end
+
+return { register = register, fill_defaults = fill_defaults }
