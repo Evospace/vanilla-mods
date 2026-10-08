@@ -1,6 +1,5 @@
 local mining_widget = "/Script/Evospace.MiningPanelWidget"
 local plate_widget = "/Script/Evospace.PlatePanelWidget"
-local decor_widget = "/Script/Evospace.DecorPanelWidget"
 
 local surface_names = {
     "StoneSurface",
@@ -73,6 +72,38 @@ local function describe_decor(items)
     end
 end
 
+local function panel_line(key, value)
+    return (Loc.get(key, "panels"):gsub("{0}", function() return value end))
+end
+
+local function build_decor(item, panel)
+    local root = ui.VBox { gap = 8 }
+
+    local label = panel.label:get()
+    if label ~= "" then
+        root:add(ui.RichText { text = label, font_size = 15 })
+    end
+
+    local block = item.block
+    local material = block and block.mined_item
+    if material == nil then
+        return root
+    end
+
+    local token = "{item:" .. material.name .. "}"
+    root:add(ui.HBox { gap = 10,
+        ui.Border { style = "plate", padding = 4, valign = "top", ui.Image { image = ui.thumbnail(block) or item.image, size = 128 } },
+        ui.VBox { fill = 1, valign = "top", gap = 8,
+            ui.RichText { text = panel_line("DecorPanelLine", token) },
+            ui.HBox { gap = 6,
+                ui.Image { image = material.image, size = 32, valign = "center" },
+                ui.RichText { text = "× " .. block.mined_count, font_size = 16, wrap = false, valign = "center" },
+            },
+        },
+    })
+    return root
+end
+
 local function fill(panel, title, items, data)
     panel.widget = mining_widget
     panel.label = Loc.new(title, "panels")
@@ -108,7 +139,7 @@ return function()
     describe_decor(decor)
 
     local decor_panel = StaticItemPanel.reg("DecorBuild")
-    decor_panel.widget = decor_widget
+    decor_panel.build = build_decor
     decor_panel.label = Loc.new("DecorPanelTitle", "panels")
     decor_panel.items = decor
 end
