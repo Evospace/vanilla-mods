@@ -1,5 +1,6 @@
 local mining_widget = "/Script/Evospace.MiningPanelWidget"
 local plate_widget = "/Script/Evospace.PlatePanelWidget"
+local decor_widget = "/Script/Evospace.DecorPanelWidget"
 
 local surface_names = {
     "StoneSurface",
@@ -47,6 +48,31 @@ local function deposit_items()
     return items
 end
 
+local function decor_items()
+    local items = {}
+    local seen = {}
+    for _, proto in pairs(db:objects()) do
+        local unlock = StaticResearchDecorationUnlock.cast(proto)
+        if unlock ~= nil then
+            for _, item in ipairs(unlock.decorations) do
+                if not seen[item.name] then
+                    seen[item.name] = true
+                    table.insert(items, item)
+                end
+            end
+        end
+    end
+    return items
+end
+
+local function describe_decor(items)
+    for _, item in ipairs(items) do
+        local parts = item.description_parts
+        parts[#parts + 1] = Loc.new("DecorBuiltFrom", "common")
+        item.description_parts = parts
+    end
+end
+
 local function fill(panel, title, items, data)
     panel.widget = mining_widget
     panel.label = Loc.new(title, "panels")
@@ -77,4 +103,12 @@ return function()
     plates.category = "Plate"
     plates.label = Loc.new("PlateTierTitle", "panels")
     plates.items = find_items(tier_names("Plate"))
+
+    local decor = decor_items()
+    describe_decor(decor)
+
+    local decor_panel = StaticItemPanel.reg("DecorBuild")
+    decor_panel.widget = decor_widget
+    decor_panel.label = Loc.new("DecorPanelTitle", "panels")
+    decor_panel.items = decor
 end
