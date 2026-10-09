@@ -1,4 +1,3 @@
-local mining_widget = "/Script/Evospace.MiningPanelWidget"
 local plate_widget = "/Script/Evospace.PlatePanelWidget"
 
 local surface_names = {
@@ -129,15 +128,145 @@ local function build_text(item, panel)
     return root
 end
 
+local mining_caption = "#ced4dd"
+
+local function gui_number(value)
+    local rounded = math.floor(value + 0.5)
+    if math.abs(value - rounded) <= 0.05 then
+        return tostring(rounded)
+    end
+    return string.format("%.1f", value)
+end
+
+local function gui_power(watts)
+    if watts >= 1000 then
+        return gui_number(watts / 1000) .. " kW"
+    end
+    return gui_number(watts) .. " W"
+end
+
+local function ore_props()
+    local props = {}
+    for _, data in ipairs(StaticPropList.find("OreProps").data) do
+        for _, prop in ipairs(data.props) do
+            props[#props + 1] = prop
+        end
+    end
+    return props
+end
+
+local function find_deposit(item)
+    for _, prop in ipairs(ore_props()) do
+        local result = prop.mined_item
+        if result ~= nil and result.name == item.name then
+            return prop
+        end
+    end
+    return nil
+end
+
+local function deposit_results(type)
+    local items = {}
+    local seen = {}
+    for _, prop in ipairs(ore_props()) do
+        local result = prop.mined_item
+        if result ~= nil and result.type == type and not seen[result.name] then
+            seen[result.name] = true
+            items[#items + 1] = result
+        end
+    end
+    return items
+end
+
+local function bonus_percent(panel, block)
+    local bonus = math.floor(panel:get_number("productivity_per_level", 0)) * block.level
+    local modifier = panel:get_string("modifier")
+    if modifier ~= "" then
+        bonus = bonus + StaticModifier.find(modifier).value
+    end
+    return math.max(0, bonus)
+end
+
+local function mining_card(value, caption)
+    local box = ui.VBox { ui.RichText { text = value, font_size = 20, wrap = false } }
+    if caption ~= nil then
+        box:add(ui.RichText { text = caption, font_size = 11, color = mining_caption })
+    end
+    return ui.Border { style = "plate", padding = { 8, 6 }, fill = 1, box }
+end
+
+local function item_row(items)
+    local inventory = AutosizeInventory.new_simple()
+    inventory.zero_slots = true
+    for _, item in ipairs(items) do
+        inventory:add(item, 0)
+    end
+    return ui.Inventory { inventory = inventory, numbers = false, columns = 15 }
+end
+
+local function build_mining(item, panel)
+    local block = item.block
+    local miner = block ~= nil and block.logic ~= nil and block.logic:is_child_of(DrillingMachineBase.get_class())
+    local deposit = not miner and find_deposit(item) or nil
+
+    local root = ui.VBox { gap = 8 }
+    local lines = ui.VBox { gap = 6 }
+
+    if not miner and deposit == nil then
+        root:add(ui.RichText { text = Loc.get("MiningSurfaceTitle", "panels"), font_size = 15 })
+        lines:add(ui.RichText { text = Loc.get("MiningSurface", "panels") })
+        root:add(lines)
+        return root
+    end
+
+    local label = panel.label:get()
+    if label ~= "" then
+        root:add(ui.RichText { text = label, font_size = 15 })
+    end
+    root:add(lines)
+
+    local tick_rate = game.tick_rate
+    local ticks = math.max(1, math.floor(panel:get_number("ticks", 0)))
+    local production = math.max(1, math.floor(panel:get_number("production", 1)))
+    local seconds = ticks / tick_rate
+    local bonus = miner and bonus_percent(panel, block) or 0
+    local output_name = panel:get_string("output")
+    local output = output_name ~= "" and StaticItem.find(output_name) or nil
+    local unit = output ~= nil and output.unit_mul or item.unit_mul
+    local per_minute = production * unit * 60 / seconds * (1 + bonus / 100)
+
+    local cards = ui.HBox { gap = 4 }
+    cards:add(mining_card(Loc.format("MiningRateValue", "panels", { gui_number(per_minute) })))
+    if bonus > 0 then
+        cards:add(mining_card(Loc.format("MiningPercent", "panels", { bonus })))
+    end
+    cards:add(mining_card(Loc.format("MiningCycleValue", "panels", { gui_number(seconds) }), Loc.get("MiningCycleCaption", "panels")))
+    if miner and block.energy_consumption_per_tick > 0 then
+        cards:add(mining_card(gui_power(block.energy_consumption_per_tick * tick_rate)))
+    end
+    lines:add(cards)
+
+    if miner then
+        lines:add(item_row(deposit_results(output ~= nil and output.type or "solid")))
+    else
+        lines:add(item_row({ deposit.item }))
+        local machine = panel:get_string("machine")
+        if machine ~= "" then
+            lines:add(ui.RichText { text = Loc.format("MiningMachineLine", "panels", { "{machine:" .. machine .. "}" }) })
+        end
+    end
+
+    return root
+end
+
 local function fill(panel, title, items, data)
-    panel.widget = mining_widget
+    panel.build = build_mining
     panel.label = Loc.new(title, "panels")
     panel.items = items
     panel:set_number("ticks", data.ticks)
     panel:set_number("production", data.production)
     panel:set_number("productivity_per_level", data.productivity_per_level)
     panel:set_string("modifier", data.modifier)
-    panel:set_string("research", data.research)
     panel:set_string("machine", data.machine)
     panel:set_string("output", data.output or "")
 end
