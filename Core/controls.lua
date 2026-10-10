@@ -465,6 +465,60 @@ return function()
       name = "SelectToolGroundLevelingTool",
       default_key = "Alt+V",
    })
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Key",
+      key_binding = "VehicleThrottle",
+      label = "VehicleForward",
+      name = "VehicleForward",
+      default_key = "W",
+   })
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Key",
+      key_binding = "VehicleThrottle",
+      label = "VehicleBack",
+      name = "VehicleBack",
+      default_key = "S",
+   })
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Key",
+      key_binding = "VehicleSteer",
+      label = "VehicleRight",
+      name = "VehicleRight",
+      default_key = "D",
+   })
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Key",
+      key_binding = "VehicleSteer",
+      label = "VehicleLeft",
+      name = "VehicleLeft",
+      default_key = "A",
+   })
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Key",
+      key_binding = "VehicleHandbrake",
+      label = "VehicleHandbrake",
+      name = "VehicleHandbrake",
+      default_key = "SpaceBar",
+   })
+   db:from_table({
+      class = "Setting",
+      category = "Controls",
+      type = "Key",
+      key_binding = "VehicleExit",
+      label = "VehicleExit",
+      name = "VehicleExit",
+      default_key = "T",
+   })
    local nums = {"Zero","One","Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"}
    for i=0,9 do
       db:from_table({
