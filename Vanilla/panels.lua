@@ -259,6 +259,24 @@ local function build_mining(item, panel)
     return root
 end
 
+local function group_items()
+    local items = {}
+    for _, proto in pairs(db:objects()) do
+        local group = ItemGroup.cast(proto)
+        if group ~= nil then
+            table.insert(items, group)
+        end
+    end
+    return items
+end
+
+local function build_group(item, panel)
+    local root = ui.VBox { gap = 8 }
+    root:add(ui.RichText { text = panel.label:get(), font_size = 15 })
+    root:add(item_row(ItemGroup.cast(item).members))
+    return root
+end
+
 local function fill(panel, title, items, data)
     panel.build = build_mining
     panel.label = Loc.new(title, "panels")
@@ -305,6 +323,11 @@ local function register()
     decor_panel.build = build_decor
     decor_panel.label = Loc.new("DecorPanelTitle", "panels")
     decor_panel.items = decor
+
+    local group_panel = StaticItemPanel.reg("GroupMembers")
+    group_panel.build = build_group
+    group_panel.label = Loc.new("GroupPanelTitle", "panels")
+    group_panel.items = group_items()
 end
 
 return { register = register, fill_defaults = fill_defaults }
