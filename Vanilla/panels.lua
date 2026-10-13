@@ -277,6 +277,140 @@ local function build_group(item, panel)
     return root
 end
 
+local ore_links = { "Ore", "OreImpureGravel", "OreGravel", "OreDust", "Dust" }
+
+local ore_dictionaries = {
+    "AutomaticHammerRecipeDictionary",
+    "OreWasherRecipeDictionary",
+    "ChemicalBathRecipeDictionary",
+    "MaceratorRecipeDictionary",
+    "SifterRecipeDictionary",
+    "SeparatorRecipeDictionary",
+    "ElectrolyzerRecipeDictionary",
+    "SmelterRecipeDictionary",
+}
+
+local ore_bases = {}
+
+local function ore_chain_items()
+    local items = {}
+    for _, proto in pairs(db:objects()) do
+        local item = StaticItem.cast(proto)
+        local base = item ~= nil and item.name:match("^(.+)OreImpureGravel$") or nil
+        if base ~= nil then
+            local links = {}
+            for _, link in ipairs(ore_links) do
+                links[#links + 1] = StaticItem.find(base .. link)
+            end
+            if #links == #ore_links then
+                for _, link in ipairs(links) do
+                    ore_bases[link.name] = base
+                    items[#items + 1] = link
+                end
+            end
+        end
+    end
+    return items
+end
+
+local ore_cell = 39
+local ore_arrow_size = 20
+
+local function slot_of(inventory, item)
+    for i = 1, inventory:count() do
+        local slot_item = inventory:slot(i).item
+        if slot_item ~= nil then
+            local group = ItemGroup.cast(slot_item)
+            if slot_item.name == item.name or (group ~= nil and group:matches(item)) then
+                return i - 1
+            end
+        end
+    end
+    return nil
+end
+
+local function ore_slot(item)
+    local inventory = AutosizeInventory.new_simple()
+    inventory.zero_slots = true
+    inventory:add(item, 0)
+    return ui.Inventory { inventory = inventory, numbers = false }
+end
+
+local function ore_line(column, ...)
+    local line = ui.HBox { ui.Spacer { width = column * ore_cell } }
+    for _, widget in ipairs({ ... }) do
+        line:add(widget)
+    end
+    return line
+end
+
+local function ore_down(column)
+    return ui.HBox {
+        ui.Spacer { width = column * ore_cell + (ore_cell - ore_arrow_size) / 2, height = ore_cell },
+        ui.Image { image = Texture.load("/Game/Textures/WhiteArrow.WhiteArrow"), size = ore_arrow_size, angle = 90, valign = "center" },
+    }
+end
+
+local function ore_steps(link, next_link, shown)
+    local side, down = {}, {}
+    for _, name in ipairs(ore_dictionaries) do
+        local dictionary = RecipeDictionary.get(name)
+        for _, recipe in ipairs(dictionary:recipes()) do
+            local key = name .. ":" .. recipe.name
+            if not shown[key] and slot_of(recipe.input, link) ~= nil then
+                shown[key] = true
+                local step = { recipe = recipe, machine = dictionary.machines[1], order = #side + #down }
+                step.next = next_link ~= nil and slot_of(recipe.output, next_link) or nil
+                table.insert(step.next ~= nil and down or side, step)
+            end
+        end
+    end
+    table.sort(down, function(a, b)
+        if a.next ~= b.next then
+            return a.next > b.next
+        end
+        return a.order < b.order
+    end)
+    return side, down
+end
+
+local function build_ore(item, panel)
+    local base = ore_bases[item.name]
+    local links = {}
+    for i, suffix in ipairs(ore_links) do
+        links[i] = StaticItem.get(base .. suffix)
+    end
+
+    local root = ui.VBox { gap = 8 }
+    root:add(ui.RichText { text = panel.label:get(), font_size = 15 })
+
+    local tree = ui.VBox {}
+    tree:add(ore_line(0, ore_slot(links[1])))
+
+    local column = 0
+    local shown = {}
+    for k, link in ipairs(links) do
+        local side, down = ore_steps(link, links[k + 1], shown)
+        if #side + #down == 0 then
+            break
+        end
+        tree:add(ore_down(column))
+        for _, step in ipairs(side) do
+            tree:add(ore_line(column, ore_slot(step.machine), ui.Inventory { inventory = step.recipe.output, numbers = true }))
+        end
+        for _, step in ipairs(down) do
+            tree:add(ore_line(column, ore_slot(step.machine), ui.Inventory { inventory = step.recipe.output, numbers = true }))
+        end
+        if #down == 0 then
+            break
+        end
+        column = column + 1 + down[#down].next
+    end
+
+    root:add(tree)
+    return root
+end
+
 local function fill(panel, title, items, data)
     panel.build = build_mining
     panel.label = Loc.new(title, "panels")
@@ -328,6 +462,11 @@ local function register()
     group_panel.build = build_group
     group_panel.label = Loc.new("GroupPanelTitle", "panels")
     group_panel.items = group_items()
+
+    local ore_panel = StaticItemPanel.reg("OreProcessing")
+    ore_panel.build = build_ore
+    ore_panel.label = Loc.new("OreProcessingTitle", "panels")
+    ore_panel.items = ore_chain_items()
 end
 
 return { register = register, fill_defaults = fill_defaults }
