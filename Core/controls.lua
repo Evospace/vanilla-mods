@@ -1,533 +1,423 @@
 return function()
 
-   db:from_table({
-      class = "Setting",
+   Setting.reg("MouseSensitivityX", {
       category = "Controls",
       type = "Slider",
-      max_value = 200,
-      min_value = 30,
-      int_default_value = 100,
+      max = 200,
+      min = 30,
+      default = 100,
       ---@param setting Setting
       set_action = function(setting)
-         local value = setting.int_value / 100.0
+         local value = setting.value / 100.0
          engine.mouse_sensitivity_x = value
          print_info("set MouseSensitivityX "..value)
          engine:apply()
       end,
       label = "MouseSensitivityX",
-      name = "MouseSensitivityX",
    })
 
-   db:from_table({
-      class = "Setting",
+   Setting.reg("MouseSensitivityY", {
       category = "Controls",
       type = "Slider",
-      max_value = 200,
-      min_value = 30,
-      int_default_value = 100,
+      max = 200,
+      min = 30,
+      default = 100,
       ---@param setting Setting
       set_action = function(setting)
-         local value = setting.int_value / 100.0
+         local value = setting.value / 100.0
          engine.mouse_sensitivity_y = value
          print_info("set MouseSensitivityY "..value)
          engine:apply()
       end,
       label = "MouseSensitivityY",
-      name = "MouseSensitivityY",
    })
 
-   db:from_table({
-      class = "Setting",
+   Setting.reg("MouseInversionX", {
       category = "Controls",
       type = "Bool",
-      bool_default_value = false,
+      default = false,
       ---@param setting Setting
       set_action = function(setting)
-         local value = setting.bool_value
+         local value = setting.value
          engine.mouse_inversion_x = value
          print_info("set MouseInversionX "..tostring(value))
          engine:apply()
       end,
       label = "MouseInversionX",
-      name = "MouseInversionX",
    })
 
-   db:from_table({
-      class = "Setting",
+   Setting.reg("MouseInversionY", {
       category = "Controls",
       type = "Bool",
-      bool_default_value = false,
+      default = false,
       ---@param setting Setting
       set_action = function(setting)
-         local value = setting.bool_value
+         local value = setting.value
          engine.mouse_inversion_y = value
          print_info("set MouseInversionY "..tostring(value))
          engine:apply()
       end,
       label = "MouseInversionY",
-      name = "MouseInversionY",
    })
 
-   db:from_table({
-      class = "Setting",
+   Setting.reg("MoveForward", {
       category = "Controls",
       type = "Key",
       key_binding = "Move",
       label = "MoveForward",
-      name = "MoveForward",
       default_key = "W",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("MoveBack", {
       category = "Controls",
       type = "Key",
       key_binding = "Move",
       label = "MoveBack",
-      name = "MoveBack",
       default_key = "S",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("MoveRight", {
       category = "Controls",
       type = "Key",
       key_binding = "Move",
       label = "MoveRight",
-      name = "MoveRight",
       default_key = "D",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("MoveLeft", {
       category = "Controls",
       type = "Key",
       key_binding = "Move",
       label = "MoveLeft",
-      name = "MoveLeft",
       default_key = "A",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("RaiseBlock", {
       category = "Controls",
       type = "Key",
       key_binding = "VertOffset",
       label = "RaiseBlock",
-      name = "RaiseBlock",
       default_key = "MouseWheelAxis",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("MoveUp", {
       category = "Controls",
       type = "Key",
       key_binding = "MoveUp",
       label = "MoveUp",
-      name = "MoveUp",
       default_key = "Spacebar",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("MoveDown", {
       category = "Controls",
       type = "Key",
       key_binding = "MoveUp",
       label = "MoveDown",
-      name = "MoveDown",
       default_key = "C",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("ActionRotate", {
       category = "Controls",
       type = "Key",
       key_binding = "ActionRotate",
       label = "ActionRotate",
-      name = "ActionRotate",
       default_key = "R",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("ToggleInventory", {
       category = "Controls",
       type = "Key",
       key_binding = "ToggleInventory",
       label = "ToggleInventory",
-      name = "ToggleInventory",
       default_key = "E",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("BlockAction", {
       category = "Controls",
       type = "Key",
       key_binding = "BlockAction",
       label = "BlockAction",
-      name = "BlockAction",
       default_key = "T",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("BlockUp", {
       category = "Controls",
       type = "Key",
       key_binding = "BlockUp",
       label = "BlockUp",
-      name = "BlockUp",
       default_key = "Up",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("BlockDown", {
       category = "Controls",
       type = "Key",
       key_binding = "BlockDown",
       label = "BlockDown",
-      name = "BlockDown",
       default_key = "Down",
    })
    
-   db:from_table({
-      class = "Setting",
+   Setting.reg("ChangeMovementMode", {
       category = "Controls",
       type = "Key",
       key_binding = "ChangeMovementMode",
       label = "ChangeMovementMode",
-      name = "ChangeMovementMode",
       default_key = "F",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("Chat", {
       category = "Controls",
       type = "Key",
       key_binding = "Chat",
       label = "Chat",
-      name = "Chat",
       default_key = "Enter",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("Console", {
       category = "Controls",
       type = "Key",
       key_binding = "Console",
       label = "Console",
-      name = "Console",
       default_key = "Slash",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("Crouch", {
       category = "Controls",
       type = "Key",
       key_binding = "Crouch",
       label = "Crouch",
-      name = "Crouch",
       default_key = "C",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("EmptyHand", {
       category = "Controls",
       type = "Key",
       key_binding = "EmptyHand",
       label = "EmptyHand",
-      name = "EmptyHand",
       default_key = "Alt+Q",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("Escape", {
       category = "Controls",
       type = "Key",
       key_binding = "Escape",
       label = "Escape",
-      name = "Escape",
       default_key = "Escape",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("Journal", {
       category = "Controls",
       type = "Key",
       key_binding = "Journal",
       label = "Researches",
-      name = "Journal",
       default_key = "J",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("QuestBook", {
       category = "Controls",
       type = "Key",
       key_binding = "QuestBook",
       label = "QuestBook",
-      name = "QuestBook",
       default_key = "B",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("Blueprints", {
       category = "Controls",
       type = "Key",
       key_binding = "Blueprints",
       label = "Blueprints",
-      name = "Blueprints",
       default_key = "N",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("Trains", {
       category = "Controls",
       type = "Key",
       key_binding = "Trains",
       label = "Trains",
-      name = "Trains",
       default_key = "K",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("Production", {
       category = "Controls",
       type = "Key",
       key_binding = "Production",
       label = "Production",
-      name = "Production",
       default_key = "P",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("Decor", {
       category = "Controls",
       type = "Key",
       key_binding = "Decor",
       label = "Decor",
-      name = "Decor",
       default_key = "V",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("Jump", {
       category = "Controls",
       type = "Key",
       key_binding = "Jump",
       label = "Jump",
-      name = "Jump",
       default_key = "SpaceBar",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("LoadSettings", {
       category = "Controls",
       type = "Key",
       key_binding = "LoadSettings",
       label = "LoadSettings",
-      name = "LoadSettings",
       default_key = "Ctrl+V",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("RecipesLeft", {
       category = "Controls",
       type = "Key",
       key_binding = "NeiLeft",
       label = "RecipesLeft",
-      name = "RecipesLeft",
       default_key = "Backspace",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("RecipesRight", {
       category = "Controls",
       type = "Key",
       key_binding = "NeiRight",
       label = "RecipesRight",
-      name = "RecipesRight",
       default_key = "Alt+Backspace",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("PickBlock", {
       category = "Controls",
       type = "Key",
       key_binding = "PickBlock",
       label = "PickBlock",
-      name = "PickBlock",
       default_key = "Q",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("Recipe", {
       category = "Controls",
       type = "Key",
       key_binding = "Recipe",
       label = "Recipe",
-      name = "Recipe",
       default_key = "U",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("SaveSettings", {
       category = "Controls",
       type = "Key",
       key_binding = "SaveSettings",
       label = "SaveSettings",
-      name = "SaveSettings",
       default_key = "Ctrl+C",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("Sprint", {
       category = "Controls",
       type = "Key",
       key_binding = "Sprint",
       label = "Sprint",
-      name = "Sprint",
       default_key = "LeftShift",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("SwitchCreativeMode", {
       category = "Controls",
       type = "Key",
       key_binding = "SwitchCreativeMode",
       label = "SwitchCreativeMode",
-      name = "SwitchCreativeMode",
       default_key = "Shift+F",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("ThrowItem", {
       category = "Controls",
       type = "Key",
       key_binding = "ThrowItem",
       label = "ThrowItem",
-      name = "ThrowItem",
       default_key = "G",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("ToggleMap", {
       category = "Controls",
       type = "Key",
       key_binding = "ToggleMap",
       label = "ToggleMap",
-      name = "ToggleMap",
       default_key = "M",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("ToggleReplaceMode", {
       category = "Controls",
       type = "Key",
       key_binding = "ToggleReplaceMode",
       label = "ToggleReplaceMode",
-      name = "ToggleReplaceMode",
       default_key = "Y",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("ToggleFoundation", {
       category = "Controls",
       type = "Key",
       key_binding = "ToggleFoundation",
       label = "ToggleFoundation",
-      name = "ToggleFoundation",
       default_key = "H",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("ToggleSideIcons", {
       category = "Controls",
       type = "Key",
       key_binding = "ToggleSideIcons",
       label = "ToggleSideIcons",
-      name = "ToggleSideIcons",
       default_key = "X",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("ToggleHud", {
       category = "Controls",
       type = "Key",
       key_binding = "ToggleHud",
       label = "ToggleHud",
-      name = "ToggleHud",
       default_key = "Period",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("ToggleFlashlight", {
       category = "Controls",
       type = "Key",
       key_binding = "ToggleFlashlight",
       label = "ToggleFlashlight",
-      name = "ToggleFlashlight",
       default_key = "L",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("Ping", {
       category = "Controls",
       type = "Key",
       key_binding = "Ping",
       label = "Ping",
-      name = "Ping",
       default_key = "Z",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("SelectToolMultitool", {
       category = "Controls",
       type = "Key",
       key_binding = "SelectToolMultitool",
       label = "SelectToolMultitool",
-      name = "SelectToolMultitool",
       default_key = "Alt+Z",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("SelectToolScrewdriver", {
       category = "Controls",
       type = "Key",
       key_binding = "SelectToolScrewdriver",
       label = "SelectToolScrewdriver",
-      name = "SelectToolScrewdriver",
       default_key = "Alt+X",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("SelectToolGroundLevelingTool", {
       category = "Controls",
       type = "Key",
       key_binding = "SelectToolGroundLevelingTool",
       label = "SelectToolGroundLevelingTool",
-      name = "SelectToolGroundLevelingTool",
       default_key = "Alt+V",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("VehicleForward", {
       category = "Controls",
       type = "Key",
       key_binding = "VehicleThrottle",
       label = "VehicleForward",
-      name = "VehicleForward",
       default_key = "W",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("VehicleBack", {
       category = "Controls",
       type = "Key",
       key_binding = "VehicleThrottle",
       label = "VehicleBack",
-      name = "VehicleBack",
       default_key = "S",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("VehicleRight", {
       category = "Controls",
       type = "Key",
       key_binding = "VehicleSteer",
       label = "VehicleRight",
-      name = "VehicleRight",
       default_key = "D",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("VehicleLeft", {
       category = "Controls",
       type = "Key",
       key_binding = "VehicleSteer",
       label = "VehicleLeft",
-      name = "VehicleLeft",
       default_key = "A",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("VehicleHandbrake", {
       category = "Controls",
       type = "Key",
       key_binding = "VehicleHandbrake",
       label = "VehicleHandbrake",
-      name = "VehicleHandbrake",
       default_key = "SpaceBar",
    })
-   db:from_table({
-      class = "Setting",
+   Setting.reg("VehicleExit", {
       category = "Controls",
       type = "Key",
       key_binding = "VehicleExit",
       label = "VehicleExit",
-      name = "VehicleExit",
       default_key = "T",
    })
    local nums = {"Zero","One","Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"}
    for i=0,9 do
-      db:from_table({
-         class = "Setting",
+      Setting.reg("ActiveSlot_"..i, {
          category = "Controls",
          type = "Key",
          key_binding = "ActiveSlot"..i,
          label = "ActiveSlot_"..i,
-         name = "ActiveSlot_"..i,
          default_key = nums[i+1],
       })
    end

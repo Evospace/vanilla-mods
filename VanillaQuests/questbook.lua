@@ -740,17 +740,13 @@ function qb.build()
    quest_defs = {}
 
    for _, def in ipairs(chapters) do
-      db:from_table({
-         class = "StaticChapter",
-         name = def.name,
+      StaticChapter.reg(def.name, {
          label = def.label,
       })
    end
 
    for _, def in ipairs(quests) do
       local row = {
-         class = "StaticQuest",
-         name = def.name,
          label = def.label,
          description_parts = def.description or {},
          any_objective = (def.any == true),
@@ -765,7 +761,7 @@ function qb.build()
             row.chapter = chapter
          end
       end
-      db:from_table(row)
+      StaticQuest.reg(def.name, row)
 
       for _, spec in ipairs(def.objectives) do
          if spec.poll ~= nil then

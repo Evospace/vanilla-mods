@@ -1,15 +1,14 @@
 return function()
    local function make_audio(name, classes, default)
-      db:from_table({
-         class = "Setting",
+      Setting.reg(name, {
          category = "Audio",
          type = "Slider",
-         max_value = 100,
-         min_value = 0,
-         int_default_value = default,
+         max = 100,
+         min = 0,
+         default = default,
          ---@param setting Setting
          set_action = function(setting)
-            local value = setting.int_value / 100.0
+            local value = setting.value / 100.0
             for _, path in ipairs(classes) do
                local className = path .. "." .. string.match(path, "[^/]+$")
                local sc = SoundClass.load(className)
@@ -19,7 +18,6 @@ return function()
             engine:apply()
          end,
          label = name,
-         name = name,
       })
    end
 
@@ -35,19 +33,17 @@ return function()
    make_audio("Footsteps", { audio .. "Footsteps" }, 75)
    make_audio("UI", { audio .. "UI" }, 100)
 
-   db:from_table({
-      class = "Setting",
+   Setting.reg("MuteOnFocusLoss", {
       category = "Audio",
       type = "Bool",
-      bool_default_value = true,
+      default = true,
       ---@param setting Setting
       set_action = function(setting)
-         local value = setting.bool_value
+         local value = setting.value
          engine.mute_on_focus_loss = value
          print_info("set MuteOnFocusLoss "..tostring(value))
          engine:apply()
       end,
       label = "MuteOnFocusLoss",
-      name = "MuteOnFocusLoss",
    })
  end

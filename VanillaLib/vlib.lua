@@ -159,7 +159,7 @@ Vlib = {
                 local table = register_fn(name, index - 1, index - first_tier)
 
                 for key, value in pairs(table) do
-                    block.lua[key] = value
+                    block[key] = value
                 end
             end
         end
@@ -180,7 +180,7 @@ Vlib = {
                 local table = register_fn(tier..name, index - 1, index - first_tier - 1)
 
                 for key, value in pairs(table) do
-                    block.lua[key] = value
+                    block[key] = value
                 end
             end
         end

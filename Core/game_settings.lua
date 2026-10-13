@@ -1,20 +1,18 @@
 return function()
-    db:from_table({
-        class = "Setting",
+    Setting.reg("SectorLodCount", {
         category = "Game",
         type = "Slider",
-        max_value = 2,
-        min_value = 0,
-        int_default_value = 2,
+        max = 2,
+        min = 0,
+        default = 2,
         ---@param setting Setting
         set_action = function(setting)
-           local value = setting.int_value
+           local value = setting.value
            engine.sector_lod_count = value
            print_info("set SectorLodCount "..value)
            engine:apply()
         end,
         label = "SectorLodCount",
-        name = "SectorLodCount",
     })
 
     local LocalizationMap = {
@@ -42,75 +40,67 @@ return function()
         return LocalizationMap[value] or "en"
     end
     
-    db:from_table({
-        class = "Setting",
+    Setting.reg("Localization", {
         category = "Game",
         type = "String",
-        default_string_value = "English",
-        string_options = LocArray,
+        default = "English",
+        options = LocArray,
         ---@param setting Setting
         set_action = function(setting)
-            local loc = get_select(setting.string_value)
-            print_info("localization set "..setting.string_value)
+            local loc = get_select(setting.value)
+            print_info("localization set "..setting.value)
             game.localization = loc
         end,
         label = "Localization",
-        name = "Localization",
     })
 
-    db:from_table({
-       class = "Setting",
+    Setting.reg("Dpi", {
        category = "Game",
        type = "Slider",
-       max_value = 200,
-       min_value = 50,
-       int_default_value = 100,
+       max = 200,
+       min = 50,
+       default = 100,
        ---@param setting Setting
        set_action = function(setting)
-          local value = setting.int_value / 100.0
+          local value = setting.value / 100.0
           engine.dpi = value
           print_info("set Dpi "..value)
           engine:apply()
        end,
        label = "Dpi",
-       name = "Dpi",
     })
 
     local function make_bool_set(name, field)
-        db:from_table({
-            class = "Setting",
+        Setting.reg(name, {
             category = "Game",
             type = "String",
-            default_string_value = "Off",
-            string_options = {"Off", "On"},
+            default = "Off",
+            options = {"Off", "On"},
             ---@param setting Setting
             set_action = function(setting)
-                local value = setting.string_value == "On"
+                local value = setting.value == "On"
                 print_info("set "..name.." "..tostring(value))
                 engine[field] = value
                 engine:apply()
             end,
             label = name,
-            name = name,
         })
     end
 
     local function make_bool_set_on(name, field)
-        db:from_table({
-            class = "Setting",
+        Setting.reg(name, {
             category = "Game",
             type = "String",
-            default_string_value = "On",
-            string_options = {"Off", "On"},
+            default = "On",
+            options = {"Off", "On"},
             ---@param setting Setting
             set_action = function(setting)
-                local value = setting.string_value == "On"
+                local value = setting.value == "On"
                 print_info("set "..name.." "..tostring(value))
                 engine[field] = value
                 engine:apply()
             end,
             label = name,
-            name = name,
         })
     end
 
@@ -126,39 +116,35 @@ return function()
     make_bool_set("AltHotbar", "alt_hotbar")
     make_bool_set("ShiftHotbar", "shift_hotbar")
 
-    db:from_table({
-        class = "Setting",
+    Setting.reg("AutosavePeriod", {
         category = "Game",
         type = "Slider",
-        max_value = 60,
-        min_value = 0,
-        int_default_value = 10,
+        max = 60,
+        min = 0,
+        default = 10,
         ---@param setting Setting
         set_action = function(setting)
-           local value = setting.int_value
+           local value = setting.value
            engine.autosave_period = value
            print_info("set AutosavePeriod "..value)
            engine:apply()
         end,
         label = "AutosavePeriod",
-        name = "AutosavePeriod",
      })
 
-    db:from_table({
-        class = "Setting",
+    Setting.reg("UndoConfirmMinutes", {
         category = "Game",
         type = "Slider",
-        max_value = 5,
-        min_value = 0,
-        int_default_value = 1,
+        max = 5,
+        min = 0,
+        default = 1,
         ---@param setting Setting
         set_action = function(setting)
-           local value = setting.int_value
+           local value = setting.value
            engine.undo_confirm_minutes = value
            print_info("set UndoConfirmMinutes "..value)
         end,
         label = "UndoConfirmMinutes",
-        name = "UndoConfirmMinutes",
      })
 
 end

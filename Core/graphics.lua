@@ -1,287 +1,267 @@
 return function()
-    local function option4_to_int(string_value)
+    local function option4_to_int(value)
         local preset = 0
-        if string_value == "Medium" then preset = 1 end
-        if string_value == "High" then preset = 2 end
-        if string_value == "Epic" then preset = 3 end
+        if value == "Medium" then preset = 1 end
+        if value == "High" then preset = 2 end
+        if value == "Epic" then preset = 3 end
         return preset
     end
 
-    db:from_table({
-        class = "Setting",
+    Setting.reg("ScalabilityPreset", {
         category = "Graphics",
         type = "Buttons",
 
-        default_string_value = "High",
-        string_options = {"Low", "Medium", "High", "Epic"},
+        default = "High",
+        options = {"Low", "Medium", "High", "Epic"},
         ---@param setting Setting
         set_action = function(setting)
-            local scalability = option4_to_int(setting.string_value)
+            local scalability = option4_to_int(setting.value)
 
             local four_opts = {"ShadowQuality", "TextureQuality", "EffectsQuality", "PostProcessQuality"}
             for _, name in ipairs(four_opts) do
                 local set = Setting.find(name)
-                set.string_value = setting.string_value
+                set.value = setting.value
                 set:set_action()
             end
 
             local relf_values = {"Disable", "Disable", "ScreenSpace", "Lumen"}
             local set = Setting.find("GlobalIllumination")
-            set.string_value = relf_values[scalability + 1]
+            set.value = relf_values[scalability + 1]
             set:set_action()
 
             local relf_values = {"Disable", "ScreenSpace", "ScreenSpace", "Lumen"}
             local set = Setting.find("Reflection")
-            set.string_value = relf_values[scalability + 1]
+            set.value = relf_values[scalability + 1]
             set:set_action()
 
             local relf_values = {"Low", "Low", "High", "High"}
             local set = Setting.find("ReflectionQuality")
-            set.string_value = relf_values[scalability + 1]
+            set.value = relf_values[scalability + 1]
             set:set_action()
 
             local relf_values = {"Low", "Medium", "High", "High"}
             local set = Setting.find("MaterialQuality")
-            set.string_value = relf_values[scalability + 1]
+            set.value = relf_values[scalability + 1]
             set:set_action()
 
             local values = {0.3, 0.7, 1.0, 1.0}
             local set = Setting.find("GrassRenderingRange")
-            set.int_value = math.floor(values[scalability + 1] * 100)
+            set.value = math.floor(values[scalability + 1] * 100)
             set:set_action()
 
             local values = {2, 5, 9, 10}
             local set = Setting.find("DecorationsQuality")
-            set.int_value = math.floor(values[scalability + 1])
+            set.value = math.floor(values[scalability + 1])
             set:set_action()
 
             local values = {15, 18, 25, 27}
             local set = Setting.find("LoadingRange")
-            set.int_value = values[scalability + 1]
+            set.value = values[scalability + 1]
             set:set_action()
 
             local values = {"FXAA", "FXAA", "TAA", "TAA"}
             local set = Setting.find("AntiAliasingMethod")
-            set.string_value = values[scalability + 1]
+            set.value = values[scalability + 1]
             set:set_action()
 
             local values = {"100%", "100%", "100%", "100%"}
             local set = Setting.find("ScreenPersentage")
-            set.string_value = values[scalability + 1]
+            set.value = values[scalability + 1]
             set:set_action()
 
             local detail = Setting.find("DetailShadows")
             if scalability <= 1 then
-                detail.string_value = "Off"
+                detail.value = "Off"
             else
-                detail.string_value = "On"
+                detail.value = "On"
             end
             detail:set_action()
 
             local spotlight = Setting.find("SpotlightShadows")
             if scalability <= 1 then
-                spotlight.string_value = "Off"
+                spotlight.value = "Off"
             else
-                spotlight.string_value = "On"
+                spotlight.value = "On"
             end
             spotlight:set_action()
 
             local values = {"Low", "Medium", "High", "High"}
             local transparency = Setting.find("Transparency")
-            transparency.string_value = values[scalability + 1]
+            transparency.value = values[scalability + 1]
             transparency:set_action()
 
             local clouds = Setting.find("CloudsQuality")
             if scalability == 0 then
-                clouds.string_value = "Off"
+                clouds.value = "Off"
             elseif scalability == 1 then
-                clouds.string_value = "Simple"
+                clouds.value = "Simple"
             else
-                clouds.string_value = "Volumteric"
+                clouds.value = "Volumteric"
             end
             clouds:set_action()
 
             local values = {"Off", "Minimal", "Full", "Full"}
             local wind = Setting.find("WindAnimation")
-            wind.string_value = values[scalability + 1]
+            wind.value = values[scalability + 1]
             wind:set_action()
 
             local values = {"Low", "High", "High", "High"}
             local particles = Setting.find("WeatherParticles")
-            particles.string_value = values[scalability + 1]
+            particles.value = values[scalability + 1]
             particles:set_action()
 
             local values = {"Low", "Medium", "High", "High"}
             local vram = Setting.find("VramBudget")
-            vram.string_value = values[scalability + 1]
+            vram.value = values[scalability + 1]
             vram:set_action()
 
             Setting.update_widgets()
         end,
 
         label = "ScalabilityPreset",
-        name = "ScalabilityPreset",
     })
 
-    db:from_table({
-        class = "Setting",
+    Setting.reg("CloudsQuality", {
         category = "Graphics",
         type = "String",
-        default_string_value = "Simple",
-        string_options = {"Off", "Simple", "Volumteric"},
+        default = "Simple",
+        options = {"Off", "Simple", "Volumteric"},
         ---@param setting Setting
         set_action = function(setting)
-           local function option3_to_int(string_value)
+           local function option3_to_int(value)
                local preset = 0
-               if string_value == "Simple" then preset = 1 end
-               if string_value == "Volumteric" then preset = 2 end
+               if value == "Simple" then preset = 1 end
+               if value == "Volumteric" then preset = 2 end
                return preset
            end
-           engine.cloud_preset = option3_to_int(setting.string_value)
+           engine.cloud_preset = option3_to_int(setting.value)
            engine:apply()
         end,
         label = "CloudsQuality",
-        name = "CloudsQuality",
     })
 
-    db:from_table({
-        class = "Setting",
+    Setting.reg("WeatherParticles", {
         category = "Graphics",
         type = "String",
-        default_string_value = "High",
-        string_options = {"Off", "Low", "High"},
+        default = "High",
+        options = {"Off", "Low", "High"},
         ---@param setting Setting
         set_action = function(setting)
             local preset = 0
-            if setting.string_value == "Low" then preset = 1 end
-            if setting.string_value == "High" then preset = 2 end
+            if setting.value == "Low" then preset = 1 end
+            if setting.value == "High" then preset = 2 end
             engine.weather_particles = preset
             engine:apply()
         end,
         label = "WeatherParticles",
-        name = "WeatherParticles",
     })
 
-    db:from_table({
-        class = "Setting",
+    Setting.reg("WindAnimation", {
         category = "Graphics",
         type = "String",
-        default_string_value = "Full",
-        string_options = {"Off", "Minimal", "Full"},
+        default = "Full",
+        options = {"Off", "Minimal", "Full"},
         ---@param setting Setting
         set_action = function(setting)
             local value = 1.0
-            if setting.string_value == "Off" then value = 0.0 end
-            if setting.string_value == "Minimal" then value = 0.25 end
+            if setting.value == "Off" then value = 0.0 end
+            if setting.value == "Minimal" then value = 0.25 end
             engine.wind_animation = value
             engine:apply()
         end,
         label = "WindAnimation",
-        name = "WindAnimation",
     })
 
-    db:from_table({
-        class = "Setting",
+    Setting.reg("DetailShadows", {
         category = "Graphics",
         type = "String",
-        default_string_value = "On",
-        string_options = {"Off", "On"},
+        default = "On",
+        options = {"Off", "On"},
         ---@param setting Setting
         set_action = function(setting)
-            local enabled = (setting.string_value == "On")
+            local enabled = (setting.value == "On")
             engine.detail_shadows = enabled
             engine:apply()
         end,
         label = "DetailShadows",
-        name = "DetailShadows",
     })
 
-    db:from_table({
-        class = "Setting",
+    Setting.reg("SpotlightShadows", {
         category = "Graphics",
         type = "String",
-        default_string_value = "On",
-        string_options = {"Off", "On"},
+        default = "On",
+        options = {"Off", "On"},
         ---@param setting Setting
         set_action = function(setting)
-            local enabled = (setting.string_value == "On")
+            local enabled = (setting.value == "On")
             engine.spotlight_shadows = enabled
             engine:apply()
         end,
         label = "SpotlightShadows",
-        name = "SpotlightShadows",
     })
 
-    db:from_table({
-        class = "Setting",
+    Setting.reg("Fullscreen", {
         category = "Graphics",
         type = "String",
-        default_string_value = "Windowed",
-        string_options = {"Fullscreen", "WindowedFullscreen", "Windowed"},
+        default = "Windowed",
+        options = {"Fullscreen", "WindowedFullscreen", "Windowed"},
         ---@param setting Setting
         set_action = function(setting)
-           local function option3_to_int(string_value)
+           local function option3_to_int(value)
                local preset = 0
-               if string_value == "WindowedFullscreen" then preset = 1 end
-               if string_value == "Windowed" then preset = 2 end
+               if value == "WindowedFullscreen" then preset = 1 end
+               if value == "Windowed" then preset = 2 end
                return preset
            end
-           engine.window_mode = option3_to_int(setting.string_value)
+           engine.window_mode = option3_to_int(setting.value)
            engine:show_confirmation()
            engine:apply()
         end,
         label = "Fullscreen",
-        name = "Fullscreen",
     })
 
-    db:from_table({
-        class = "Setting",
+    Setting.reg("Resolution", {
         category = "Graphics",
         type = "String",
-        default_string_value = "800x600",
-        string_options = Game.get_supported_resolutions(),
+        default = "800x600",
+        options = Game.get_supported_resolutions(),
         ---@param setting Setting
         set_action = function(setting)
-            local width, height = string.match(setting.string_value, "^(%d+)x(%d+)$")
+            local width, height = string.match(setting.value, "^(%d+)x(%d+)$")
             engine.res_x, engine.res_y = tonumber(width), tonumber(height)
             print_info("resolution set "..width.."x"..height)
             engine:show_confirmation()
             engine:apply()
         end,
         label = "Resolution",
-        name = "Resolution",
     })
 
     local function generate_setting_on_off(name, command)
-        db:from_table({
-            class = "Setting",
+        Setting.reg(name, {
             category = "Graphics",
             type = "String",
-            default_string_value = "Off",
-            string_options = {"Off", "On"},
+            default = "Off",
+            options = {"Off", "On"},
             ---@param setting Setting
             set_action = function(setting)
-                local value = (setting.string_value == "On") and 1 or 0
+                local value = (setting.value == "On") and 1 or 0
                 Console.run(command.." "..value)
             end,
             label = name,
-            name = name,
         })
     end
 
     local function generate_setting(name, command)
-        db:from_table({
-            class = "Setting",
+        Setting.reg(name, {
             category = "Graphics",
             type = "String",
-            default_string_value = "High",
-            string_options = {"Low", "Medium", "High", "Epic"},
+            default = "High",
+            options = {"Low", "Medium", "High", "Epic"},
             ---@param setting Setting
             set_action = function(setting)
-                Console.run(command.." "..option4_to_int(setting.string_value))
+                Console.run(command.." "..option4_to_int(setting.value))
             end,
             label = name,
-            name = name,
         })
     end
 
@@ -290,51 +270,46 @@ return function()
     generate_setting("EffectsQuality", "sg.EffectsQuality")
     generate_setting("PostProcessQuality", "sg.PostProcessQuality")
 
-    db:from_table({
-        class = "Setting",
+    Setting.reg("Transparency", {
         category = "Graphics",
         type = "String",
-        default_string_value = "High",
-        string_options = {"Low", "Medium", "High"},
+        default = "High",
+        options = {"Low", "Medium", "High"},
         ---@param setting Setting
         set_action = function(setting)
-            engine.transparency_preset = option4_to_int(setting.string_value)
+            engine.transparency_preset = option4_to_int(setting.value)
         end,
         label = "Transparency",
-        name = "Transparency",
     })
 
-    db:from_table({
-        class = "Setting",
+    Setting.reg("MaterialQuality", {
         category = "Graphics",
         type = "String",
-        default_string_value = "High",
-        string_options = {"Low", "Medium", "High"},
+        default = "High",
+        options = {"Low", "Medium", "High"},
         ---@param setting Setting
         set_action = function(setting)
             local preset = 0
-            if setting.string_value == "Low" then preset = 0 end
-            if setting.string_value == "Medium" then preset = 2 end
-            if setting.string_value == "High" then preset = 1 end
+            if setting.value == "Low" then preset = 0 end
+            if setting.value == "Medium" then preset = 2 end
+            if setting.value == "High" then preset = 1 end
 
             Console.run("R.MaterialQualityLevel "..preset)
         end,
         label = "MaterialQuality",
-        name = "MaterialQuality",
     })
 
     local function generate_reflection(name, command, field)
-        db:from_table({
-            class = "Setting",
+        Setting.reg(name, {
             category = "Graphics",
             type = "String",
-            default_string_value = "ScreenSpace",
-            string_options = {"Disable", "ScreenSpace", "Lumen"},
+            default = "ScreenSpace",
+            options = {"Disable", "ScreenSpace", "Lumen"},
             ---@param setting Setting
             set_action = function(setting)
                 local preset = 0
-                if setting.string_value == "Lumen" then preset = 1 end
-                if setting.string_value == "ScreenSpace" then preset = 2 end
+                if setting.value == "Lumen" then preset = 1 end
+                if setting.value == "ScreenSpace" then preset = 2 end
 
                 Console.run(command.." "..preset)
 
@@ -342,174 +317,156 @@ return function()
                 engine:apply()
             end,
             label = name,
-            name = name,
         })
     end
     generate_reflection("GlobalIllumination", "r.DynamicGlobalIlluminationMethod", "gi_preset")
     generate_reflection("Reflection", "r.ReflectionMethod", "reflection_preset")
 
-    db:from_table({
-        class = "Setting",
+    Setting.reg("ReflectionQuality", {
         category = "Graphics",
         type = "String",
-        default_string_value = "High",
-        string_options = {"Low", "High"},
+        default = "High",
+        options = {"Low", "High"},
         ---@param setting Setting
         set_action = function(setting)
             local preset = 3
-            if setting.string_value == "Low" then preset = 1 end
+            if setting.value == "Low" then preset = 1 end
 
             Console.run("r.SSR.Quality "..preset)
         end,
         label = "ReflectionQuality",
-        name = "ReflectionQuality",
     })
 
-    db:from_table({
-        class = "Setting",
+    Setting.reg("ScreenPersentage", {
         category = "Graphics",
         type = "String",
-        default_string_value = "100%",
-        string_options = {"30%", "50%", "75%", "85%", "90%", "100%"},
+        default = "100%",
+        options = {"30%", "50%", "75%", "85%", "90%", "100%"},
         ---@param setting Setting
         set_action = function(setting)
             local preset = 90
-            if setting.string_value == "30%" then preset = 30 end
-            if setting.string_value == "50%" then preset = 50 end
-            if setting.string_value == "75%" then preset = 75 end
-            if setting.string_value == "85%" then preset = 85 end
-            if setting.string_value == "90%" then preset = 90 end
-            if setting.string_value == "100%" then preset = 100 end
+            if setting.value == "30%" then preset = 30 end
+            if setting.value == "50%" then preset = 50 end
+            if setting.value == "75%" then preset = 75 end
+            if setting.value == "85%" then preset = 85 end
+            if setting.value == "90%" then preset = 90 end
+            if setting.value == "100%" then preset = 100 end
             Console.run("r.ScreenPercentage "..preset)
         end,
         label = "ScreenPersentage",
-        name = "ScreenPersentage",
     })
 
-    db:from_table({
-        class = "Setting",
+    Setting.reg("AntiAliasingMethod", {
         category = "Graphics",
         type = "String",
-        default_string_value = "TAA",
-        string_options = {"None", "FXAA", "TAA", "TSR"},
+        default = "TAA",
+        options = {"None", "FXAA", "TAA", "TSR"},
         set_action = function(setting)
             local preset = 2
-            if setting.string_value == "None" then preset = 0 end
-            if setting.string_value == "FXAA" then preset = 1 end
-            if setting.string_value == "TSR" then preset = 4 end
+            if setting.value == "None" then preset = 0 end
+            if setting.value == "FXAA" then preset = 1 end
+            if setting.value == "TSR" then preset = 4 end
             Console.run("r.AntiAliasingMethod "..preset)
         end,
         label = "AntiAliasingMethod",
-        name = "AntiAliasingMethod",
     })
 
-    db:from_table({
-        class = "Setting",
+    Setting.reg("DecorationsQuality", {
         category = "Graphics",
         type = "Slider",
-        max_value = 10,
-        min_value = 1,
-        int_default_value = 10,
+        max = 10,
+        min = 1,
+        default = 10,
         ---@param setting Setting
         set_action = function(setting)
-           local value = setting.int_value / 10.0
+           local value = setting.value / 10.0
            engine.props_quality = value
            print_info("set DecorationsQuality "..value)
            engine:apply()
         end,
         label = "DecorationsQuality",
-        name = "DecorationsQuality",
     })
 
-    db:from_table({
-        class = "Setting",
+    Setting.reg("LoadingRange", {
         category = "Graphics",
         type = "Slider",
-        max_value = 30,
-        min_value = 6,
-        int_default_value = 22,
+        max = 30,
+        min = 6,
+        default = 22,
         ---@param setting Setting
         set_action = function(setting)
-           local value = setting.int_value
+           local value = setting.value
            engine.loading_range = value
            print_info("set LoadingRange "..value)
            engine:apply()
         end,
         label = "LoadingRange",
-        name = "LoadingRange",
     })
 
     local function generate_slider(name, variable)
-        db:from_table({
-            class = "Setting",
+        Setting.reg(name, {
             category = "Graphics",
             type = "Slider",
-            max_value = 100,
-            min_value = 0,
-            int_default_value = 100,
+            max = 100,
+            min = 0,
+            default = 100,
             ---@param setting Setting
             set_action = function(setting)
-               local value = setting.int_value / 100.0
+               local value = setting.value / 100.0
                engine[variable] = value
                print_info("set "..variable.." "..value)
                engine:apply()
             end,
             label = name,
-            name = name,
         })
     end
 
     generate_slider("GrassRenderingRange", "props_mul")
     generate_slider("Fog", "fog")
 
-    db:from_table({
-        class = "Setting",
+    Setting.reg("Fov", {
         category = "Graphics",
         type = "Slider",
-        max_value = 100,
-        min_value = 70,
-        int_default_value = 80,
+        max = 100,
+        min = 70,
+        default = 80,
         ---@param setting Setting
         set_action = function(setting)
-           local value = setting.int_value
+           local value = setting.value
            engine.fov = value
            print_info("set ".."Fov".." "..value)
            engine:apply()
         end,
         label = "Fov",
-        name = "Fov",
     })
 
-    db:from_table({
-        class = "Setting",
+    Setting.reg("MaxFps", {
         category = "Graphics",
         type = "String",
-        default_string_value = "60",
-        string_options = {"24", "30", "60", "120"},
+        default = "60",
+        options = {"24", "30", "60", "120"},
         ---@param setting Setting
         set_action = function(setting)
-           engine.fps = tonumber(setting.string_value)
+           engine.fps = tonumber(setting.value)
            engine:apply()
         end,
         label = "MaxFps",
-        name = "MaxFps",
     })
 
-    db:from_table({
-        class = "Setting",
+    Setting.reg("VramBudget", {
         category = "Graphics",
         type = "String",
-        default_string_value = "Medium",
-        string_options = {"Low", "Medium", "High"},
+        default = "Medium",
+        options = {"Low", "Medium", "High"},
         ---@param setting Setting
         set_action = function(setting)
-            if setting.string_value == "Low" then
+            if setting.value == "Low" then
                 engine.limit_texture_pool_to_vram = true
                 engine.texture_pool_size_mb = 768
                 engine.texture_max_temp_memory_mb = 96
                 engine.texture_mip_bias = 2
                 engine.render_target_pool_min_mb = 256
-            elseif setting.string_value == "High" then
+            elseif setting.value == "High" then
                 engine.limit_texture_pool_to_vram = true
                 engine.texture_pool_size_mb = 1536
                 engine.texture_max_temp_memory_mb = 192
@@ -535,7 +492,6 @@ return function()
             engine:apply()
         end,
         label = "VramBudget",
-        name = "VramBudget",
     })
 
     generate_setting_on_off("VSync", "r.Vsync")
