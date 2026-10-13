@@ -80,7 +80,7 @@ local function build_decor(item, panel)
 
     local label = panel.label:get()
     if label ~= "" then
-        root:add(ui.RichText { text = label, font_size = 15 })
+        root:add(ui.Text { text = label, font_size = 15 })
     end
 
     local block = item.block
@@ -93,10 +93,10 @@ local function build_decor(item, panel)
     root:add(ui.HBox { gap = 10,
         ui.Border { style = "plate", padding = 4, valign = "top", ui.Image { image = ui.thumbnail(block) or item.image, size = 128 } },
         ui.VBox { fill = 1, valign = "top", gap = 8,
-            ui.RichText { text = panel_line("DecorPanelLine", token) },
+            ui.Text { text = panel_line("DecorPanelLine", token) },
             ui.HBox { gap = 6,
                 ui.Image { image = material.image, size = 32, valign = "center" },
-                ui.RichText { text = "× " .. block.mined_count, font_size = 16, wrap = false, valign = "center" },
+                ui.Text { text = "× " .. block.mined_count, font_size = 16, wrap = false, valign = "center" },
             },
         },
     })
@@ -108,7 +108,7 @@ local function build_text(item, panel)
 
     local label = panel.label:get()
     if label ~= "" then
-        root:add(ui.RichText { text = label, font_size = 16 })
+        root:add(ui.Text { text = label, font_size = 16 })
     end
 
     local body = ui.VBox { gap = 8 }
@@ -118,7 +118,7 @@ local function build_text(item, panel)
     end
     local text = table.concat(parts, "\n\n"):match("^%s*(.-)%s*$")
     if text ~= "" then
-        body:add(ui.RichText { text = text })
+        body:add(ui.Text { text = text })
     end
     if panel.context.size > 0 then
         body:add(ui.Inventory { inventory = panel.context, numbers = false })
@@ -188,9 +188,9 @@ local function bonus_percent(panel, block)
 end
 
 local function mining_card(value, caption)
-    local box = ui.VBox { ui.RichText { text = value, font_size = 20, wrap = false } }
+    local box = ui.VBox { ui.Text { text = value, font_size = 20, wrap = false } }
     if caption ~= nil then
-        box:add(ui.RichText { text = caption, font_size = 11, color = mining_caption })
+        box:add(ui.Text { text = caption, font_size = 11, color = mining_caption })
     end
     return ui.Border { style = "plate", padding = { 8, 6 }, fill = 1, box }
 end
@@ -213,15 +213,15 @@ local function build_mining(item, panel)
     local lines = ui.VBox { gap = 6 }
 
     if not miner and deposit == nil then
-        root:add(ui.RichText { text = Loc.get("MiningSurfaceTitle", "panels"), font_size = 15 })
-        lines:add(ui.RichText { text = Loc.get("MiningSurface", "panels") })
+        root:add(ui.Text { text = Loc.get("MiningSurfaceTitle", "panels"), font_size = 15 })
+        lines:add(ui.Text { text = Loc.get("MiningSurface", "panels") })
         root:add(lines)
         return root
     end
 
     local label = panel.label:get()
     if label ~= "" then
-        root:add(ui.RichText { text = label, font_size = 15 })
+        root:add(ui.Text { text = label, font_size = 15 })
     end
     root:add(lines)
 
@@ -252,7 +252,7 @@ local function build_mining(item, panel)
         lines:add(item_row({ deposit.item }))
         local machine = panel:get_string("machine")
         if machine ~= "" then
-            lines:add(ui.RichText { text = Loc.format("MiningMachineLine", "panels", { "{machine:" .. machine .. "}" }) })
+            lines:add(ui.Text { text = Loc.format("MiningMachineLine", "panels", { "{machine:" .. machine .. "}" }) })
         end
     end
 
@@ -272,7 +272,7 @@ end
 
 local function build_group(item, panel)
     local root = ui.VBox { gap = 8 }
-    root:add(ui.RichText { text = panel.label:get(), font_size = 15 })
+    root:add(ui.Text { text = panel.label:get(), font_size = 15 })
     root:add(item_row(ItemGroup.cast(item).members))
     return root
 end
@@ -382,7 +382,7 @@ local function build_ore(item, panel)
     end
 
     local root = ui.VBox { gap = 8 }
-    root:add(ui.RichText { text = panel.label:get(), font_size = 15 })
+    root:add(ui.Text { text = panel.label:get(), font_size = 15 })
 
     local tree = ui.VBox {}
     tree:add(ore_line(0, ore_slot(links[1])))
