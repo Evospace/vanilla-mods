@@ -203,7 +203,7 @@ return function()
     Setting.reg("Fullscreen", {
         category = "Graphics",
         type = "String",
-        default = "Windowed",
+        default = "WindowedFullscreen",
         options = {"Fullscreen", "WindowedFullscreen", "Windowed"},
         ---@param setting Setting
         set_action = function(setting)
@@ -223,7 +223,7 @@ return function()
     Setting.reg("Resolution", {
         category = "Graphics",
         type = "String",
-        default = "800x600",
+        default = Game.get_desktop_resolution(),
         options = Game.get_supported_resolutions(),
         ---@param setting Setting
         set_action = function(setting)
