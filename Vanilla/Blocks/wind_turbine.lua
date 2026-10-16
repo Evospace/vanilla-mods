@@ -8,7 +8,7 @@ local logic = function(self)
     env.wind_powered = true
     env.cut_in_wind_speed = 3.0
     env.rated_wind_speed = 14.0
-    env.exclusion_radius = 4
+    env.exclusion_radius = 9
 
     local inv = ResourceInventory.new(crafter, "rio")
     crafter.energy_output_inventory = inv
