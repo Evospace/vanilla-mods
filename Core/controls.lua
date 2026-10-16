@@ -320,6 +320,20 @@ return function()
       label = "ToggleFoundation",
       default_key = "H",
    })
+   Setting.reg("Undo", {
+      category = "Controls",
+      type = "Key",
+      key_binding = "Undo",
+      label = "Undo",
+      default_key = "Ctrl+Z",
+   })
+   Setting.reg("Redo", {
+      category = "Controls",
+      type = "Key",
+      key_binding = "Redo",
+      label = "Redo",
+      default_key = "Ctrl+Y",
+   })
    Setting.reg("ToggleSideIcons", {
       category = "Controls",
       type = "Key",
