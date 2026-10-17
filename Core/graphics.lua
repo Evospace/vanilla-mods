@@ -1,4 +1,6 @@
 return function()
+    local steam_deck = Game.is_steam_deck()
+
     local function option4_to_int(value)
         local preset = 0
         if value == "Medium" then preset = 1 end
@@ -7,113 +9,60 @@ return function()
         return preset
     end
 
+    local function preset_values(preset)
+        local deck = preset == "SteamDeck"
+        local level = deck and "High" or preset
+        local scalability = option4_to_int(level)
+        local function pick(values)
+            return values[scalability + 1]
+        end
+
+        local values = {
+            {"ShadowQuality", deck and "Medium" or level},
+            {"TextureQuality", level},
+            {"EffectsQuality", level},
+            {"PostProcessQuality", level},
+            {"GlobalIllumination", pick({"Disable", "Disable", "ScreenSpace", "Lumen"})},
+            {"Reflection", pick({"Disable", "ScreenSpace", "ScreenSpace", "Lumen"})},
+            {"ReflectionQuality", pick({"Low", "Low", "High", "High"})},
+            {"MaterialQuality", pick({"Low", "Medium", "High", "High"})},
+            {"GrassRenderingRange", pick({30, 70, 100, 100})},
+            {"DecorationsQuality", pick({2, 5, 9, 10})},
+            {"LoadingRange", pick({15, 18, 25, 27})},
+            {"AntiAliasingMethod", pick({"FXAA", "FXAA", "TAA", "TAA"})},
+            {"ScreenPersentage", "100%"},
+            {"DetailShadows", (deck or scalability <= 1) and "Off" or "On"},
+            {"SpotlightShadows", scalability <= 1 and "Off" or "On"},
+            {"Transparency", pick({"Low", "Medium", "High", "High"})},
+            {"CloudsQuality", pick({"Off", "Simple", "Volumteric", "Volumteric"})},
+            {"WindAnimation", pick({"Off", "Minimal", "Full", "Full"})},
+            {"WeatherParticles", pick({"Low", "High", "High", "High"})},
+            {"VramBudget", pick({"Low", "Medium", "High", "High"})},
+        }
+        if deck then
+            table.insert(values, {"MaxFps", "40"})
+        end
+        return values
+    end
+
+    local preset_options = {"Low", "Medium", "High", "Epic"}
+    if steam_deck then
+        table.insert(preset_options, "SteamDeck")
+    end
+
     Setting.reg("ScalabilityPreset", {
         category = "Graphics",
         type = "Buttons",
 
-        default = "High",
-        options = {"Low", "Medium", "High", "Epic"},
+        default = steam_deck and "SteamDeck" or "High",
+        options = preset_options,
         ---@param setting Setting
         set_action = function(setting)
-            local scalability = option4_to_int(setting.value)
-
-            local four_opts = {"ShadowQuality", "TextureQuality", "EffectsQuality", "PostProcessQuality"}
-            for _, name in ipairs(four_opts) do
-                local set = Setting.find(name)
-                set.value = setting.value
+            for _, entry in ipairs(preset_values(setting.value)) do
+                local set = Setting.find(entry[1])
+                set.value = entry[2]
                 set:set_action()
             end
-
-            local relf_values = {"Disable", "Disable", "ScreenSpace", "Lumen"}
-            local set = Setting.find("GlobalIllumination")
-            set.value = relf_values[scalability + 1]
-            set:set_action()
-
-            local relf_values = {"Disable", "ScreenSpace", "ScreenSpace", "Lumen"}
-            local set = Setting.find("Reflection")
-            set.value = relf_values[scalability + 1]
-            set:set_action()
-
-            local relf_values = {"Low", "Low", "High", "High"}
-            local set = Setting.find("ReflectionQuality")
-            set.value = relf_values[scalability + 1]
-            set:set_action()
-
-            local relf_values = {"Low", "Medium", "High", "High"}
-            local set = Setting.find("MaterialQuality")
-            set.value = relf_values[scalability + 1]
-            set:set_action()
-
-            local values = {0.3, 0.7, 1.0, 1.0}
-            local set = Setting.find("GrassRenderingRange")
-            set.value = math.floor(values[scalability + 1] * 100)
-            set:set_action()
-
-            local values = {2, 5, 9, 10}
-            local set = Setting.find("DecorationsQuality")
-            set.value = math.floor(values[scalability + 1])
-            set:set_action()
-
-            local values = {15, 18, 25, 27}
-            local set = Setting.find("LoadingRange")
-            set.value = values[scalability + 1]
-            set:set_action()
-
-            local values = {"FXAA", "FXAA", "TAA", "TAA"}
-            local set = Setting.find("AntiAliasingMethod")
-            set.value = values[scalability + 1]
-            set:set_action()
-
-            local values = {"100%", "100%", "100%", "100%"}
-            local set = Setting.find("ScreenPersentage")
-            set.value = values[scalability + 1]
-            set:set_action()
-
-            local detail = Setting.find("DetailShadows")
-            if scalability <= 1 then
-                detail.value = "Off"
-            else
-                detail.value = "On"
-            end
-            detail:set_action()
-
-            local spotlight = Setting.find("SpotlightShadows")
-            if scalability <= 1 then
-                spotlight.value = "Off"
-            else
-                spotlight.value = "On"
-            end
-            spotlight:set_action()
-
-            local values = {"Low", "Medium", "High", "High"}
-            local transparency = Setting.find("Transparency")
-            transparency.value = values[scalability + 1]
-            transparency:set_action()
-
-            local clouds = Setting.find("CloudsQuality")
-            if scalability == 0 then
-                clouds.value = "Off"
-            elseif scalability == 1 then
-                clouds.value = "Simple"
-            else
-                clouds.value = "Volumteric"
-            end
-            clouds:set_action()
-
-            local values = {"Off", "Minimal", "Full", "Full"}
-            local wind = Setting.find("WindAnimation")
-            wind.value = values[scalability + 1]
-            wind:set_action()
-
-            local values = {"Low", "High", "High", "High"}
-            local particles = Setting.find("WeatherParticles")
-            particles.value = values[scalability + 1]
-            particles:set_action()
-
-            local values = {"Low", "Medium", "High", "High"}
-            local vram = Setting.find("VramBudget")
-            vram.value = values[scalability + 1]
-            vram:set_action()
 
             Setting.update_widgets()
         end,
@@ -440,11 +389,16 @@ return function()
         label = "Fov",
     })
 
+    local fps_options = {"24", "30", "60", "120"}
+    if steam_deck then
+        table.insert(fps_options, 3, "40")
+    end
+
     Setting.reg("MaxFps", {
         category = "Graphics",
         type = "String",
         default = "60",
-        options = {"24", "30", "60", "120"},
+        options = fps_options,
         ---@param setting Setting
         set_action = function(setting)
            engine.fps = tonumber(setting.value)
@@ -496,4 +450,11 @@ return function()
 
     generate_setting_on_off("VSync", "r.Vsync")
 
+    if steam_deck then
+        for _, entry in ipairs(preset_values("SteamDeck")) do
+            local set = Setting.find(entry[1])
+            set.default = entry[2]
+            set.value = entry[2]
+        end
+    end
 end
