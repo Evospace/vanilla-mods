@@ -72,7 +72,7 @@ local function describe_decor(items)
 end
 
 local function panel_line(key, value)
-    return (Loc.get(key, "panels"):gsub("{0}", function() return value end))
+    return (Loc.new(key, "panels"):raw():gsub("{0}", function() return value end))
 end
 
 local function build_decor(item, panel)
