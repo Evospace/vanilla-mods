@@ -320,6 +320,13 @@ return function()
       label = "ToggleFoundation",
       default_key = "H",
    })
+   Setting.reg("RunAxisSnap", {
+      category = "Controls",
+      type = "Key",
+      key_binding = "RunAxisSnap",
+      label = "RunAxisSnap",
+      default_key = "X",
+   })
    Setting.reg("Undo", {
       category = "Controls",
       type = "Key",
