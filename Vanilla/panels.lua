@@ -128,7 +128,7 @@ local function build_text(item, panel)
     return root
 end
 
-local mining_caption = "#ced4dd"
+local caption_color = "#ced4dd"
 
 local function gui_number(value)
     local rounded = math.floor(value + 0.5)
@@ -190,7 +190,7 @@ end
 local function mining_card(value, caption)
     local box = ui.VBox { ui.Text { text = value, font_size = 20, wrap = false } }
     if caption ~= nil then
-        box:add(ui.Text { text = caption, font_size = 11, color = mining_caption })
+        box:add(ui.Text { text = caption, font_size = 11, color = caption_color })
     end
     return ui.Border { style = "plate", padding = { 8, 6 }, fill = 1, box }
 end
@@ -329,7 +329,7 @@ local function slot_of(inventory, item)
     return nil
 end
 
-local function ore_slot(item)
+local function item_slot(item)
     local inventory = AutosizeInventory.new_simple()
     inventory.zero_slots = true
     inventory:add(item, 0)
@@ -385,7 +385,7 @@ local function build_ore(item, panel)
     root:add(ui.Text { text = panel.label:get(), font_size = 15 })
 
     local tree = ui.VBox {}
-    tree:add(ore_line(0, ore_slot(links[1])))
+    tree:add(ore_line(0, item_slot(links[1])))
 
     local column = 0
     local shown = {}
@@ -396,10 +396,10 @@ local function build_ore(item, panel)
         end
         tree:add(ore_down(column))
         for _, step in ipairs(side) do
-            tree:add(ore_line(column, ore_slot(step.machine), ui.Inventory { inventory = step.recipe.output, numbers = true }))
+            tree:add(ore_line(column, item_slot(step.machine), ui.Inventory { inventory = step.recipe.output, numbers = true }))
         end
         for _, step in ipairs(down) do
-            tree:add(ore_line(column, ore_slot(step.machine), ui.Inventory { inventory = step.recipe.output, numbers = true }))
+            tree:add(ore_line(column, item_slot(step.machine), ui.Inventory { inventory = step.recipe.output, numbers = true }))
         end
         if #down == 0 then
             break
@@ -409,6 +409,93 @@ local function build_ore(item, panel)
 
     root:add(tree)
     return root
+end
+
+local tier_current = "#00bbff29"
+local tier_power_width = 84
+local tier_badge_width = 28
+local tier_skip = { None = true, Assembler = true, Constructor = true }
+
+local tier_families = {}
+
+local function tier_items()
+    local families = {}
+    for _, proto in pairs(db:objects()) do
+        local block = StaticBlock.cast(proto)
+        if block ~= nil and not tier_skip[block.replace_tag] and block.item ~= nil then
+            local logic = block.logic
+            local key = block.replace_tag .. ":" .. (logic ~= nil and logic.name or "")
+            families[key] = families[key] or {}
+            table.insert(families[key], block)
+        end
+    end
+
+    local items = {}
+    for _, family in pairs(families) do
+        if #family > 1 then
+            table.sort(family, function(a, b)
+                if a.tier ~= b.tier then
+                    return a.tier < b.tier
+                end
+                return a.name < b.name
+            end)
+            for _, block in ipairs(family) do
+                tier_families[block.item.name] = family
+                items[#items + 1] = block.item
+            end
+        end
+    end
+    return items
+end
+
+local function tier_power(block)
+    local per_tick, resource = block.energy_production_per_tick, block.energy_production_item
+    if per_tick <= 0 then
+        per_tick, resource = block.energy_consumption_per_tick, block.energy_consumption_item
+    end
+    local cell = ui.HBox { width = tier_power_width, gap = 4, ui.Spacer { fill = 1 } }
+    if per_tick <= 0 then
+        return cell
+    end
+    if resource ~= nil then
+        cell:add(ui.Image { image = resource.image, size = 16, valign = "center" })
+    end
+    cell:add(ui.Text { text = gui_power(per_tick * game.tick_rate), font_size = 13, color = "dim", wrap = false, valign = "center" })
+    return cell
+end
+
+local function tier_row(block, current, powered)
+    local item = block.item
+    local tint = current and "primary" or caption_color
+    local row = ui.HBox { gap = 8,
+        item_slot(item),
+        ui.Text { text = item.label:get(), font_size = 13, color = tint, fill = 1, valign = "center" },
+    }
+    if powered then
+        row:add(tier_power(block))
+    end
+    row:add(ui.Text { text = Loc.format("PlateTierBadge", "panels", { block.tier }), font_size = 13, color = tint, wrap = false, align = "right", width = tier_badge_width, valign = "center" })
+    return ui.Border { style = "plate", color = current and tier_current or nil, padding = { 6, 3 }, row }
+end
+
+local function build_tiers(item, panel)
+    local family = tier_families[item.name]
+    local powered = false
+    for _, block in ipairs(family) do
+        if block.energy_production_per_tick > 0 or block.energy_consumption_per_tick > 0 then
+            powered = true
+        end
+    end
+
+    local rows = ui.VBox { gap = 2 }
+    for _, block in ipairs(family) do
+        rows:add(tier_row(block, block.item.name == item.name, powered))
+    end
+
+    return ui.VBox { gap = 8,
+        ui.Text { text = panel.label:get(), font_size = 15 },
+        rows,
+    }
 end
 
 local function fill(panel, title, items, data)
@@ -467,6 +554,12 @@ local function register()
     ore_panel.build = build_ore
     ore_panel.label = Loc.new("OreProcessingTitle", "panels")
     ore_panel.items = ore_chain_items()
+
+    local tiers_panel = StaticItemPanel.reg("MachineTiers")
+    tiers_panel.build = build_tiers
+    tiers_panel.label = Loc.new("NeiTiers", "ui")
+    tiers_panel.order = 1
+    tiers_panel.items = tier_items()
 end
 
 return { register = register, fill_defaults = fill_defaults }
