@@ -413,6 +413,171 @@ function VanillaQuestsMod.init()
       },
    })
 
+   qb.chapter("Steel", {
+      label = Loc.new("SteelChapter", "quests"),
+      requires = { "QueueResearch" },
+   })
+
+   qb.quest("AutomateFuel", {
+      chapter = "Steel",
+      label = Loc.new("AutomateFuel", "quests"),
+      description = {
+         Loc.new("AutomateFuelDesc1", "quests"),
+         Loc.new("AutomateFuelDesc2", "quests"),
+         Loc.new("AutomateFuelDesc3", "quests"),
+      },
+      context = { "CopperDrillingRig", "CoalOre", "CopperAutomaticFarm", "Log", "CopperPump", "CopperAtmosphericCondenser" },
+      unlocks = { "MakeCoke" },
+      any = true,
+      objectives = {
+         qb.produce_item({ "CoalOre" }, 20,
+            { label = Loc.new("ObjDrillCoalOre", "quests") }),
+         qb.produce_item({ "Log" }, 20,
+            { label = Loc.new("ObjFarmLogs", "quests") }),
+      },
+   })
+
+   qb.quest("MakeCoke", {
+      chapter = "Steel",
+      label = Loc.new("MakeCoke", "quests"),
+      description = {
+         Loc.new("MakeCokeDesc1", "quests"),
+         Loc.new("MakeCokeDesc2", "quests"),
+         Loc.new("MakeCokeDesc3", "quests"),
+      },
+      context = { "CopperOven", "CopperFurnace", "Coke", "Creosote", "CopperPump", "CopperFluidFurnace", "CopperDestroyer" },
+      unlocks = { "MineIron" },
+      objectives = {
+         qb.produce_item({ "Coke" }, 10,
+            { label = Loc.new("ObjProduceCoke", "quests") }),
+      },
+   })
+
+   qb.quest("MineIron", {
+      chapter = "Steel",
+      label = Loc.new("MineIron", "quests"),
+      description = {
+         Loc.new("MineIronDesc1", "quests"),
+         Loc.new("MineIronDesc2", "quests"),
+      },
+      context = { "MagnetiteOre", "PyriteOre", "CopperDrillingRig", "IronPlate" },
+      unlocks = { "SmeltSteel" },
+      objectives = {
+         qb.produce_item({ "IronPlate" }, 10,
+            { label = Loc.new("ObjSmeltIronPlate", "quests") }),
+      },
+   })
+
+   qb.quest("SmeltSteel", {
+      chapter = "Steel",
+      label = Loc.new("SmeltSteel", "quests"),
+      description = {
+         Loc.new("SmeltSteelDesc1", "quests"),
+      },
+      context = { "CopperBlastFurnace", "IronPlate", "Coke", "SteelPlate" },
+      unlocks = { "SteamIndustry" },
+      objectives = {
+         qb.produce_item({ "SteelPlate" }, 10,
+            { label = Loc.new("ObjSmeltSteelPlate", "quests") }),
+      },
+   })
+
+   qb.quest("SteamIndustry", {
+      chapter = "Steel",
+      label = Loc.new("SteamIndustry", "quests"),
+      description = {
+         Loc.new("SteamIndustryDesc1", "quests"),
+         Loc.new("SteamIndustryDesc2", "quests"),
+         Loc.new("SteamIndustryDesc3", "quests"),
+      },
+      context = { "SteelBoiler", "SteelSteamEngine", "SteelCompactGenerator", "Steam", "Resistor", "AdvancedCircuit" },
+      unlocks = { "AdvancedCircuits" },
+      objectives = {
+         qb.research("Boiler", { label = Loc.new("ObjResearchBoiler", "quests") }),
+         qb.research("SteamEngine", { label = Loc.new("ObjResearchSteamEngine", "quests") }),
+         qb.research("Resistor", { label = Loc.new("ObjResearchResistor", "quests") }),
+         qb.research("AdvancedCircuit", { label = Loc.new("ObjResearchAdvancedCircuit", "quests") }),
+      },
+   })
+
+   qb.quest("AdvancedCircuits", {
+      chapter = "Steel",
+      label = Loc.new("AdvancedCircuits", "quests"),
+      description = {
+         Loc.new("AdvancedCircuitsDesc1", "quests"),
+         Loc.new("AdvancedCircuitsDesc2", "quests"),
+         Loc.new("AdvancedCircuitsDesc3", "quests"),
+      },
+      context = { "AdvancedCircuit", "CircuitBoard", "Resistor", "Circuit", "CopperConstructor", "SteelComputer" },
+      unlocks = { "ResearchAluminium" },
+      objectives = {
+         qb.research("DistributedComputing1", { label = Loc.new("ObjResearchDistributedComputing1", "quests") }),
+         qb.produce_item({ "AdvancedCircuit" }, 3,
+            { label = Loc.new("ObjProduceAdvancedCircuit", "quests") }),
+      },
+   })
+
+   qb.quest("ResearchAluminium", {
+      chapter = "Steel",
+      label = Loc.new("ResearchAluminium", "quests"),
+      description = {
+         Loc.new("ResearchAluminiumDesc1", "quests"),
+      },
+      context = { "SteelElectrolyzer", "SteelArcSmelter", "AluminiumPlate" },
+      objectives = {
+         qb.research("AluminiumProduction", { label = Loc.new("ObjResearchAluminiumProduction", "quests") }),
+      },
+   })
+
+   qb.chapter("Aluminium", {
+      label = Loc.new("AluminiumChapter", "quests"),
+      requires = { "ResearchAluminium" },
+   })
+
+   qb.quest("MineAluminiumOre", {
+      chapter = "Aluminium",
+      label = Loc.new("MineAluminiumOre", "quests"),
+      description = {
+         Loc.new("MineAluminiumOreDesc1", "quests"),
+      },
+      context = { "BauxiteOre", "RubyOre", "CopperDrillingRig" },
+      unlocks = { "ProcessAluminiumOre" },
+      objectives = {
+         qb.produce_item({ "BauxiteOre", "RubyOre" }, 20,
+            { label = Loc.new("ObjDrillAluminiumOre", "quests") }),
+      },
+   })
+
+   qb.quest("ProcessAluminiumOre", {
+      chapter = "Aluminium",
+      label = Loc.new("ProcessAluminiumOre", "quests"),
+      description = {
+         Loc.new("ProcessAluminiumOreDesc1", "quests"),
+         Loc.new("ProcessAluminiumOreDesc2", "quests"),
+      },
+      context = { "BauxiteDust", "RubyDust", "CopperSmelter", "CopperAutomaticHammer", "CopperMacerator", "SteelSeparator" },
+      unlocks = { "Electrolysis" },
+      objectives = {
+         qb.produce_item({ "BauxiteDust", "RubyDust" }, 24,
+            { label = Loc.new("ObjProduceAluminiumOreDust", "quests") }),
+      },
+   })
+
+   qb.quest("Electrolysis", {
+      chapter = "Aluminium",
+      label = Loc.new("Electrolysis", "quests"),
+      description = {
+         Loc.new("ElectrolysisDesc1", "quests"),
+         Loc.new("ElectrolysisDesc2", "quests"),
+         Loc.new("ElectrolysisDesc3", "quests"),
+      },
+      context = { "SteelElectrolyzer", "AluminiumOxideDust", "AluminiumDust", "Oxygen", "CopperPump", "CopperDestroyer", "CopperLoader", "SteelSorter", "CopperItemRack" },
+      objectives = {
+         qb.produce_item({ "AluminiumDust" }, 12,
+            { label = Loc.new("ObjProduceAluminiumDust", "quests") }),
+      },
+   })
+
    qb.build()
 end
 

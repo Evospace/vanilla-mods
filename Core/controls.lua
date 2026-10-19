@@ -285,6 +285,27 @@ return function()
       label = "Sprint",
       default_key = "LeftShift",
    })
+   Setting.reg("ModAlternate", {
+      category = "Controls",
+      type = "Key",
+      key_binding = "ModAlternate",
+      label = "ModAlternate",
+      default_key = "LeftShift",
+   })
+   Setting.reg("ModAxis", {
+      category = "Controls",
+      type = "Key",
+      key_binding = "ModAxis",
+      label = "ModAxis",
+      default_key = "LeftAlt",
+   })
+   Setting.reg("ModTake", {
+      category = "Controls",
+      type = "Key",
+      key_binding = "ModTake",
+      label = "ModTake",
+      default_key = "LeftControl",
+   })
    Setting.reg("SwitchCreativeMode", {
       category = "Controls",
       type = "Key",
