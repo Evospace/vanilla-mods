@@ -16,7 +16,7 @@ local logic = function(self)
 
     local tier = Vlib.tier_material[conductor.static_block.tier + 1]
 
-    conductor.capacity = 256000 * (level + 1)
+    conductor.capacity = 512000 * 2 ^ level
     conductor.conductor_channel = 1000
     conductor.channel = "Electricity"
     conductor.single_cover = StaticCover.get(tier.."BatteryBoxSingle")
