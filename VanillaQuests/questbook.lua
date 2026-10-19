@@ -495,7 +495,18 @@ end
 
 function qb.return_home(opts)
    opts = opts or {}
-   local left = false
+   local radius = opts.radius or 12
+   local function at_home()
+      local player = Player.get()
+      if player == nil or dim == nil then
+         return nil
+      end
+      local cell = player:cell()
+      local spawn = dim:spawn_point()
+      local dx = cell.x - spawn.x
+      local dy = cell.y - spawn.y
+      return dx * dx + dy * dy <= radius * radius
+   end
    return {
       kind = "return_home",
       id = opts.id or "return_home",
@@ -503,17 +514,16 @@ function qb.return_home(opts)
       required = 1,
       show_progress = false,
       label = opts.label,
-      match = function(ctx)
-         if ctx.pos == nil then
-            return false
-         end
-         if ctx.pos.x ~= 0 or ctx.pos.y ~= 0 then
-            left = true
-            return false
-         end
-         return left
-      end,
+      match = function(ctx) return at_home() == true end,
       amount = function(ctx) return 1 end,
+      poll_absolute = true,
+      poll = function()
+         local home = at_home()
+         if home == nil then
+            return nil
+         end
+         return home and 1 or 0
+      end,
    }
 end
 

@@ -228,7 +228,7 @@ return function()
         set_action = function(setting)
             engine.transparency_preset = option4_to_int(setting.value)
         end,
-        label = "Transparency",
+        label = "TransparencyQuality",
     })
 
     Setting.reg("MaterialQuality", {
@@ -302,7 +302,7 @@ return function()
             if setting.value == "100%" then preset = 100 end
             Console.run("r.ScreenPercentage "..preset)
         end,
-        label = "ScreenPersentage",
+        label = "ScreenPercentage",
     })
 
     Setting.reg("AntiAliasingMethod", {

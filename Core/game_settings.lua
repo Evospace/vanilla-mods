@@ -129,7 +129,7 @@ return function()
            print_info("set AutosavePeriod "..value)
            engine:apply()
         end,
-        label = "AutosavePeriod",
+        label = "AutosaveInterval",
      })
 
     Setting.reg("UndoConfirmMinutes", {
