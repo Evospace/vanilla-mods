@@ -1,3 +1,5 @@
+local Vlib = require('@VanillaLib/vlib')
+
 local plate_widget = "/Script/Evospace.PlatePanelWidget"
 
 local surface_names = {

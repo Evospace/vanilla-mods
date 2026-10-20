@@ -1,3 +1,4 @@
+local Vlib = require('@VanillaLib/vlib')
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)

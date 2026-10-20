@@ -1,3 +1,5 @@
+local Vlib = require('@VanillaLib/vlib')
+
 local logic = function(self)
     local conductor = ElectricityContainerBlockLogic.cast(self)
 

@@ -1,4 +1,4 @@
-local qb = require('questbook')
+local qb = require('@self/questbook')
 
 local VanillaQuestsMod = {}
 

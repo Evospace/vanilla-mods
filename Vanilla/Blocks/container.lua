@@ -1,3 +1,5 @@
+local Vlib = require('@VanillaLib/vlib')
+
 local logic = function(self)
     local container = FluidContainerBlockLogic.cast(self)
 

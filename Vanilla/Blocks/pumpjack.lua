@@ -1,3 +1,5 @@
+local Vlib = require('@VanillaLib/vlib')
+
 local logic = function(self)
     local crafter = DrillingMachineBase.cast(self)
     crafter.ticks_per_item = Vlib.mining.pumpjack.ticks

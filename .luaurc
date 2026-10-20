@@ -1,0 +1,10 @@
+{
+    "lint": { "CommentDirective": false },
+    "aliases": {
+        "Core": "./Core",
+        "Vanilla": "./Vanilla",
+        "VanillaLib": "./VanillaLib",
+        "VanillaQuests": "./VanillaQuests",
+        "VanillaTips": "./VanillaTips"
+    }
+}

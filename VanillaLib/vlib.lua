@@ -1,4 +1,4 @@
-local Vlib = {}
+local Vlib
 
 Vlib = {
     ---@param parent Object
@@ -143,6 +143,15 @@ Vlib = {
             machine = "Pumpjack",
         },
     },
+
+    conveyor_ticks_per_item = { 12, 8, 6, 4, 3, 2, 1 },
+
+    --- @param level integer
+    --- @return integer
+    conveyor_ticks = function(level)
+        local ticks = Vlib.conveyor_ticks_per_item
+        return ticks[math.min(level + 1, #ticks)]
+    end,
 
     --- @param names string[]
     --- @param register_fn function

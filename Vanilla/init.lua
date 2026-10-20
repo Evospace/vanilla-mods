@@ -1,10 +1,6 @@
-require('balance')
+local Vlib = require('@VanillaLib/vlib')
 
 local vanilla_mod = {}
-
-function vanilla_mod.pre_init()
-   Vlib = require('vlib')
-end
 
 function vanilla_mod.init()
    local es = EventSystem.get()
@@ -17,9 +13,9 @@ function vanilla_mod.init()
       end
    end
 
-   require('Blocks/all')
+   require('@self/Blocks/all')()
 
-   require('panels').register()
+   require('@self/panels').register()
 
    local ss = StaticStructure.reg("StartPlatform")
 
@@ -142,7 +138,7 @@ function vanilla_mod.init()
 end
 
 function vanilla_mod.post_init()
-   require('panels').fill_defaults()
+   require('@self/panels').fill_defaults()
 end
 
 db:mod(vanilla_mod)

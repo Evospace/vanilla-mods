@@ -1,109 +1,113 @@
-Vlib.FillBlock("OreWasher", require('Blocks/ore_washer'))
+local Vlib = require('@VanillaLib/vlib')
 
-Vlib.FillBlock("Macerator", require('Blocks/macerator'))
+return function()
+    Vlib.FillBlock("OreWasher", require('./ore_washer'))
 
-Vlib.FillBlock("Fermenter", require('Blocks/fermenter'))
+    Vlib.FillBlock("Macerator", require('./macerator'))
 
-Vlib.FillBlock("AutomaticHammer", require('Blocks/automatic_hammer'))
+    Vlib.FillBlock("Fermenter", require('./fermenter'))
 
-Vlib.FillBlock("StirlingEngine", require('Blocks/stirling_engine'))
+    Vlib.FillBlock("AutomaticHammer", require('./automatic_hammer'))
 
-Vlib.FillBlock("CompactGenerator", require('Blocks/compact_generator'))
+    Vlib.FillBlock("StirlingEngine", require('./stirling_engine'))
 
-Vlib.FillBlock("Smelter", require('Blocks/smelter'))
+    Vlib.FillBlock("CompactGenerator", require('./compact_generator'))
 
-Vlib.FillBlock("IndustrialSmelter", require('Blocks/industrial_smelter'))
+    Vlib.FillBlock("Smelter", require('./smelter'))
 
-Vlib.FillBlock("Furnace", require('Blocks/furnace'))
+    Vlib.FillBlock("IndustrialSmelter", require('./industrial_smelter'))
 
-Vlib.FillBlock("FluidFurnace", require('Blocks/fluid_furnace'))
+    Vlib.FillBlock("Furnace", require('./furnace'))
 
-Vlib.FillBlock("ElectricFurnace", require('Blocks/electric_furnace'))
+    Vlib.FillBlock("FluidFurnace", require('./fluid_furnace'))
 
-Vlib.FillBlock("Destroyer", require('Blocks/destroyer'))
+    Vlib.FillBlock("ElectricFurnace", require('./electric_furnace'))
 
-Vlib.FillBlock("Assembler", require('Blocks/assembler'))
+    Vlib.FillBlock("Destroyer", require('./destroyer'))
 
-Vlib.FillBlock("Oven", require('Blocks/oven'))
+    Vlib.FillBlock("Assembler", require('./assembler'))
 
-Vlib.FillBlock("BlastFurnace", require('Blocks/blast_furnace'))
+    Vlib.FillBlock("Oven", require('./oven'))
 
-Vlib.FillBlock("AutomaticFarm", require('Blocks/automatic_farm'))
+    Vlib.FillBlock("BlastFurnace", require('./blast_furnace'))
 
-Vlib.FillBlock("AtmosphericCondenser", require('Blocks/atmospheric_condenser'))
+    Vlib.FillBlock("AutomaticFarm", require('./automatic_farm'))
 
-Vlib.FillBlock("Boiler", require('Blocks/boiler'))
+    Vlib.FillBlock("AtmosphericCondenser", require('./atmospheric_condenser'))
 
-Vlib.FillBlock("SteamTurbine", require('Blocks/steam_turbine'))
+    Vlib.FillBlock("Boiler", require('./boiler'))
 
-Vlib.FillBlock("SteamEngine", require('Blocks/steam_engine'))
+    Vlib.FillBlock("SteamTurbine", require('./steam_turbine'))
 
-Vlib.FillBlock("Generator", require('Blocks/generator'))
+    Vlib.FillBlock("SteamEngine", require('./steam_engine'))
 
-Vlib.FillBlock("ElectricEngine", require('Blocks/electric_engine'))
-Vlib.FillBlock("BiElectricEngine", require('Blocks/bi_electric_engine'))
+    Vlib.FillBlock("Generator", require('./generator'))
 
-Vlib.FillBlock("Separator", require('Blocks/separator'))
+    Vlib.FillBlock("ElectricEngine", require('./electric_engine'))
+    Vlib.FillBlock("BiElectricEngine", require('./bi_electric_engine'))
 
-Vlib.FillBlock("Electrolyzer", require('Blocks/electrolyzer'))
+    Vlib.FillBlock("Separator", require('./separator'))
 
-Vlib.FillBlock("ArcSmelter", require('Blocks/arc_smelter'))
+    Vlib.FillBlock("Electrolyzer", require('./electrolyzer'))
 
-Vlib.FillBlock("ChemicalBath", require('Blocks/chemical_bath'))
+    Vlib.FillBlock("ArcSmelter", require('./arc_smelter'))
 
-Vlib.FillBlock("IndustrialChemReactor", require('Blocks/industrial_chem_reactor'))
+    Vlib.FillBlock("ChemicalBath", require('./chemical_bath'))
 
-Vlib.FillBlock("Mixer", require('Blocks/mixer'))
+    Vlib.FillBlock("IndustrialChemReactor", require('./industrial_chem_reactor'))
 
-Vlib.FillBlock("PyrolysisUnit", require('Blocks/pyrolysis_unit'))
+    Vlib.FillBlock("Mixer", require('./mixer'))
 
-Vlib.FillBlock("FractionatingColumn", require('Blocks/fractionating_column'))
+    Vlib.FillBlock("PyrolysisUnit", require('./pyrolysis_unit'))
 
-Vlib.FillBlock("Constructor", require('Blocks/constructor'))
+    Vlib.FillBlock("FractionatingColumn", require('./fractionating_column'))
 
-Vlib.FillBlock("Sifter", require('Blocks/sifter'))
+    Vlib.FillBlock("Constructor", require('./constructor'))
 
-Vlib.FillBlock("Computer", require('Blocks/computer'))
+    Vlib.FillBlock("Sifter", require('./sifter'))
 
-Vlib.FillBlock("BatteryBox", require('Blocks/battery_box'))
+    Vlib.FillBlock("Computer", require('./computer'))
 
-Vlib.FillBlock("LogicWire", require('Blocks/data_wire'))
-Vlib.FillBlock("Pipe", require('Blocks/pipe'))
-Vlib.FillBlock("HeatPipe", require('Blocks/heat_pipe'))
-Vlib.FillBlock("Flywheel", require('Blocks/flywheel'))
+    Vlib.FillBlock("BatteryBox", require('./battery_box'))
 
-Vlib.FillBlock("Container", require('Blocks/container'))
+    Vlib.FillBlock("LogicWire", require('./data_wire'))
+    Vlib.FillBlock("Pipe", require('./pipe'))
+    Vlib.FillBlock("HeatPipe", require('./heat_pipe'))
+    Vlib.FillBlock("Flywheel", require('./flywheel'))
 
-Vlib.FillBlock("Chest", require('Blocks/chest'))
-Vlib.FillBlock("ItemRack", require('Blocks/item_rack'))
-Vlib.FillBlock("DeepStorage", require('Blocks/deep_storage'))
+    Vlib.FillBlock("Container", require('./container'))
 
-Vlib.FillBlock("Conveyor", require('Blocks/conveyor'))
-Vlib.FillBlock("Splitter", require('Blocks/splitter'))
-Vlib.FillBlock("Sorter", require('Blocks/splitter'))
+    Vlib.FillBlock("Chest", require('./chest'))
+    Vlib.FillBlock("ItemRack", require('./item_rack'))
+    Vlib.FillBlock("DeepStorage", require('./deep_storage'))
 
-Vlib.FillBlock("TeslaTower", require('Blocks/tesla_tower'))
+    Vlib.FillBlock("Conveyor", require('./conveyor'))
+    Vlib.FillBlock("Splitter", require('./splitter'))
+    Vlib.FillBlock("Sorter", require('./splitter'))
 
-Vlib.FillBlock("KineticHeater", require('Blocks/kinetic_heater'))
+    Vlib.FillBlock("TeslaTower", require('./tesla_tower'))
 
-Vlib.FillBlock("FissionReactor", require('Blocks/fission_reactor'))
+    Vlib.FillBlock("KineticHeater", require('./kinetic_heater'))
 
-Vlib.FillBlock("DrillingRig", require('Blocks/drilling_rig'))
+    Vlib.FillBlock("FissionReactor", require('./fission_reactor'))
 
-Vlib.FillBlock("Pumpjack", require('Blocks/pumpjack'))
+    Vlib.FillBlock("DrillingRig", require('./drilling_rig'))
 
-Vlib.FillBlock("CombustionEngine", require('Blocks/combustion_engine'))
-Vlib.FillBlock("IndustrialBoiler", require('Blocks/industrial_boiler'))
-Vlib.FillBlock("IndustrialSteamTurbine", require('Blocks/industrial_steam_turbine'))
-Vlib.FillBlock("IndustrialGenerator", require('Blocks/industrial_generator'))
+    Vlib.FillBlock("Pumpjack", require('./pumpjack'))
 
-Vlib.FillBlock("FusionReactor", require('Blocks/fusion_reactor'))
-Vlib.FillBlock("Portal", require('Blocks/portal'))
-Vlib.FillBlock("SmallSolarPanel", require('Blocks/small_solar_panel'))
-Vlib.FillBlock("SolarPanel", require('Blocks/solar_panel'))
-Vlib.FillBlock("WindTurbine", require('Blocks/wind_turbine'))
-Vlib.FillBlock("Riteg", require('Blocks/riteg'))
+    Vlib.FillBlock("CombustionEngine", require('./combustion_engine'))
+    Vlib.FillBlock("IndustrialBoiler", require('./industrial_boiler'))
+    Vlib.FillBlock("IndustrialSteamTurbine", require('./industrial_steam_turbine'))
+    Vlib.FillBlock("IndustrialGenerator", require('./industrial_generator'))
 
-Vlib.FillBlockCustom({"CopperConnector"}, require('Blocks/cable'))
+    Vlib.FillBlock("FusionReactor", require('./fusion_reactor'))
+    Vlib.FillBlock("Portal", require('./portal'))
+    Vlib.FillBlock("SmallSolarPanel", require('./small_solar_panel'))
+    Vlib.FillBlock("SolarPanel", require('./solar_panel'))
+    Vlib.FillBlock("WindTurbine", require('./wind_turbine'))
+    Vlib.FillBlock("Riteg", require('./riteg'))
 
-Vlib.FillBlockCustom({"Stairs", "Corner", "Beam", "Scaffold", "Chair", "Table", "Ladder", "Fence", "Column", "Floor"}, require('Blocks/designable'))
+    Vlib.FillBlockCustom({"CopperConnector"}, require('./cable'))
+
+    Vlib.FillBlockCustom({"Stairs", "Corner", "Beam", "Scaffold", "Chair", "Table", "Ladder", "Fence", "Column", "Floor"}, require('./designable'))
+end

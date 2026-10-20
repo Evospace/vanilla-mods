@@ -1,10 +1,10 @@
 local core_mod = {}
 
 function core_mod.pre_init()
-   require('controls')()
-   require('graphics')()
-   require('game_settings')()
-   require('audio')()
+   require('@self/controls')()
+   require('@self/graphics')()
+   require('@self/game_settings')()
+   require('@self/audio')()
 end
 
 function core_mod.init()

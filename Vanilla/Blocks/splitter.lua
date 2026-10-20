@@ -1,5 +1,7 @@
+local Vlib = require('@VanillaLib/vlib')
+
 return function(name, tier, level)
-    local ticks = Balance.conveyor_ticks(level)
+    local ticks = Vlib.conveyor_ticks(level)
 
     return {
         logic_init = function(self)
