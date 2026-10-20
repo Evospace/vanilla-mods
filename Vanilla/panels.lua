@@ -197,6 +197,7 @@ end
 
 local function item_row(items)
     local inventory = AutosizeInventory.new_simple()
+    inventory.draggable = false
     inventory.zero_slots = true
     for _, item in ipairs(items) do
         inventory:add(item, 0)
@@ -331,6 +332,7 @@ end
 
 local function item_slot(item)
     local inventory = AutosizeInventory.new_simple()
+    inventory.draggable = false
     inventory.zero_slots = true
     inventory:add(item, 0)
     return ui.Inventory { inventory = inventory, numbers = false }

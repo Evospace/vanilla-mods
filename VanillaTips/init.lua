@@ -2,6 +2,7 @@ local VanillaTipsMod = {}
 
 function VanillaTipsMod.init()
     local i_hud = AutosizeInventory.new_simple()
+    i_hud.draggable = false
     i_hud:add(StaticItem.find("Multitool"), 1)
     i_hud:add(StaticItem.find("Screwdriver"), 1)
     i_hud:add(StaticItem.find("StoneFurnace"), 1)
@@ -28,6 +29,7 @@ function VanillaTipsMod.init()
     })
 
     local i_first = AutosizeInventory.new_simple()
+    i_first.draggable = false
     i_first:add(StaticItem.find("ChalcopyriteOre"), 1)
     i_first:add(StaticItem.find("MalachiteOre"), 1)
     i_first:add(StaticItem.find("BasicPlatform"), 1)
@@ -44,6 +46,7 @@ function VanillaTipsMod.init()
     })
 
     local i_comp = AutosizeInventory.new_simple()
+    i_comp.draggable = false
     i_comp:add(StaticItem.find("CopperComputer"), 1)
     i_comp:add(StaticItem.find("Circuit"), 3)
     i_comp:add(StaticItem.find("SteelComputer"), 1)
@@ -67,6 +70,7 @@ function VanillaTipsMod.init()
     })
 
     local i_prod = AutosizeInventory.new_simple()
+    i_prod.draggable = false
     i_prod:add(StaticItem.find("CopperAutomaticHammer"), 1)
     i_prod:add(StaticItem.find("CopperMacerator"), 1)
     i_prod:add(StaticItem.find("ChalcopyriteOre"), 1)
@@ -83,6 +87,7 @@ function VanillaTipsMod.init()
     })
 
     local i_modes = AutosizeInventory.new_simple()
+    i_modes.draggable = false
     i_modes:add(StaticItem.find("StoneFurnace"), 1)
     i_modes:add(StaticItem.find("BasicPlatform"), 1)
     i_modes:add(StaticItem.find("CopperConveyor"), 1)
@@ -99,6 +104,7 @@ function VanillaTipsMod.init()
     })
 
     local i_scr = AutosizeInventory.new_simple()
+    i_scr.draggable = false
     i_scr:add(StaticItem.find("Screwdriver"), 1)
     StaticTip.reg("Screwdriver", {
         label = Loc.new("Screwdriver", "tips"),
@@ -130,6 +136,7 @@ function VanillaTipsMod.init()
     })
 
     local i_db = AutosizeInventory.new_simple()
+    i_db.draggable = false
     i_db:add(StaticItem.find("StoneFurnace"), 1)
     i_db:add(StaticItem.find("StoneSmelter"), 1)
     StaticTip.reg("ItemDatabase", {
@@ -146,6 +153,7 @@ function VanillaTipsMod.init()
     })
 
     local i_recipes = AutosizeInventory.new_simple()
+    i_recipes.draggable = false
     i_recipes:add(StaticItem.find("CopperPlate"), 1)
     i_recipes:add(StaticItem.find("StoneSmelter"), 1)
     i_recipes:add(StaticItem.find("CopperStirlingEngine"), 1)
@@ -169,6 +177,7 @@ function VanillaTipsMod.init()
     })
 
     local i_energy = AutosizeInventory.new_simple()
+    i_energy.draggable = false
     i_energy:add(StaticItem.find("StoneFurnace"), 1)
     i_energy:add(StaticItem.find("CopperStirlingEngine"), 1)
     i_energy:add(StaticItem.find("CopperCompactGenerator"), 1)
@@ -193,6 +202,7 @@ function VanillaTipsMod.init()
     })
 
     local i_power = AutosizeInventory.new_simple()
+    i_power.draggable = false
     i_power:add(StaticItem.find("StoneFurnace"), 1)
     i_power:add(StaticItem.find("CopperComputer"), 1)
     StaticTip.reg("NoPower", {
@@ -207,6 +217,7 @@ function VanillaTipsMod.init()
     })
 
     local i_ctor = AutosizeInventory.new_simple()
+    i_ctor.draggable = false
     i_ctor:add(StaticItem.find("CopperConstructor"), 1)
     i_ctor:add(StaticItem.find("CopperRobotArm"), 1)
     i_ctor:add(StaticItem.find("CopperWire"), 1)
