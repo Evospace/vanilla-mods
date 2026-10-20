@@ -5,7 +5,7 @@ function VanillaTipsMod.init()
     i_hud:add(StaticItem.find("Multitool"), 1)
     i_hud:add(StaticItem.find("Screwdriver"), 1)
     i_hud:add(StaticItem.find("StoneFurnace"), 1)
-    StaticTip.reg("Interface", {
+    local interface = StaticTip.reg("Interface", {
         label = Loc.new("Interface", "tips"),
         description_parts = {
             Loc.new("InterfaceDescription1", "tips"),
@@ -22,6 +22,7 @@ function VanillaTipsMod.init()
 
     StaticTip.reg("Map", {
         label = Loc.new("Map", "tips"),
+        parent = interface,
         description_parts = {Loc.new("MapDescription", "tips")},
         image = "Textures/Map.png"
     })
@@ -81,22 +82,13 @@ function VanillaTipsMod.init()
         context = i_prod
     })
 
-    local i_scr = AutosizeInventory.new_simple()
-    i_scr:add(StaticItem.find("Screwdriver"), 1)
-    StaticTip.reg("Screwdriver", {
-        label = Loc.new("Screwdriver", "tips"),
-        description_parts = {Loc.new("ScrewdriverDescription", "tips")},
-        image = "Textures/Screwdriver.png",
-        context = i_scr
-    })
-
     local i_modes = AutosizeInventory.new_simple()
     i_modes:add(StaticItem.find("StoneFurnace"), 1)
     i_modes:add(StaticItem.find("BasicPlatform"), 1)
     i_modes:add(StaticItem.find("CopperConveyor"), 1)
     i_modes:add(StaticItem.find("CopperPipe"), 1)
     i_modes:add(StaticItem.find("CopperConnector"), 1)
-    StaticTip.reg("BuildingModes", {
+    local building = StaticTip.reg("BuildingModes", {
         label = Loc.new("BuildingModes", "tips"),
         description_parts = {
             Loc.new("BuildingModesDescription1", "tips"),
@@ -106,20 +98,33 @@ function VanillaTipsMod.init()
         context = i_modes
     })
 
+    local i_scr = AutosizeInventory.new_simple()
+    i_scr:add(StaticItem.find("Screwdriver"), 1)
+    StaticTip.reg("Screwdriver", {
+        label = Loc.new("Screwdriver", "tips"),
+        parent = building,
+        description_parts = {Loc.new("ScrewdriverDescription", "tips")},
+        image = "Textures/Screwdriver.png",
+        context = i_scr
+    })
+
     StaticTip.reg("RotationWhileBuilding", {
         label = Loc.new("RotationWhileBuilding", "tips"),
+        parent = building,
         description_parts = {Loc.new("RotationWhileBuildingDescription", "tips")},
         image = "Textures/Rotation.png"
     })
 
     StaticTip.reg("BlockPipette", {
         label = Loc.new("BlockPipette", "tips"),
+        parent = building,
         description_parts = {Loc.new("BlockPipetteDescription", "tips")},
         image = "Textures/Pipette.png"
     })
 
     StaticTip.reg("StackTransfers", {
         label = Loc.new("StackTransfers", "tips"),
+        parent = interface,
         description_parts = {Loc.new("StackTransfersDescription", "tips")},
         image = "Textures/StackTransfers.png"
     })
@@ -129,6 +134,7 @@ function VanillaTipsMod.init()
     i_db:add(StaticItem.find("StoneSmelter"), 1)
     StaticTip.reg("ItemDatabase", {
         label = Loc.new("ItemDatabase", "tips"),
+        parent = interface,
         description_parts = {
             Loc.new("ItemDatabaseDescription1", "tips"),
             Loc.new("ItemDatabaseDescription2", "tips"),
@@ -145,6 +151,7 @@ function VanillaTipsMod.init()
     i_recipes:add(StaticItem.find("CopperStirlingEngine"), 1)
     StaticTip.reg("Recipes", {
         label = Loc.new("Recipes", "tips"),
+        parent = interface,
         description_parts = {
             Loc.new("RecipesDescription1", "tips"),
             Loc.new("RecipesDescription2", "tips")
@@ -154,6 +161,7 @@ function VanillaTipsMod.init()
 
     StaticTip.reg("CraftQueue", {
         label = Loc.new("CraftQueue", "tips"),
+        parent = interface,
         description_parts = {
             Loc.new("CraftQueueDescription1", "tips"),
             Loc.new("CraftQueueDescription2", "tips")
@@ -171,7 +179,7 @@ function VanillaTipsMod.init()
     i_energy:add(StaticItem.find("Heat"), 1)
     i_energy:add(StaticItem.find("Kinetic"), 1)
     i_energy:add(StaticItem.find("Electricity"), 1)
-    StaticTip.reg("Energy", {
+    local energy = StaticTip.reg("Energy", {
         label = Loc.new("Energy", "tips"),
         description_parts = {
             Loc.new("EnergyDescription1", "tips"),
@@ -189,6 +197,7 @@ function VanillaTipsMod.init()
     i_power:add(StaticItem.find("CopperComputer"), 1)
     StaticTip.reg("NoPower", {
         label = Loc.new("NoPower", "tips"),
+        parent = energy,
         description_parts = {
             Loc.new("NoPowerDescription1", "tips"),
             Loc.new("NoPowerDescription2", "tips"),
