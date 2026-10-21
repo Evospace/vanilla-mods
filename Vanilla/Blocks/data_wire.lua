@@ -1,4 +1,4 @@
-local Vlib = require('@VanillaLib/vlib')
+local Vlib = require('@VanillaLib')
 
 local logic = function(self)
     local conductor = ConductorBlockLogic.cast(self)

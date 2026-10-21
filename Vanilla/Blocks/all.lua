@@ -1,4 +1,4 @@
-local Vlib = require('@VanillaLib/vlib')
+local Vlib = require('@VanillaLib')
 
 return function()
     Vlib.FillBlock("OreWasher", require('./ore_washer'))

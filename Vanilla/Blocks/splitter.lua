@@ -1,4 +1,4 @@
-local Vlib = require('@VanillaLib/vlib')
+local Vlib = require('@VanillaLib')
 
 return function(name, tier, level)
     local ticks = Vlib.conveyor_ticks(level)

@@ -1,9 +1,9 @@
 {
     "name": "VanillaQuests",
-    "version": "0.22.0",
+    "version": "0.22.2",
     "title": "Vanilla Questbook",
     "author": "evospace",
-    "evospace_version": "0.22.0",
-    "dependencies": ["Vanilla >= 0.22.0"],
+    "evospace_version": "0.22.2",
+    "dependencies": ["Vanilla >= 0.22.2"],
     "description": "Chapters, quests and objectives for vanilla content"
 }

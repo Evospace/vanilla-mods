@@ -1,4 +1,4 @@
-local Vlib = require('@VanillaLib/vlib')
+local Vlib = require('@VanillaLib')
 
 local function describe(name, ticks)
     local item = StaticItem.find(name)

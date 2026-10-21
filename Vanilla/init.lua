@@ -1,4 +1,4 @@
-local Vlib = require('@VanillaLib/vlib')
+local Vlib = require('@VanillaLib')
 
 local vanilla_mod = {}
 
