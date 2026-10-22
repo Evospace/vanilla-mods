@@ -2,7 +2,7 @@ local Vlib = require('@VanillaLib')
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
-    crafter.recipes = RecipeDictionary.get("GeneratorRecipeDictionary")
+    crafter.recipes = RecipeDictionary.get("RitegRecipeDictionary")
     crafter.speed = Vlib.get_speed(crafter)
             
     local inv = ResourceInventory.new(crafter, "rio")

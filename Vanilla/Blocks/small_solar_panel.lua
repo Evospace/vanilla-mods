@@ -1,7 +1,7 @@
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
-    crafter.recipes = RecipeDictionary.get("GeneratorRecipeDictionary")
+    crafter.recipes = RecipeDictionary.get("SmallSolarPanelRecipeDictionary")
     crafter.speed = 100
     crafter.stable_supply = false
 

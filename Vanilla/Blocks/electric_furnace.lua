@@ -1,7 +1,7 @@
 
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
-    crafter.recipes = RecipeDictionary.get("GeneratorRecipeDictionary")
+    crafter.recipes = RecipeDictionary.get("ElectricFurnaceRecipeDictionary")
     crafter.stable_supply = false
             
     local inv = ResourceInventory.new(crafter, "rio")
