@@ -70,7 +70,7 @@ return function()
 
     Vlib.FillBlock("BatteryBox", require('./battery_box'))
 
-    Vlib.FillBlock("LogicWire", require('./data_wire'))
+    Vlib.FillBlockCustom({"LogicWire"}, require('./data_wire'))
     Vlib.FillBlock("Pipe", require('./pipe'))
     Vlib.FillBlock("HeatPipe", require('./heat_pipe'))
     Vlib.FillBlock("Flywheel", require('./flywheel'))
