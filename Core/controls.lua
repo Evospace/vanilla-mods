@@ -229,6 +229,13 @@ return function()
       label = "Decor",
       default_key = "V",
    })
+   Setting.reg("Tips", {
+      category = "Controls",
+      type = "Key",
+      key_binding = "Tips",
+      label = "TipsTricks",
+      default_key = "I",
+   })
    Setting.reg("Jump", {
       category = "Controls",
       type = "Key",
