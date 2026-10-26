@@ -18,6 +18,12 @@ local surface_names = {
     "PeatSurface",
 }
 
+local drill_ground_names = {
+    "StoneSurface",
+    "SandSurface",
+    "BasaltSurface",
+}
+
 local function find_items(names)
     local items = {}
     for _, name in ipairs(names) do
@@ -167,15 +173,29 @@ local function find_deposit(item)
     return nil
 end
 
-local function deposit_results(type)
+local function is_ground_source(item)
+    for _, ground in ipairs(find_items(drill_ground_names)) do
+        if ground.name == item.name then
+            return true
+        end
+    end
+    return false
+end
+
+local function drill_results(type)
     local items = {}
     local seen = {}
-    for _, prop in ipairs(ore_props()) do
-        local result = prop.mined_item
+    local function add(result)
         if result ~= nil and result.type == type and not seen[result.name] then
             seen[result.name] = true
             items[#items + 1] = result
         end
+    end
+    for _, prop in ipairs(ore_props()) do
+        add(prop.mined_item)
+    end
+    for _, ground in ipairs(find_items(drill_ground_names)) do
+        add(ground)
     end
     return items
 end
@@ -207,6 +227,13 @@ local function item_row(items)
     return ui.Inventory { inventory = inventory, numbers = false, columns = 15 }
 end
 
+local function add_machine_line(lines, panel)
+    local machine = panel:get_string("machine")
+    if machine ~= "" then
+        lines:add(ui.Text { text = Loc.format("MiningMachineLine", "panels", { "{machine:" .. machine .. "}" }) })
+    end
+end
+
 local function build_mining(item, panel)
     local block = item.block
     local miner = block ~= nil and block.logic ~= nil and block.logic:is_child_of(DrillingMachineBase.get_class())
@@ -218,6 +245,9 @@ local function build_mining(item, panel)
     if not miner and deposit == nil then
         root:add(ui.Text { text = Loc.get("MiningSurfaceTitle", "panels"), font_size = 15 })
         lines:add(ui.Text { text = Loc.get("MiningSurface", "panels") })
+        if is_ground_source(item) then
+            add_machine_line(lines, panel)
+        end
         root:add(lines)
         return root
     end
@@ -250,13 +280,10 @@ local function build_mining(item, panel)
     lines:add(cards)
 
     if miner then
-        lines:add(item_row(deposit_results(output ~= nil and output.type or "solid")))
+        lines:add(item_row(drill_results(output ~= nil and output.type or "solid")))
     else
         lines:add(item_row({ deposit.item }))
-        local machine = panel:get_string("machine")
-        if machine ~= "" then
-            lines:add(ui.Text { text = Loc.format("MiningMachineLine", "panels", { "{machine:" .. machine .. "}" }) })
-        end
+        add_machine_line(lines, panel)
     end
 
     return root
