@@ -31,6 +31,7 @@ return function()
    make_audio("Environment", { uds .. "UDS_Environment_Sound", uds .. "UDS_Outdoor_Sound" }, 50)
    make_audio("Weather", { uds .. "UDS_Weather_Mixer" }, 50)
    make_audio("Footsteps", { audio .. "Footsteps" }, 75)
+   make_audio("Voice", { audio .. "Voice/Voice" }, 100)
    make_audio("UI", { audio .. "UI" }, 100)
 
    Setting.reg("MuteOnFocusLoss", {

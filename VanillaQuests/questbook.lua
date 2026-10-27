@@ -762,6 +762,7 @@ function qb.build()
          any_objective = (def.any == true),
          events = build_events_table(def),
          on_unlock = def.on_unlock,
+         on_complete = def.on_complete,
       }
       if def.kind ~= nil then
          row.kind = defines.quest_kind[def.kind]

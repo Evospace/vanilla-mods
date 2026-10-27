@@ -1,4 +1,5 @@
 local qb = require('@self/questbook')
+local ev01 = require('@self/ev01')
 
 local VanillaQuestsMod = {}
 
@@ -227,6 +228,9 @@ function VanillaQuestsMod.init()
          qb.chain_running(power_plant, 3, { label = Loc.new("ObjPlantGenerator", "quests") }),
          qb.chain_running(power_plant, 4, { states = { "working", "idle" }, label = Loc.new("ObjPlantComputer", "quests") }),
       },
+      on_complete = function()
+         ev01.say("ResearchComputerOnline")
+      end,
    })
 
    qb.chapter("Automation", {
@@ -579,6 +583,7 @@ function VanillaQuestsMod.init()
    })
 
    qb.build()
+   ev01.listen()
 end
 
 function VanillaQuestsMod.post_init()
