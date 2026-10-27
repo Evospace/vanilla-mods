@@ -238,6 +238,161 @@ function VanillaTipsMod.init()
         image = "Textures/Constructor.png",
         context = i_ctor
     })
+
+    local i_trains = AutosizeInventory.new_simple()
+    i_trains.draggable = false
+    i_trains:add(StaticItem.find("SteelRail"), 1)
+    i_trains:add(StaticItem.find("RailStation"), 1)
+    i_trains:add(StaticItem.find("Locomotive"), 1)
+    i_trains:add(StaticItem.find("CargoWagon"), 1)
+    i_trains:add(StaticItem.find("TankWagon"), 1)
+    i_trains:add(StaticItem.find("RailSignal"), 1)
+    i_trains:add(StaticItem.find("RailChainSignal"), 1)
+    local trains = StaticTip.reg("Trains", {
+        label = Loc.new("Trains", "tips"),
+        description_parts = {
+            Loc.new("TrainsDescription1", "tips"),
+            Loc.new("TrainsDescription2", "tips"),
+            Loc.new("TrainsDescription3", "tips")
+        },
+        image = "Textures/Trains.png",
+        context = i_trains
+    })
+
+    local i_rails = AutosizeInventory.new_simple()
+    i_rails.draggable = false
+    i_rails:add(StaticItem.find("SteelRail"), 1)
+    StaticTip.reg("TrainsRails", {
+        label = Loc.new("TrainsRails", "tips"),
+        parent = trains,
+        description_parts = {
+            Loc.new("TrainsRailsDescription1", "tips"),
+            Loc.new("TrainsRailsDescription2", "tips"),
+            Loc.new("TrainsRailsDescription3", "tips"),
+            Loc.new("TrainsRailsDescription4", "tips"),
+            Loc.new("TrainsRailsDescription5", "tips"),
+            Loc.new("TrainsRailsDescription6", "tips")
+        },
+        image = "Textures/TrainsRails.png",
+        context = i_rails
+    })
+
+    local i_stations = AutosizeInventory.new_simple()
+    i_stations.draggable = false
+    i_stations:add(StaticItem.find("RailStation"), 1)
+    i_stations:add(StaticItem.find("CopperLoader"), 1)
+    i_stations:add(StaticItem.find("CopperRobotArm"), 1)
+    i_stations:add(StaticItem.find("CopperPump"), 1)
+    StaticTip.reg("TrainsStations", {
+        label = Loc.new("TrainsStations", "tips"),
+        parent = trains,
+        description_parts = {
+            Loc.new("TrainsStationsDescription1", "tips"),
+            Loc.new("TrainsStationsDescription2", "tips"),
+            Loc.new("TrainsStationsDescription3", "tips"),
+            Loc.new("TrainsStationsDescription4", "tips"),
+            Loc.new("TrainsStationsDescription5", "tips"),
+            Loc.new("TrainsStationsDescription6", "tips"),
+            Loc.new("TrainsStationsDescription7", "tips"),
+            Loc.new("TrainsStationsDescription8", "tips"),
+            Loc.new("TrainsStationsDescription9", "tips"),
+            Loc.new("TrainsStationsDescription10", "tips")
+        },
+        image = "Textures/TrainsStations.png",
+        context = i_stations
+    })
+
+    local i_consist = AutosizeInventory.new_simple()
+    i_consist.draggable = false
+    i_consist:add(StaticItem.find("Locomotive"), 1)
+    i_consist:add(StaticItem.find("CargoWagon"), 1)
+    i_consist:add(StaticItem.find("TankWagon"), 1)
+    StaticTip.reg("TrainsConsist", {
+        label = Loc.new("TrainsConsist", "tips"),
+        parent = trains,
+        description_parts = {
+            Loc.new("TrainsConsistDescription1", "tips"),
+            Loc.new("TrainsConsistDescription2", "tips"),
+            Loc.new("TrainsConsistDescription3", "tips"),
+            Loc.new("TrainsConsistDescription4", "tips"),
+            Loc.new("TrainsConsistDescription5", "tips"),
+            Loc.new("TrainsConsistDescription6", "tips"),
+            Loc.new("TrainsConsistDescription7", "tips"),
+            Loc.new("TrainsConsistDescription8", "tips"),
+            Loc.new("TrainsConsistDescription9", "tips"),
+            Loc.new("TrainsConsistDescription10", "tips")
+        },
+        image = "Textures/TrainsConsist.png",
+        context = i_consist
+    })
+
+    StaticTip.reg("TrainsSchedule", {
+        label = Loc.new("TrainsSchedule", "tips"),
+        parent = trains,
+        description_parts = {
+            Loc.new("TrainsScheduleDescription1", "tips"),
+            Loc.new("TrainsScheduleDescription2", "tips"),
+            Loc.new("TrainsScheduleDescription3", "tips"),
+            Loc.new("TrainsScheduleDescription4", "tips"),
+            Loc.new("TrainsScheduleDescription5", "tips"),
+            Loc.new("TrainsScheduleDescription6", "tips"),
+            Loc.new("TrainsScheduleDescription7", "tips"),
+            Loc.new("TrainsScheduleDescription8", "tips"),
+            Loc.new("TrainsScheduleDescription9", "tips"),
+            Loc.new("TrainsScheduleDescription10", "tips"),
+            Loc.new("TrainsScheduleDescription11", "tips")
+        },
+        image = "Textures/TrainsSchedule.png"
+    })
+
+    StaticTip.reg("TrainsConditions", {
+        label = Loc.new("TrainsConditions", "tips"),
+        parent = trains,
+        description_parts = {
+            Loc.new("TrainsConditionsDescription1", "tips"),
+            Loc.new("TrainsConditionsDescription2", "tips"),
+            Loc.new("TrainsConditionsDescription3", "tips"),
+            Loc.new("TrainsConditionsDescription4", "tips"),
+            Loc.new("TrainsConditionsDescription5", "tips"),
+            Loc.new("TrainsConditionsDescription6", "tips"),
+            Loc.new("TrainsConditionsDescription7", "tips"),
+            Loc.new("TrainsConditionsDescription8", "tips"),
+            Loc.new("TrainsConditionsDescription9", "tips")
+        },
+        image = "Textures/TrainsConditions.png"
+    })
+
+    local i_signals = AutosizeInventory.new_simple()
+    i_signals.draggable = false
+    i_signals:add(StaticItem.find("RailSignal"), 1)
+    i_signals:add(StaticItem.find("RailChainSignal"), 1)
+    StaticTip.reg("TrainsSignals", {
+        label = Loc.new("TrainsSignals", "tips"),
+        parent = trains,
+        description_parts = {
+            Loc.new("TrainsSignalsDescription1", "tips"),
+            Loc.new("TrainsSignalsDescription2", "tips"),
+            Loc.new("TrainsSignalsDescription3", "tips"),
+            Loc.new("TrainsSignalsDescription4", "tips"),
+            Loc.new("TrainsSignalsDescription5", "tips"),
+            Loc.new("TrainsSignalsDescription6", "tips"),
+            Loc.new("TrainsSignalsDescription7", "tips")
+        },
+        image = "Textures/TrainsSignals.png",
+        context = i_signals
+    })
+
+    StaticTip.reg("TrainsWaiting", {
+        label = Loc.new("TrainsWaiting", "tips"),
+        parent = trains,
+        description_parts = {
+            Loc.new("TrainsWaitingDescription1", "tips"),
+            Loc.new("TrainsWaitingDescription2", "tips"),
+            Loc.new("TrainsWaitingDescription3", "tips"),
+            Loc.new("TrainsWaitingDescription4", "tips")
+        },
+        image = "Textures/TrainsWaiting.png"
+    })
 end
 
 function VanillaTipsMod.pre_init()
