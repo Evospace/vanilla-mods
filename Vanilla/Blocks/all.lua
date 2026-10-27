@@ -102,6 +102,7 @@ return function()
 
     Vlib.FillBlock("FusionReactor", require('./fusion_reactor'))
     Vlib.FillBlock("Portal", require('./portal'))
+    Vlib.FillBlockCustom({"Portal"}, require('./portal_project'))
     Vlib.FillBlock("SmallSolarPanel", require('./small_solar_panel'))
     Vlib.FillBlock("SolarPanel", require('./solar_panel'))
     Vlib.FillBlock("WindTurbine", require('./wind_turbine'))
