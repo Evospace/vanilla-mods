@@ -763,6 +763,12 @@ function qb.build()
          events = build_events_table(def),
          on_unlock = def.on_unlock,
       }
+      if def.kind ~= nil then
+         row.kind = defines.quest_kind[def.kind]
+         if row.kind == nil then
+            print_err("questbook: quest '" .. def.name .. "' has unknown kind '" .. tostring(def.kind) .. "'")
+         end
+      end
       if def.chapter ~= nil then
          local chapter = StaticChapter.find(def.chapter)
          if chapter == nil then
