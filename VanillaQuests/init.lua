@@ -515,7 +515,7 @@ function VanillaQuestsMod.init()
       context = { "AdvancedCircuit", "CircuitBoard", "Resistor", "Circuit", "CopperConstructor", "SteelComputer" },
       unlocks = { "ResearchAluminium" },
       objectives = {
-         qb.research("DistributedComputing1", { label = Loc.new("ObjResearchDistributedComputing1", "quests") }),
+         qb.research("Dynamo", { label = Loc.new("ObjResearchDistributedComputing1", "quests") }),
          qb.produce_item({ "AdvancedCircuit" }, 3,
             { label = Loc.new("ObjProduceAdvancedCircuit", "quests") }),
       },
