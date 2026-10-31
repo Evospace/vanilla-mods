@@ -1,7 +1,7 @@
 local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.get("ResearchLaboratoryRecipeDictionary")
-    crafter.speed = 100
+    crafter.speed = 100 + 10 * crafter.static_block.level
 
     local inv = ResourceInventory.new(crafter, "rii")
     crafter.energy_input_inventory = inv

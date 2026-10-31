@@ -238,6 +238,39 @@ function VanillaQuestsMod.init()
       requires = { "StartPowerPlant" },
    })
 
+   qb.quest("BuildResearchLaboratory", {
+      chapter = "Automation",
+      label = Loc.new("BuildResearchLaboratory", "quests"),
+      description = {
+         Loc.new("BuildResearchLaboratoryDesc1", "quests"),
+         Loc.new("BuildResearchLaboratoryDesc2", "quests"),
+      },
+      context = { "CopperResearchLaboratory", "CopperComputer", "CopperCompactGenerator" },
+      unlocks = { "RunExperiments" },
+      objectives = {
+         qb.research("ResearchLaboratory", { label = Loc.new("ObjResearchLaboratory", "quests") }),
+         qb.craft_item({ "CopperResearchLaboratory" }, 1,
+            { label = Loc.new("ObjCraftLaboratory", "quests") }),
+         qb.build_block({ "CopperResearchLaboratory" }, 1,
+            { label = Loc.new("ObjBuildLaboratory", "quests") }),
+      },
+   })
+
+   qb.quest("RunExperiments", {
+      chapter = "Automation",
+      label = Loc.new("RunExperiments", "quests"),
+      description = {
+         Loc.new("RunExperimentsDesc1", "quests"),
+         Loc.new("RunExperimentsDesc2", "quests"),
+      },
+      context = { "CopperResearchLaboratory", "CopperStirlingEngine", "Coal", "CoalOre" },
+      unlocks = { "ResearchBasicMachines" },
+      objectives = {
+         qb.consume_item({ "CopperStirlingEngine" }, 10,
+            { label = Loc.new("ObjRunMachinesExperiments", "quests") }),
+      },
+   })
+
    qb.quest("ResearchBasicMachines", {
       chapter = "Automation",
       label = Loc.new("ResearchBasicMachines", "quests"),
@@ -245,7 +278,7 @@ function VanillaQuestsMod.init()
          Loc.new("ResearchBasicMachinesDesc1", "quests"),
          Loc.new("ResearchBasicMachinesDesc2", "quests"),
       },
-      context = { "CopperMacerator", "CopperAutomaticHammer" },
+      context = { "CopperAutomaticHammer" },
       unlocks = { "ResearchAutomaticMining" },
       objectives = {
          qb.open_gui("research", { label = Loc.new("ObjOpenResearch", "quests") }),
@@ -261,7 +294,7 @@ function VanillaQuestsMod.init()
          Loc.new("ResearchAutomaticMiningDesc2", "quests"),
       },
       context = { "CopperConveyor", "CopperRobotArm", "CopperDrillingRig" },
-      unlocks = { "BuildAutomaticMine" },
+      unlocks = { "BuildAutomaticMine", "BuildPortalFoundation" },
       objectives = {
          qb.research("Automatization", { label = Loc.new("ObjResearchAutomatization", "quests") }),
          qb.research("AutomaticMining", { label = Loc.new("ObjResearchAutomaticMining", "quests") }),
@@ -288,6 +321,34 @@ function VanillaQuestsMod.init()
             { block = "CopperDrillingRig", out = "oa" },
             { block = { "StoneChest", "CopperChest" } },
          }, { label = Loc.new("ObjDockMineChest", "quests") }),
+      },
+   })
+
+   qb.quest("BuildPortalFoundation", {
+      chapter = "Automation",
+      label = Loc.new("BuildPortalFoundation", "quests"),
+      description = {
+         Loc.new("BuildPortalFoundationDesc1", "quests"),
+         Loc.new("BuildPortalFoundationDesc2", "quests"),
+      },
+      context = { "Portal", "BuildingMaterial", "StoneSurface" },
+      unlocks = { "RunAutomationExperiments" },
+      objectives = {
+         qb.research("PortalTier0", { label = Loc.new("ObjBuildPortalFoundation", "quests") }),
+      },
+   })
+
+   qb.quest("RunAutomationExperiments", {
+      chapter = "Automation",
+      label = Loc.new("RunAutomationExperiments", "quests"),
+      description = {
+         Loc.new("RunAutomationExperimentsDesc1", "quests"),
+      },
+      context = { "CopperResearchLaboratory", "CopperConveyor", "CopperRobotArm" },
+      unlocks = { "CraftOreMultiplication" },
+      objectives = {
+         qb.consume_item({ "CopperConveyor" }, 10,
+            { label = Loc.new("ObjRunAutomationExperiments", "quests") }),
       },
    })
 
