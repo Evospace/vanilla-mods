@@ -22,10 +22,16 @@ end
 
 local function generate(ctx, kit)
    local occupied = {}
+   local supported = {}
    local function occupy(x, y, sx, sy)
       for i = x, x + sx - 1 do
          for j = y, y + sy - 1 do
             occupied[i * 100 + j] = true
+         end
+      end
+      for i = x - 1, x + sx do
+         for j = y - 1, y + sy do
+            supported[i * 100 + j] = true
          end
       end
    end
@@ -115,7 +121,7 @@ local function generate(ctx, kit)
          local rim = x == PLATFORM_MIN or x == PLATFORM_MAX or y == PLATFORM_MIN or y == PLATFORM_MAX
          local block = rim and kit.rim or kit.floor
          local underDais = x >= DAIS_MIN and x <= DAIS_MAX and y >= DAIS_MIN and y <= DAIS_MAX
-         if underDais or occupied[x * 100 + y] or ctx:fraction() >= (rim and 0.12 or 0.05) then
+         if rim or underDais or supported[x * 100 + y] or ctx:fraction() >= 0.05 then
             ctx:set_cell(cell(x, y, 0), block)
          end
       end
