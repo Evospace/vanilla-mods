@@ -14,6 +14,9 @@ local logic = function(self)
         conductor:add_wire(acc)
     end
 
+    conductor.side_cover = StaticCover.get("HeatSide")
+    conductor.center_cover = StaticCover.get("HeatCenter")
+    conductor.always_center = true
     conductor.drain = 1
     conductor.capacity = 32000
     conductor.conductor_channel = 3000
