@@ -6,6 +6,7 @@ local logic = function(self)
     crafter.speed = Vlib.get_speed(crafter)
             
     local inv = ResourceInventory.new(crafter, "rii")
+    inv.drain = 8
     crafter.energy_input_inventory = inv
 
     Vlib.add_single_slot_invs(crafter.crafter_input_container, crafter, "ii", 1)
