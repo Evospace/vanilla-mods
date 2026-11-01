@@ -17,8 +17,6 @@ local logic = function(self)
     conductor.straight_cover = StaticCover.get("ShaftStraightCoupled")
     conductor.straight_plain_cover = StaticCover.get("ShaftStraight")
     conductor.always_center = true
-    conductor.drain = 2
-    conductor.capacity = 200
     conductor.conductor_channel = 4000
     conductor.channel = "Kinetic"
 end
