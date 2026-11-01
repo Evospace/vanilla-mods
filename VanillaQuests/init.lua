@@ -238,39 +238,6 @@ function VanillaQuestsMod.init()
       requires = { "StartPowerPlant" },
    })
 
-   qb.quest("BuildResearchLaboratory", {
-      chapter = "Automation",
-      label = Loc.new("BuildResearchLaboratory", "quests"),
-      description = {
-         Loc.new("BuildResearchLaboratoryDesc1", "quests"),
-         Loc.new("BuildResearchLaboratoryDesc2", "quests"),
-      },
-      context = { "CopperResearchLaboratory", "CopperComputer", "CopperCompactGenerator" },
-      unlocks = { "RunExperiments" },
-      objectives = {
-         qb.research("ResearchLaboratory", { label = Loc.new("ObjResearchLaboratory", "quests") }),
-         qb.craft_item({ "CopperResearchLaboratory" }, 1,
-            { label = Loc.new("ObjCraftLaboratory", "quests") }),
-         qb.build_block({ "CopperResearchLaboratory" }, 1,
-            { label = Loc.new("ObjBuildLaboratory", "quests") }),
-      },
-   })
-
-   qb.quest("RunExperiments", {
-      chapter = "Automation",
-      label = Loc.new("RunExperiments", "quests"),
-      description = {
-         Loc.new("RunExperimentsDesc1", "quests"),
-         Loc.new("RunExperimentsDesc2", "quests"),
-      },
-      context = { "CopperResearchLaboratory", "CopperStirlingEngine", "Coal", "CoalOre" },
-      unlocks = { "ResearchBasicMachines" },
-      objectives = {
-         qb.consume_item({ "CopperStirlingEngine" }, 10,
-            { label = Loc.new("ObjRunMachinesExperiments", "quests") }),
-      },
-   })
-
    qb.quest("ResearchBasicMachines", {
       chapter = "Automation",
       label = Loc.new("ResearchBasicMachines", "quests"),
@@ -332,23 +299,8 @@ function VanillaQuestsMod.init()
          Loc.new("BuildPortalFoundationDesc2", "quests"),
       },
       context = { "Portal", "BuildingMaterial", "StoneSurface" },
-      unlocks = { "RunAutomationExperiments" },
       objectives = {
          qb.research("PortalTier0", { label = Loc.new("ObjBuildPortalFoundation", "quests") }),
-      },
-   })
-
-   qb.quest("RunAutomationExperiments", {
-      chapter = "Automation",
-      label = Loc.new("RunAutomationExperiments", "quests"),
-      description = {
-         Loc.new("RunAutomationExperimentsDesc1", "quests"),
-      },
-      context = { "CopperResearchLaboratory", "CopperConveyor", "CopperRobotArm" },
-      unlocks = { "CraftOreMultiplication" },
-      objectives = {
-         qb.consume_item({ "CopperConveyor" }, 10,
-            { label = Loc.new("ObjRunAutomationExperiments", "quests") }),
       },
    })
 
@@ -457,10 +409,43 @@ function VanillaQuestsMod.init()
          Loc.new("BoostResearchDesc2", "quests"),
       },
       context = { "CopperComputer", "Circuit", "CopperRobotArm" },
-      unlocks = { "QueueResearch" },
+      unlocks = { "BuildResearchLaboratory" },
       objectives = {
          qb.consume_item({ "Circuit" }, 3,
             { label = Loc.new("ObjBoostComputer", "quests") }),
+      },
+   })
+
+   qb.quest("BuildResearchLaboratory", {
+      chapter = "Circuits",
+      label = Loc.new("BuildResearchLaboratory", "quests"),
+      description = {
+         Loc.new("BuildResearchLaboratoryDesc1", "quests"),
+         Loc.new("BuildResearchLaboratoryDesc2", "quests"),
+      },
+      context = { "CopperElectronicsLaboratory", "CopperConstructor", "CopperCompactGenerator" },
+      unlocks = { "RunExperiments" },
+      objectives = {
+         qb.research("ElectronicsLaboratory", { label = Loc.new("ObjResearchLaboratory", "quests") }),
+         qb.craft_item({ "CopperElectronicsLaboratory" }, 1,
+            { label = Loc.new("ObjCraftLaboratory", "quests") }),
+         qb.build_block({ "CopperElectronicsLaboratory" }, 1,
+            { label = Loc.new("ObjBuildLaboratory", "quests") }),
+      },
+   })
+
+   qb.quest("RunExperiments", {
+      chapter = "Circuits",
+      label = Loc.new("RunExperiments", "quests"),
+      description = {
+         Loc.new("RunExperimentsDesc1", "quests"),
+         Loc.new("RunExperimentsDesc2", "quests"),
+      },
+      context = { "CopperElectronicsLaboratory", "Circuit", "CopperWire" },
+      unlocks = { "QueueResearch" },
+      objectives = {
+         qb.consume_item({ "Circuit" }, 100,
+            { label = Loc.new("ObjRunMachinesExperiments", "quests") }),
       },
    })
 
