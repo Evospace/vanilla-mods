@@ -392,13 +392,37 @@ function VanillaQuestsMod.init()
          Loc.new("MachineCircuitsDesc2", "quests"),
       },
       context = { "CopperWire", "Triod", "CircuitBoard", "Circuit", "CopperRobotArm" },
-      unlocks = { "BoostResearch" },
+      unlocks = { "BoostResearch", "BuildBeacon" },
       objectives = {
          qb.produce_item({ "Triod" }, 9,
             { label = Loc.new("ObjProduceTriod", "quests") }),
          qb.produce_item({ "Circuit" }, 3,
             { label = Loc.new("ObjProduceCircuit", "quests") }),
       },
+   })
+
+   local beacon = qb.chain("Beacon", {
+      { block = "CopperBeacon" },
+   })
+   EventSystem.get():sub(defines.events.on_built_block, function(ctx)
+      local found = beacon.find_built(ctx)
+      if found ~= nil then
+         beacon.remember(found)
+      end
+   end)
+
+   qb.quest("BuildBeacon", {
+      chapter = "Circuits",
+      label = Loc.new("BuildBeacon", "quests"),
+      description = { Loc.new("BuildBeaconDesc1", "quests") },
+      context = { "CopperBeacon", "Triod", "Circuit" },
+      objectives = {
+         qb.chain_running(beacon, 1, { label = Loc.new("ObjBuildBeacon", "quests") }),
+      },
+      on_complete = function()
+         ev01.say("BeaconTransmitting")
+         ev01.say("KeepListening", { delay = 3 })
+      end,
    })
 
    qb.quest("BoostResearch", {

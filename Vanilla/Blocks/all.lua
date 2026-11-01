@@ -68,6 +68,8 @@ return function()
 
     Vlib.FillBlock("Computer", require('./computer'))
 
+    Vlib.FillBlock("Beacon", require('./beacon'))
+
     Vlib.FillBlock("BatteryBox", require('./battery_box'))
 
     Vlib.FillBlockCustom({"LogicWire"}, require('./data_wire'))
@@ -105,6 +107,7 @@ return function()
     Vlib.FillBlock("Portal", require('./portal'))
     Vlib.FillBlockCustom({"Portal"}, require('./portal_project'))
     Vlib.FillBlockCustom({"RocketPad"}, require('./rocket_pad'))
+    Vlib.FillBlockCustom({"SatelliteAntenna"}, require('./satellite_antenna'))
     Vlib.FillBlockCustom({"AntimatterCollector"}, require('./antimatter_collector'))
     for _, laboratory in ipairs({ "ElectronicsLaboratory", "EngineeringLaboratory", "ChemicalLaboratory" }) do
         Vlib.FillBlock(laboratory, require('./research_laboratory')(laboratory))
