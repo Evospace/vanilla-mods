@@ -73,7 +73,8 @@ return function()
     Vlib.FillBlockCustom({"LogicWire"}, require('./data_wire'))
     Vlib.FillBlock("Pipe", require('./pipe'))
     Vlib.FillBlock("HeatPipe", require('./heat_pipe'))
-    Vlib.FillBlock("Flywheel", require('./flywheel'))
+    Vlib.FillBlock("Shaft", require('./shaft'))
+    Vlib.FillBlock("KineticAccumulator", require('./kinetic_accumulator'))
 
     Vlib.FillBlock("Container", require('./container'))
 
