@@ -17,6 +17,8 @@ function vanilla_mod.init()
 
    require('@self/panels').register()
 
+   require('@self/Pois/ancient_shrine')()
+
    local ss = StaticStructure.reg("StartPlatform")
 
    ss.generate = function(context)
