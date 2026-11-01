@@ -18,6 +18,7 @@ function vanilla_mod.init()
    require('@self/panels').register()
 
    require('@self/Pois/ancient_shrine')()
+   require('@self/Pois/ancient_village')()
 
    local ss = StaticStructure.reg("StartPlatform")
 

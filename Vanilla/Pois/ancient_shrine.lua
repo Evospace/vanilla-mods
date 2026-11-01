@@ -21,6 +21,8 @@ local function weighted(ctx, options)
 end
 
 local function generate(ctx, kit)
+   ctx:level(Vec2i.new(PLATFORM_MIN, PLATFORM_MIN), Vec2i.new(PLATFORM_MAX - PLATFORM_MIN + 1, PLATFORM_MAX - PLATFORM_MIN + 1), 0)
+
    local occupied = {}
    local supported = {}
    local function occupy(x, y, sx, sy)
@@ -64,6 +66,9 @@ local function generate(ctx, kit)
       pillars[i] = kind
       if kind then
          prop(kind, spot[1], spot[2], 1, 1, 1, ctx:random(4))
+         if kind ~= "AncientPillarStump" and ctx:fraction() < 0.4 then
+            prop("AncientVinePillar", spot[1], spot[2], 1, 1, 1, ctx:random(4))
+         end
       end
    end
    for _, side in ipairs({ 0, 4 }) do
@@ -80,7 +85,11 @@ local function generate(ctx, kit)
    for x = 3, 9, 2 do
       local kind = ctx:fraction() < 0.4 and "AncientWall" or "AncientWallBroken"
       if ctx:fraction() < 0.85 then
-         prop(kind, x, 11, 1, 2, 1, ctx:random(2) * 2)
+         local yaw = ctx:random(2) * 2
+         prop(kind, x, 11, 1, 2, 1, yaw)
+         if kind == "AncientWall" and ctx:fraction() < 0.5 then
+            prop("AncientVineDrape", x + ctx:random(2), 11, 1, 1, 1, yaw)
+         end
       end
    end
 
@@ -115,6 +124,15 @@ local function generate(ctx, kit)
       end
    end
 
+   for _ = 1, 4 do
+      local x = PLATFORM_MIN + 1 + ctx:random(PLATFORM_MAX - PLATFORM_MIN - 1)
+      local y = PLATFORM_MIN + 1 + ctx:random(PLATFORM_MAX - PLATFORM_MIN - 1)
+      local onDais = x >= DAIS_MIN and x <= DAIS_MAX and y >= DAIS_MIN and y <= DAIS_MAX
+      if not onDais and free(x, y, 1, 1) then
+         prop(ctx:fraction() < 0.5 and "AncientCrackFern" or "AncientCrackWeed", x, y, 1, 1, 1, ctx:random(4))
+      end
+   end
+
    -- the platform: a brick rim around a tiled floor, a raised dais in the middle
    for x = PLATFORM_MIN, PLATFORM_MAX do
       for y = PLATFORM_MIN, PLATFORM_MAX do
@@ -123,6 +141,9 @@ local function generate(ctx, kit)
          local underDais = x >= DAIS_MIN and x <= DAIS_MAX and y >= DAIS_MIN and y <= DAIS_MAX
          if rim or underDais or supported[x * 100 + y] or ctx:fraction() >= 0.05 then
             ctx:set_cell(cell(x, y, 0), block)
+         elseif ctx:fraction() < 0.6 then
+            local plant = weighted(ctx, { { "AncientCrackSapling", 2 }, { "AncientCrackFern", 3 }, { "AncientCrackWeed", 3 } })
+            ctx:add_prop(cell(x, y, 0), Vec2i.new(1, 1), ctx:random(4), kit[plant])
          end
       end
    end
@@ -143,6 +164,7 @@ return function()
       "AncientPillar", "AncientPillarBroken", "AncientPillarStump", "AncientPillarFallen", "AncientLintel",
       "AncientGate", "AncientStairs", "AncientWall", "AncientWallBroken", "AncientAltar", "AncientStele",
       "AncientRubble", "AncientRubbleLarge",
+      "AncientCrackFern", "AncientCrackWeed", "AncientCrackSapling", "AncientVineDrape", "AncientVinePillar",
    }) do
       kit[name] = StaticProp.find(name)
    end
