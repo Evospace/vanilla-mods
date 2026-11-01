@@ -152,6 +152,7 @@ return function()
    shrine.rarity = 3
    shrine.min_distance = 192
    shrine.max_relief = 5
+   shrine.max_cut = 3
    shrine.margin = 8
    shrine.clearance = 10
    shrine.generate = function(ctx)
