@@ -249,7 +249,7 @@ function VanillaQuestsMod.init()
       unlocks = { "ResearchAutomaticMining" },
       objectives = {
          qb.open_gui("research", { label = Loc.new("ObjOpenResearch", "quests") }),
-         qb.research("BasicMachines", { label = Loc.new("ObjResearchBasicMachines", "quests") }),
+         qb.research("AutomaticHammer", { label = Loc.new("ObjResearchBasicMachines", "quests") }),
       },
    })
 
@@ -260,7 +260,7 @@ function VanillaQuestsMod.init()
          Loc.new("ResearchAutomaticMiningDesc1", "quests"),
          Loc.new("ResearchAutomaticMiningDesc2", "quests"),
       },
-      context = { "CopperConveyor", "CopperRobotArm", "CopperDrillingRig" },
+      context = { "CopperRobotArm", "CopperDrillingRig" },
       unlocks = { "BuildAutomaticMine", "BuildPortalFoundation" },
       objectives = {
          qb.research("Automatization", { label = Loc.new("ObjResearchAutomatization", "quests") }),
