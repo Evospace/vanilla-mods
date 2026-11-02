@@ -47,4 +47,18 @@ return function()
       end,
       label = "MuteOnFocusLoss",
    })
+
+   Setting.reg("Headphones", {
+      category = "Audio",
+      type = "Bool",
+      default = false,
+      ---@param setting Setting
+      set_action = function(setting)
+         local value = setting.value
+         engine.headphones = value
+         print_info("set Headphones "..tostring(value))
+         engine:apply()
+      end,
+      label = "Headphones",
+   })
  end
