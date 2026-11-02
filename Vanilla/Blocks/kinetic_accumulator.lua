@@ -9,7 +9,7 @@ local logic = function(self)
 
     accumulator.side_cover = StaticCover.get("FlywheelPort")
     accumulator.drain = 4
-    accumulator.capacity = 256000 * 2 ^ accumulator.static_block.level
+    accumulator.capacity = 2560000 * 2 ^ accumulator.static_block.level
     accumulator.conductor_channel = 4000
     accumulator.channel = "Kinetic"
 end
