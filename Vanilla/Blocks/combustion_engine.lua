@@ -4,6 +4,7 @@ local logic = function(self)
     local crafter = AbstractCrafter.cast(self)
     crafter.recipes = RecipeDictionary.get("CombustionEngineRecipeDictionary")
     crafter.speed = Vlib.get_speed(crafter)
+    crafter.input_per_tick = true
         
     local inv = ResourceInventory.new(crafter, "rio")
     crafter.energy_output_inventory = inv
