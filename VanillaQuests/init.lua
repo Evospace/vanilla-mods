@@ -311,23 +311,33 @@ function VanillaQuestsMod.init()
          Loc.new("CraftOreMultiplicationDesc1", "quests"),
          Loc.new("CraftOreMultiplicationDesc2", "quests"),
       },
-      context = { "CopperAutomaticHammer", "CopperMacerator", "CopperRobotArm", "StoneSmelter", "StoneChest" },
-      unlocks = { "ResearchCircuits" },
+      context = { "CopperAutomaticHammer", "CopperMacerator", "CopperRobotArm", "StoneSmelter" },
+      unlocks = { "RunOreProcessingLine", "ResearchCircuits" },
       objectives = {
-         qb.craft_item({ "StoneChest" }, 2,
-            { label = Loc.new("ObjCraftLineChests", "quests") }),
+         qb.research("Macerator", { label = Loc.new("ObjResearchMacerator", "quests") }),
          qb.craft_item({ "CopperAutomaticHammer" }, 1,
             { label = Loc.new("ObjCraftLineHammer", "quests") }),
          qb.craft_item({ "CopperMacerator" }, 2,
             { label = Loc.new("ObjCraftMultiplierMacerators", "quests") }),
-         qb.craft_item({ "StoneSmelter" }, 2,
+         qb.craft_item({ "StoneSmelter" }, 1,
             { label = Loc.new("ObjCraftLineSmelter", "quests") }),
          qb.craft_item({ "CopperRobotArm" }, 5,
             { label = Loc.new("ObjCraftMultiplierArms", "quests") }),
          qb.craft_item({ "CopperStirlingEngine" }, 3,
             { label = Loc.new("ObjCraftLineEngine", "quests") }),
-         qb.craft_item({ "StoneFurnace" }, 5,
+         qb.craft_item({ "StoneFurnace" }, 4,
             { label = Loc.new("ObjCraftLineFurnaces", "quests") }),
+      },
+   })
+
+   qb.quest("RunOreProcessingLine", {
+      chapter = "Automation",
+      label = Loc.new("RunOreProcessingLine", "quests"),
+      description = { Loc.new("RunOreProcessingLineDesc1", "quests") },
+      context = { "CopperAutomaticHammer", "CopperMacerator", "StoneSmelter", "ChalcopyriteOreDust", "MalachiteOreDust" },
+      objectives = {
+         qb.consume_item({ "ChalcopyriteOreDust", "MalachiteOreDust" }, 20,
+            { label = Loc.new("ObjSmeltOreDust", "quests") }),
       },
    })
 
