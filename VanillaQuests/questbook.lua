@@ -6,10 +6,13 @@ local quest_by_name = {}
 local activated_handler_id = nil
 local spawned_handler_id = nil
 
+local researched_handler_id = nil
+
 local poll_defs = {}
 local poll_handle = nil
-local poll_anchors = {}
 local poll_interval_ticks = 30
+
+local research_chapters = {}
 
 local function to_list(names)
    if type(names) == "string" then
@@ -365,7 +368,6 @@ function qb.chain_running(chain, index, opts)
       required = 1,
       show_progress = false,
       label = opts.label,
-      poll_absolute = true,
       poll = function()
          local found = chain.recall()
          if found == nil then
@@ -466,7 +468,6 @@ function qb.hotbar_item(names, opts)
       required = 1,
       show_progress = false,
       label = opts.label,
-      poll_absolute = true,
       poll = function()
          local player = Player.get()
          if player == nil then
@@ -516,7 +517,6 @@ function qb.return_home(opts)
       label = opts.label,
       match = function(ctx) return at_home() == true end,
       amount = function(ctx) return 1 end,
-      poll_absolute = true,
       poll = function()
          local home = at_home()
          if home == nil then
@@ -535,7 +535,6 @@ function qb.research(name, opts)
       required = 1,
       show_progress = false,
       label = opts.label,
-      poll_absolute = true,
       poll = function()
          local res = StaticResearch.find(name)
          if res == nil then
@@ -578,7 +577,6 @@ end
 local function build_objectives(quest, def)
    local done = quest.state == defines.quest_state.completed
    quest:clear_objectives()
-   poll_anchors[def.name] = nil
    for _, spec in ipairs(def.objectives) do
       local obj = quest:create_objective(spec.id)
       if obj ~= nil then
@@ -648,7 +646,6 @@ local function poll_tick()
    for _, def in ipairs(poll_defs) do
       local quest = StaticQuest.find(def.name)
       if quest ~= nil and quest.state == defines.quest_state.active then
-         local anchors = poll_anchors[def.name]
          local advanced = false
 
          for _, spec in ipairs(def.objectives) do
@@ -659,30 +656,11 @@ local function poll_tick()
             if obj ~= nil and not obj.completed then
                local now = spec.poll()
                if now ~= nil then
-                  local newcur
-                  if spec.poll_absolute then
-                     newcur = now
-                  else
-                     if anchors == nil then
-                        anchors = {}
-                        poll_anchors[def.name] = anchors
-                     end
-                     if anchors[spec.id] == nil then
-                        anchors[spec.id] = { base = obj.current, from = now }
-                     end
-
-                     local anchor = anchors[spec.id]
-                     local gained = now - anchor.from
-                     if gained < 0 then
-                        gained = 0
-                     end
-                     newcur = anchor.base + gained
+                  if now > spec.required then
+                     now = spec.required
                   end
-                  if newcur > spec.required then
-                     newcur = spec.required
-                  end
-                  if newcur ~= obj.current then
-                     obj:set_progress(newcur, spec.required, spec.show_progress)
+                  if now > obj.current then
+                     obj:set_progress(now, spec.required, spec.show_progress)
                      advanced = true
                   end
                end
@@ -691,6 +669,25 @@ local function poll_tick()
 
          if advanced and objectives_done(quest, def) then
             quest:complete()
+         end
+      end
+   end
+end
+
+local function open_chapters_by_research()
+   for _, def in ipairs(research_chapters) do
+      local chapter = StaticChapter.find(def.name)
+      if chapter ~= nil and not chapter.unlocked then
+         local done = true
+         for _, name in ipairs(def.research) do
+            local res = StaticResearch.find(name)
+            if res == nil or not res.completed then
+               done = false
+               break
+            end
+         end
+         if done then
+            quests:open_chapter(chapter)
          end
       end
    end
@@ -823,6 +820,14 @@ function qb.build()
          end
          StaticChapter.get(def.name).required_quests = refs
       end
+      if def.research ~= nil and #def.research > 0 then
+         for _, n in ipairs(def.research) do
+            if StaticResearch.find(n) == nil then
+               print_err("questbook: chapter '" .. def.name .. "' references unknown research '" .. n .. "'")
+            end
+         end
+         research_chapters[#research_chapters + 1] = def
+      end
    end
 
    if activated_handler_id == nil then
@@ -846,9 +851,13 @@ function qb.build()
          if poll_handle ~= nil then
             sim.cancel(poll_handle)
          end
-         poll_anchors = {}
          poll_handle = sim.every(poll_interval_ticks, poll_tick)
+         open_chapters_by_research()
       end)
+   end
+
+   if researched_handler_id == nil then
+      researched_handler_id = EventSystem.get():sub(defines.events.on_research_finished, open_chapters_by_research)
    end
 
    print_info("questbook: registered " .. tostring(#chapters) .. " chapters, " .. tostring(#quests) .. " quests")

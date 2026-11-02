@@ -236,6 +236,7 @@ function VanillaQuestsMod.init()
    qb.chapter("Automation", {
       label = Loc.new("AutomationChapter", "quests"),
       requires = { "StartPowerPlant" },
+      research = { "AutomaticHammer" },
    })
 
    qb.quest("ResearchBasicMachines", {
@@ -359,6 +360,7 @@ function VanillaQuestsMod.init()
    qb.chapter("Circuits", {
       label = Loc.new("CircuitsChapter", "quests"),
       requires = { "ResearchCircuits" },
+      research = { "Constructor" },
    })
 
    qb.quest("BuildConstructor", {
@@ -500,6 +502,7 @@ function VanillaQuestsMod.init()
    qb.chapter("Steel", {
       label = Loc.new("SteelChapter", "quests"),
       requires = { "QueueResearch" },
+      research = { "EngineeringLaboratory" },
    })
 
    qb.quest("AutomateFuel", {
@@ -616,6 +619,7 @@ function VanillaQuestsMod.init()
    qb.chapter("Aluminium", {
       label = Loc.new("AluminiumChapter", "quests"),
       requires = { "ResearchAluminium" },
+      research = { "AdvancedSmelting" },
    })
 
    qb.quest("MineAluminiumOre", {
