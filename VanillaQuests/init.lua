@@ -630,7 +630,7 @@ function VanillaQuestsMod.init()
       unlocks = { "BuildSteamPowerPlant" },
       objectives = {
          qb.research("AdvancedCircuit", { label = Loc.new("ObjResearchAdvancedCircuit", "quests") }),
-         qb.research("Dynamo", { label = Loc.new("ObjResearchDistributedComputing1", "quests") }),
+         qb.research("SteelComputer", { label = Loc.new("ObjResearchDistributedComputing1", "quests") }),
          qb.produce_item({ "AdvancedCircuit" }, 3,
             { label = Loc.new("ObjProduceAdvancedCircuit", "quests") }),
       },
