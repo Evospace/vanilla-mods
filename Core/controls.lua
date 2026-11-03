@@ -60,6 +60,13 @@ return function()
       label = "MouseInversionY",
    })
 
+   Setting.reg("CursorLockedToWindow", {
+      category = "Controls",
+      type = "Bool",
+      default = true,
+      label = "CursorLockedToWindow",
+   })
+
    Setting.reg("MoveForward", {
       category = "Controls",
       type = "Key",
