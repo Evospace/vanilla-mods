@@ -445,70 +445,30 @@ function VanillaQuestsMod.init()
          Loc.new("BoostResearchDesc2", "quests"),
       },
       context = { "CopperComputer", "Circuit", "CopperRobotArm" },
-      unlocks = { "BuildResearchLaboratory" },
+      unlocks = { "BuildEngineeringLaboratory" },
       objectives = {
          qb.consume_item({ "Circuit" }, 3,
             { label = Loc.new("ObjBoostComputer", "quests") }),
       },
    })
 
-   qb.quest("BuildResearchLaboratory", {
-      chapter = "Circuits",
-      label = Loc.new("BuildResearchLaboratory", "quests"),
-      description = {
-         Loc.new("BuildResearchLaboratoryDesc1", "quests"),
-         Loc.new("BuildResearchLaboratoryDesc2", "quests"),
-      },
-      context = { "CopperElectronicsLaboratory", "CopperConstructor", "CopperCompactGenerator" },
-      unlocks = { "RunExperiments" },
-      objectives = {
-         qb.research("ElectronicsLaboratory", { label = Loc.new("ObjResearchLaboratory", "quests") }),
-         qb.craft_item({ "CopperElectronicsLaboratory" }, 1,
-            { label = Loc.new("ObjCraftLaboratory", "quests") }),
-         qb.build_block({ "CopperElectronicsLaboratory" }, 1,
-            { label = Loc.new("ObjBuildLaboratory", "quests") }),
-      },
-   })
-
-   qb.quest("RunExperiments", {
-      chapter = "Circuits",
-      label = Loc.new("RunExperiments", "quests"),
-      description = {
-         Loc.new("RunExperimentsDesc1", "quests"),
-         Loc.new("RunExperimentsDesc2", "quests"),
-      },
-      context = { "CopperElectronicsLaboratory", "Circuit", "CopperWire" },
-      unlocks = { "QueueResearch" },
-      objectives = {
-         qb.consume_item({ "Circuit" }, 100,
-            { label = Loc.new("ObjRunMachinesExperiments", "quests") }),
-      },
-   })
-
-   qb.quest("QueueResearch", {
-      chapter = "Circuits",
-      label = Loc.new("QueueResearch", "quests"),
-      description = {
-         Loc.new("QueueResearchDesc1", "quests"),
-         Loc.new("QueueResearchDesc2", "quests"),
-      },
-      context = { "CopperFurnace", "CopperOven", "CopperEngineeringLaboratory" },
-      unlocks = { "BuildEngineeringLaboratory" },
-      objectives = {
-         qb.research("Oven", { label = Loc.new("ObjResearchOven", "quests") }),
-         qb.research("EngineeringLaboratory", { label = Loc.new("ObjResearchEngineeringLaboratory", "quests") }),
-      },
+   qb.chapter("Steel", {
+      label = Loc.new("SteelChapter", "quests"),
+      requires = { "BoostResearch" },
+      research = { "EngineeringLaboratory" },
    })
 
    qb.quest("BuildEngineeringLaboratory", {
-      chapter = "Circuits",
+      chapter = "Steel",
       label = Loc.new("BuildEngineeringLaboratory", "quests"),
       description = {
          Loc.new("BuildEngineeringLaboratoryDesc1", "quests"),
+         Loc.new("BuildEngineeringLaboratoryDesc2", "quests"),
       },
-      context = { "CopperEngineeringLaboratory" },
+      context = { "CopperEngineeringLaboratory", "CopperFurnace", "CopperOven", "CopperCompactGenerator" },
       unlocks = { "RunSteelExperiments" },
       objectives = {
+         qb.research("EngineeringLaboratory", { label = Loc.new("ObjResearchEngineeringLaboratory", "quests") }),
          qb.craft_item({ "CopperEngineeringLaboratory" }, 1,
             { label = Loc.new("ObjCraftEngineeringLaboratory", "quests") }),
          qb.build_block({ "CopperEngineeringLaboratory" }, 1,
@@ -517,7 +477,7 @@ function VanillaQuestsMod.init()
    })
 
    qb.quest("RunSteelExperiments", {
-      chapter = "Circuits",
+      chapter = "Steel",
       label = Loc.new("RunSteelExperiments", "quests"),
       description = {
          Loc.new("RunSteelExperimentsDesc1", "quests"),
@@ -530,12 +490,6 @@ function VanillaQuestsMod.init()
             { label = Loc.new("ObjRunSteelExperiments", "quests") }),
          qb.research("SteelProduction", { label = Loc.new("ObjResearchSteelProduction", "quests") }),
       },
-   })
-
-   qb.chapter("Steel", {
-      label = Loc.new("SteelChapter", "quests"),
-      requires = { "QueueResearch" },
-      research = { "EngineeringLaboratory" },
    })
 
    qb.quest("AutomateFuel", {
@@ -594,7 +548,7 @@ function VanillaQuestsMod.init()
       description = {
          Loc.new("SmeltSteelDesc1", "quests"),
       },
-      context = { "CopperBlastFurnace", "IronPlate", "Coke", "SteelPlate" },
+      context = { "CopperBlastFurnace", "IronPlate", "IronDust", "Coke", "SteelPlate" },
       unlocks = { "RunSteamExperiments" },
       objectives = {
          qb.produce_item({ "SteelPlate" }, 10,
@@ -623,15 +577,44 @@ function VanillaQuestsMod.init()
       description = {
          Loc.new("SteamIndustryDesc1", "quests"),
          Loc.new("SteamIndustryDesc2", "quests"),
-         Loc.new("SteamIndustryDesc3", "quests"),
       },
-      context = { "SteelBoiler", "SteelSteamEngine", "SteelCompactGenerator", "Steam", "Resistor", "AdvancedCircuit" },
-      unlocks = { "AdvancedCircuits" },
+      context = { "SteelBoiler", "SteelSteamEngine", "Steam" },
+      unlocks = { "BuildResearchLaboratory" },
       objectives = {
          qb.research("Boiler", { label = Loc.new("ObjResearchBoiler", "quests") }),
          qb.research("SteamEngine", { label = Loc.new("ObjResearchSteamEngine", "quests") }),
+      },
+   })
+
+   qb.quest("BuildResearchLaboratory", {
+      chapter = "Steel",
+      label = Loc.new("BuildResearchLaboratory", "quests"),
+      description = {
+         Loc.new("BuildResearchLaboratoryDesc1", "quests"),
+         Loc.new("BuildResearchLaboratoryDesc2", "quests"),
+      },
+      context = { "CopperElectronicsLaboratory", "CopperConstructor" },
+      unlocks = { "RunExperiments" },
+      objectives = {
+         qb.research("ElectronicsLaboratory", { label = Loc.new("ObjResearchLaboratory", "quests") }),
+         qb.craft_item({ "CopperElectronicsLaboratory" }, 1,
+            { label = Loc.new("ObjCraftLaboratory", "quests") }),
+         qb.build_block({ "CopperElectronicsLaboratory" }, 1,
+            { label = Loc.new("ObjBuildLaboratory", "quests") }),
+      },
+   })
+
+   qb.quest("RunExperiments", {
+      chapter = "Steel",
+      label = Loc.new("RunExperiments", "quests"),
+      description = {
+         Loc.new("RunExperimentsDesc1", "quests"),
+         Loc.new("RunExperimentsDesc2", "quests"),
+      },
+      context = { "CopperElectronicsLaboratory", "Circuit", "CopperWire", "Resistor" },
+      unlocks = { "AdvancedCircuits" },
+      objectives = {
          qb.research("Resistor", { label = Loc.new("ObjResearchResistor", "quests") }),
-         qb.research("AdvancedCircuit", { label = Loc.new("ObjResearchAdvancedCircuit", "quests") }),
       },
    })
 
@@ -644,11 +627,52 @@ function VanillaQuestsMod.init()
          Loc.new("AdvancedCircuitsDesc3", "quests"),
       },
       context = { "AdvancedCircuit", "CircuitBoard", "Resistor", "Circuit", "CopperConstructor", "SteelComputer" },
-      unlocks = { "ResearchAluminium" },
+      unlocks = { "BuildSteamPowerPlant" },
       objectives = {
+         qb.research("AdvancedCircuit", { label = Loc.new("ObjResearchAdvancedCircuit", "quests") }),
          qb.research("Dynamo", { label = Loc.new("ObjResearchDistributedComputing1", "quests") }),
          qb.produce_item({ "AdvancedCircuit" }, 3,
             { label = Loc.new("ObjProduceAdvancedCircuit", "quests") }),
+      },
+   })
+
+   local steam_plant = qb.chain("SteamPowerPlant", {
+      { block = { "StoneFurnace", "CopperFurnace", "SteelFurnace" }, out = "rao" },
+      { block = "SteelBoiler", inp = "rai_", out = "rao" },
+      { block = "SteelSteamEngine", inp = "Input1", out = "Output" },
+      { block = "SteelCompactGenerator", inp = "rai" },
+   })
+
+   qb.quest("BuildSteamPowerPlant", {
+      chapter = "Steel",
+      label = Loc.new("BuildSteamPowerPlant", "quests"),
+      description = {
+         Loc.new("BuildSteamPowerPlantDesc1", "quests"),
+         Loc.new("BuildSteamPowerPlantDesc2", "quests"),
+      },
+      context = { "CopperFurnace", "SteelBoiler", "SteelSteamEngine", "SteelCompactGenerator", "CopperPump", "CopperAtmosphericCondenser" },
+      unlocks = { "RunElectricityExperiments" },
+      objectives = {
+         qb.build_chain(steam_plant, { label = Loc.new("ObjBuildSteamPowerPlant", "quests") }),
+         qb.chain_running(steam_plant, 2, { label = Loc.new("ObjSteamPlantBoiler", "quests") }),
+         qb.chain_running(steam_plant, 3, { label = Loc.new("ObjSteamPlantEngine", "quests") }),
+         qb.chain_running(steam_plant, 4, { label = Loc.new("ObjSteamPlantGenerator", "quests") }),
+      },
+   })
+
+   qb.quest("RunElectricityExperiments", {
+      chapter = "Steel",
+      label = Loc.new("RunElectricityExperiments", "quests"),
+      description = {
+         Loc.new("RunElectricityExperimentsDesc1", "quests"),
+         Loc.new("RunElectricityExperimentsDesc2", "quests"),
+      },
+      context = { "CopperEngineeringLaboratory", "SteelBoiler", "SteelSteamEngine", "BasicCoil" },
+      unlocks = { "ResearchAluminium" },
+      objectives = {
+         qb.consume_item({ "SteelBoiler" }, 25,
+            { label = Loc.new("ObjRunElectricityExperiments", "quests") }),
+         qb.research("BasicCoil", { label = Loc.new("ObjResearchBasicCoil", "quests") }),
       },
    })
 
@@ -658,9 +682,12 @@ function VanillaQuestsMod.init()
       description = {
          Loc.new("ResearchAluminiumDesc1", "quests"),
       },
-      context = { "SteelElectrolyzer", "SteelArcSmelter", "AluminiumPlate" },
+      context = { "SteelElectrolyzer", "SteelArcSmelter", "SteelSeparator", "AluminiumPlate" },
+      unlocks = { "RunAluminiumExperiments" },
       objectives = {
-         qb.research("AluminiumProduction", { label = Loc.new("ObjResearchAluminiumProduction", "quests") }),
+         qb.research("Electrolyzer", { label = Loc.new("ObjResearchElectrolyzer", "quests") }),
+         qb.research("AdvancedSmelting", { label = Loc.new("ObjResearchAdvancedSmelting", "quests") }),
+         qb.research("Separator", { label = Loc.new("ObjResearchSeparator", "quests") }),
       },
    })
 
@@ -668,6 +695,22 @@ function VanillaQuestsMod.init()
       label = Loc.new("AluminiumChapter", "quests"),
       requires = { "ResearchAluminium" },
       research = { "AdvancedSmelting" },
+   })
+
+   qb.quest("RunAluminiumExperiments", {
+      chapter = "Aluminium",
+      label = Loc.new("RunAluminiumExperiments", "quests"),
+      description = {
+         Loc.new("RunAluminiumExperimentsDesc1", "quests"),
+         Loc.new("RunAluminiumExperimentsDesc2", "quests"),
+      },
+      context = { "CopperEngineeringLaboratory", "SteelElectrolyzer", "SteelSeparator" },
+      unlocks = { "Electrolysis" },
+      objectives = {
+         qb.consume_item({ "SteelElectrolyzer" }, 30,
+            { label = Loc.new("ObjRunAluminiumExperiments", "quests") }),
+         qb.research("AluminiumReduction", { label = Loc.new("ObjResearchAluminiumReduction", "quests") }),
+      },
    })
 
    qb.quest("MineAluminiumOre", {
