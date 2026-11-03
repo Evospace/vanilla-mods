@@ -68,7 +68,7 @@ return function()
 
     Vlib.FillBlock("Computer", require('./computer'))
 
-    Vlib.FillBlock("Beacon", require('./beacon'))
+    Vlib.FillBlock("Radio", require('./radio'))
 
     Vlib.FillBlock("BatteryBox", require('./battery_box'))
 
