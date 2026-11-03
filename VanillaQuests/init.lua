@@ -492,9 +492,42 @@ function VanillaQuestsMod.init()
          Loc.new("QueueResearchDesc1", "quests"),
          Loc.new("QueueResearchDesc2", "quests"),
       },
-      context = { "CopperOven", "CopperBlastFurnace" },
+      context = { "CopperFurnace", "CopperOven", "CopperEngineeringLaboratory" },
+      unlocks = { "BuildEngineeringLaboratory" },
       objectives = {
          qb.research("Oven", { label = Loc.new("ObjResearchOven", "quests") }),
+         qb.research("EngineeringLaboratory", { label = Loc.new("ObjResearchEngineeringLaboratory", "quests") }),
+      },
+   })
+
+   qb.quest("BuildEngineeringLaboratory", {
+      chapter = "Circuits",
+      label = Loc.new("BuildEngineeringLaboratory", "quests"),
+      description = {
+         Loc.new("BuildEngineeringLaboratoryDesc1", "quests"),
+      },
+      context = { "CopperEngineeringLaboratory" },
+      unlocks = { "RunSteelExperiments" },
+      objectives = {
+         qb.craft_item({ "CopperEngineeringLaboratory" }, 1,
+            { label = Loc.new("ObjCraftEngineeringLaboratory", "quests") }),
+         qb.build_block({ "CopperEngineeringLaboratory" }, 1,
+            { label = Loc.new("ObjBuildEngineeringLaboratory", "quests") }),
+      },
+   })
+
+   qb.quest("RunSteelExperiments", {
+      chapter = "Circuits",
+      label = Loc.new("RunSteelExperiments", "quests"),
+      description = {
+         Loc.new("RunSteelExperimentsDesc1", "quests"),
+         Loc.new("RunSteelExperimentsDesc2", "quests"),
+      },
+      context = { "CopperEngineeringLaboratory", "Triod", "CopperPipe", "CopperConveyor", "CopperBlastFurnace" },
+      unlocks = { "SmeltSteel" },
+      objectives = {
+         qb.consume_item({ "CopperConveyor" }, 25,
+            { label = Loc.new("ObjRunSteelExperiments", "quests") }),
          qb.research("SteelProduction", { label = Loc.new("ObjResearchSteelProduction", "quests") }),
       },
    })
@@ -562,10 +595,25 @@ function VanillaQuestsMod.init()
          Loc.new("SmeltSteelDesc1", "quests"),
       },
       context = { "CopperBlastFurnace", "IronPlate", "Coke", "SteelPlate" },
-      unlocks = { "SteamIndustry" },
+      unlocks = { "RunSteamExperiments" },
       objectives = {
          qb.produce_item({ "SteelPlate" }, 10,
             { label = Loc.new("ObjSmeltSteelPlate", "quests") }),
+      },
+   })
+
+   qb.quest("RunSteamExperiments", {
+      chapter = "Steel",
+      label = Loc.new("RunSteamExperiments", "quests"),
+      description = {
+         Loc.new("RunSteamExperimentsDesc1", "quests"),
+         Loc.new("RunSteamExperimentsDesc2", "quests"),
+      },
+      context = { "CopperEngineeringLaboratory", "CopperPump", "SteelPipe" },
+      unlocks = { "SteamIndustry" },
+      objectives = {
+         qb.consume_item({ "CopperPump" }, 25,
+            { label = Loc.new("ObjRunSteamExperiments", "quests") }),
       },
    })
 
