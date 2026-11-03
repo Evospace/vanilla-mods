@@ -368,9 +368,8 @@ function VanillaQuestsMod.init()
       label = Loc.new("BuildConstructor", "quests"),
       description = {
          Loc.new("BuildConstructorDesc1", "quests"),
-         Loc.new("BuildConstructorDesc2", "quests"),
       },
-      context = { "CopperConstructor", "CopperWire", "CopperCompactGenerator" },
+      context = { "CopperConstructor", "CopperWire" },
       unlocks = { "SmeltGlass" },
       objectives = {
          qb.craft_item({ "CopperConstructor" }, 1,
@@ -465,7 +464,7 @@ function VanillaQuestsMod.init()
          Loc.new("BuildEngineeringLaboratoryDesc1", "quests"),
          Loc.new("BuildEngineeringLaboratoryDesc2", "quests"),
       },
-      context = { "CopperEngineeringLaboratory", "CopperFurnace", "CopperOven", "CopperCompactGenerator" },
+      context = { "CopperEngineeringLaboratory" },
       unlocks = { "RunSteelExperiments" },
       objectives = {
          qb.research("EngineeringLaboratory", { label = Loc.new("ObjResearchEngineeringLaboratory", "quests") }),
