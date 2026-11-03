@@ -78,6 +78,7 @@ function qb.craft_item(names, count, opts)
       required = count or 1,
       show_progress = true,
       label = opts.label,
+      items = set,
       match = function(ctx) return ctx.item ~= nil and set[ctx.item.name:lower()] == true end,
       amount = function(ctx) return ctx.count or 1 end,
    }
@@ -136,6 +137,7 @@ function qb.build_block(names, count, opts)
       required = count or 1,
       show_progress = (count or 1) > 1,
       label = opts.label,
+      items = set,
       match = function(ctx) return ctx.block ~= nil and set[ctx.block.name:lower()] == true end,
       amount = function(ctx) return 1 end,
    }
@@ -609,7 +611,51 @@ local function objectives_done(quest, def)
    return not def.any
 end
 
+local function same_set(a, b)
+   for k in pairs(a) do
+      if not b[k] then
+         return false
+      end
+   end
+   for k in pairs(b) do
+      if not a[k] then
+         return false
+      end
+   end
+   return true
+end
+
+local function link_skips(def)
+   for _, place in ipairs(def.objectives) do
+      if place.kind == "build_block" then
+         for _, craft in ipairs(def.objectives) do
+            if craft.kind == "craft_item" and same_set(craft.items, place.items) then
+               place.skips = place.skips or {}
+               place.skips[#place.skips + 1] = craft
+            end
+         end
+      end
+   end
+end
+
+local function skip_steps(quest, def)
+   for _, spec in ipairs(def.objectives) do
+      if spec.skips ~= nil then
+         local obj = quest:find_objective_by_id(spec.id)
+         if obj ~= nil and obj.completed then
+            for _, skipped in ipairs(spec.skips) do
+               local target = quest:find_objective_by_id(skipped.id)
+               if target ~= nil and not target.completed then
+                  target:set_progress(skipped.required, skipped.required, skipped.show_progress)
+               end
+            end
+         end
+      end
+   end
+end
+
 local function build_events_table(def)
+   link_skips(def)
    local by_event = {}
    for _, spec in ipairs(def.objectives) do
       for _, event in ipairs(to_event_list(spec.event)) do
@@ -634,6 +680,7 @@ local function build_events_table(def)
                end
             end
          end
+         skip_steps(quest, def)
          if objectives_done(quest, def) then
             quest:complete()
          end
