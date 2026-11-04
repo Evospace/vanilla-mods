@@ -116,6 +116,7 @@ return function()
     make_bool_set("AltHotbar", "alt_hotbar")
     make_bool_set("ShiftHotbar", "shift_hotbar")
     make_bool_set("AdvancedLogic", "advanced_logic")
+    make_bool_set("PipeNetworkView", "pipe_network_view")
 
     Setting.reg("AutosavePeriod", {
         category = "Game",
