@@ -626,36 +626,12 @@ function VanillaQuestsMod.init()
          Loc.new("AdvancedCircuitsDesc3", "quests"),
       },
       context = { "AdvancedCircuit", "CircuitBoard", "Resistor", "Circuit", "CopperConstructor", "SteelComputer" },
-      unlocks = { "BuildSteamPowerPlant" },
+      unlocks = { "RunElectricityExperiments" },
       objectives = {
          qb.research("AdvancedCircuit", { label = Loc.new("ObjResearchAdvancedCircuit", "quests") }),
          qb.research("SteelComputer", { label = Loc.new("ObjResearchDistributedComputing1", "quests") }),
          qb.produce_item({ "AdvancedCircuit" }, 3,
             { label = Loc.new("ObjProduceAdvancedCircuit", "quests") }),
-      },
-   })
-
-   local steam_plant = qb.chain("SteamPowerPlant", {
-      { block = { "StoneFurnace", "CopperFurnace", "SteelFurnace" }, out = "rao" },
-      { block = "SteelBoiler", inp = "rai_", out = "rao" },
-      { block = "SteelSteamEngine", inp = "Input1", out = "Output" },
-      { block = "SteelCompactGenerator", inp = "rai" },
-   })
-
-   qb.quest("BuildSteamPowerPlant", {
-      chapter = "Steel",
-      label = Loc.new("BuildSteamPowerPlant", "quests"),
-      description = {
-         Loc.new("BuildSteamPowerPlantDesc1", "quests"),
-         Loc.new("BuildSteamPowerPlantDesc2", "quests"),
-      },
-      context = { "CopperFurnace", "SteelBoiler", "SteelSteamEngine", "SteelCompactGenerator", "CopperPump", "CopperAtmosphericCondenser" },
-      unlocks = { "RunElectricityExperiments" },
-      objectives = {
-         qb.build_chain(steam_plant, { label = Loc.new("ObjBuildSteamPowerPlant", "quests") }),
-         qb.chain_running(steam_plant, 2, { label = Loc.new("ObjSteamPlantBoiler", "quests") }),
-         qb.chain_running(steam_plant, 3, { label = Loc.new("ObjSteamPlantEngine", "quests") }),
-         qb.chain_running(steam_plant, 4, { label = Loc.new("ObjSteamPlantGenerator", "quests") }),
       },
    })
 
