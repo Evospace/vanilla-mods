@@ -1,3 +1,5 @@
+local Temperate = require('./biomes')
+
 local SIZE = 14
 local PLATFORM_MIN, PLATFORM_MAX = 1, 12
 local DAIS_MIN, DAIS_MAX = 4, 9
@@ -55,7 +57,6 @@ local function generate(ctx, kit)
       occupy(x, y, sx, sy)
    end
 
-   -- pillars along the sides, walls along the back, the gate in front
    local pillar_spots = {
       { 2, 2 }, { 2, 5 }, { 2, 8 }, { 2, 11 },
       { 11, 2 }, { 11, 5 }, { 11, 8 }, { 11, 11 },
@@ -101,7 +102,6 @@ local function generate(ctx, kit)
    prop("AncientAltar", 6, 6, 2, 2, 2, ctx:random(4))
    prop("AncientStele", 6, 9, 2, 2, 1, 2)
 
-   -- fallen pieces near broken pillars, rubble wherever there is room
    for i, kind in ipairs(pillars) do
       if kind ~= "AncientPillar" and ctx:fraction() < 0.6 then
          local spot = pillar_spots[i]
@@ -133,7 +133,6 @@ local function generate(ctx, kit)
       end
    end
 
-   -- the platform: a brick rim around a tiled floor, a raised dais in the middle
    for x = PLATFORM_MIN, PLATFORM_MAX do
       for y = PLATFORM_MIN, PLATFORM_MAX do
          local rim = x == PLATFORM_MIN or x == PLATFORM_MAX or y == PLATFORM_MIN or y == PLATFORM_MAX
@@ -177,6 +176,7 @@ return function()
    shrine.max_cut = 3
    shrine.margin = 8
    shrine.clearance = 10
+   shrine.biomes = Temperate()
    shrine.generate = function(ctx)
       generate(ctx, kit)
    end

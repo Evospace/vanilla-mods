@@ -43,6 +43,21 @@ function Piece:path(x, y, floor, stair)
    self.ctx:path(Vec2i.new(tx, ty), floor, stair)
 end
 
+function Piece:level_rect(x, y, sx, sy, z)
+   local ax, ay = self:at(x, y)
+   local bx, by = self:at(x + sx - 1, y + sy - 1)
+   self.ctx:level(Vec2i.new(math.min(ax, bx), math.min(ay, by)), Vec2i.new(math.abs(bx - ax) + 1, math.abs(by - ay) + 1), self.level + z)
+end
+
+function Piece:ground(x, y)
+   local tx, ty = self:at(x, y)
+   return self.ctx:ground(Vec2i.new(tx, ty)) - self.level
+end
+
+function Piece:linked(index)
+   return self.links[index] == true
+end
+
 function Piece:random(count)
    return self.ctx:random(count)
 end
@@ -99,7 +114,7 @@ function Rooms.assemble(ctx, name, startName, limits)
    end
 
    local function place(room, x, y, r, sx, sy, step, used)
-      local piece = setmetatable({ ctx = ctx, room = room, x = x, y = y, r = r, sx = sx, sy = sy, level = 0 }, Piece)
+      local piece = setmetatable({ ctx = ctx, room = room, x = x, y = y, r = r, sx = sx, sy = sy, level = 0, links = {} }, Piece)
       table.insert(placed, piece)
       counts[room.name] = (counts[room.name] or 0) + 1
       for i = x, x + sx - 1 do
@@ -107,10 +122,13 @@ function Rooms.assemble(ctx, name, startName, limits)
             occupied[key(i, j)] = piece
          end
       end
+      if used ~= 0 then
+         piece.links[used] = true
+      end
       for index, door in ipairs(room.doors) do
          if index ~= used then
             local dx, dy = rotate(door[1], door[2], room.size[1], room.size[2], r)
-            table.insert(open, { x = x + dx, y = y + dy, dir = (door[3] + r) % 4, tag = door[4], step = step, piece = piece })
+            table.insert(open, { x = x + dx, y = y + dy, dir = (door[3] + r) % 4, tag = door[4], step = step, piece = piece, index = index })
          end
       end
    end
@@ -129,6 +147,7 @@ function Rooms.assemble(ctx, name, startName, limits)
             local x, y = tx - dx, ty - dy
             if fits(room, x, y, sx, sy, door.piece) then
                place(room, x, y, r, sx, sy, door.step + 1, index)
+               door.piece.links[door.index] = true
                return true
             end
          end
@@ -156,7 +175,7 @@ function Rooms.assemble(ctx, name, startName, limits)
          local total = 0
          for _, room in ipairs(rooms) do
             local weight = room.weight or 0
-            if weight > 0 and (counts[room.name] or 0) < (room.max or math.huge) then
+            if weight > 0 and (counts[room.name] or 0) < (room.max or math.huge) and door.step + 1 >= (room.min_step or 0) then
                for _, own in ipairs(room.doors) do
                   if own[4] == door.tag and not own[5] then
                      table.insert(candidates, room)
@@ -186,7 +205,7 @@ function Rooms.assemble(ctx, name, startName, limits)
    end
 
    for _, piece in ipairs(placed) do
-      if piece.room.kind ~= "path" then
+      if piece.room.kind ~= "path" and not piece.room.buried then
          local heights = {}
          for i = piece.x, piece.x + piece.sx - 1 do
             for j = piece.y, piece.y + piece.sy - 1 do

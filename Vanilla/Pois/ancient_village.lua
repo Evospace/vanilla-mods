@@ -1,4 +1,5 @@
 local Rooms = require('./rooms')
+local Temperate = require('./biomes')
 
 local POOL = "AncientVillage"
 local SIZE = 40
@@ -319,6 +320,7 @@ return function()
    village.max_cut = 3
    village.margin = 8
    village.clearance = 6
+   village.biomes = Temperate()
    village.generate = function(ctx)
       Rooms.assemble(ctx, POOL, "plaza", { pieces = 40, depth = 8 })
    end

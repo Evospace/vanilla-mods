@@ -19,6 +19,7 @@ function vanilla_mod.init()
 
    require('@self/Pois/ancient_shrine')()
    require('@self/Pois/ancient_village')()
+   require('@self/Pois/ancient_crypt')()
 
    local ss = StaticStructure.reg("StartPlatform")
 
@@ -90,54 +91,6 @@ function vanilla_mod.init()
          music:play_random_crossfade(10.0)
       end
    end)
-
-   math.randomseed(123)
-   local rand = math.random
-
-   local BLOCK_PLAT    = StaticBlock.find("TerracottaBricks")
-   local BLOCK_WALL    = StaticBlock.find("WoodenPlanks")
-   local BLOCK_COL_BASE= StaticBlock.find("BasicPlatform")
-   local BLOCK_COL_SEG = StaticBlock.find("BasicPlatform")
-   local BLOCK_COL_CAP = StaticBlock.find("BasicPlatform")
-
-   local function generate_platform(ctx, pos)
-   local size = rand(4, 7)
-   local h    = dim:sample_height(pos.x, pos.y)
-   local z    = math.floor(h)
-   for i = 0, size-1 do
-      for j = 0, size-1 do
-         local p = Vec3i.new(pos.x + i, pos.y + j, z)
-         for k = 0, 2 do
-            ctx:set_cell(p - Vec3i.new(0, 0, k), BLOCK_PLAT)
-         end
-
-         for k = 1, 4 do
-            ctx:set_cell(p + Vec3i.new(0, 0, k), BLOCK_WALL)
-         end
-         for k = 4, 6 do
-            ctx:set_cell(p + Vec3i.new(0, 0, k), nil)
-            ctx:clear_props(p + Vec3i.new(0, 0, k))
-         end
-      end
-   end
-   end
-
-   local RuinsGen = StaticStructure.reg("RuinsGenerator")
-      RuinsGen.size = Vec2i.new(10, 10)
-
-      RuinsGen.generate = function(ctx)
-      local gen_zero = ctx.pos * Vec2i.new(cs.sector_size.x, cs.sector_size.y)
-
-      local count = rand(3, 6)
-
-      for _ = 1, count do
-         local offset = Vec2i.new(rand(0, 50), rand(0, 50))
-         local pos = gen_zero + offset
-
-         generate_platform(ctx, pos)
-      end
-   end
-
 end
 
 function vanilla_mod.post_init()
