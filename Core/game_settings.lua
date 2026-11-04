@@ -116,7 +116,22 @@ return function()
     make_bool_set("AltHotbar", "alt_hotbar")
     make_bool_set("ShiftHotbar", "shift_hotbar")
     make_bool_set("AdvancedLogic", "advanced_logic")
-    make_bool_set("PipeNetworkView", "pipe_network_view")
+
+    local PipeNetworkViewReach = { Off = 0, ["10"] = 10, Infinite = -1 }
+    Setting.reg("PipeNetworkView", {
+        category = "Game",
+        type = "String",
+        default = "Off",
+        options = {"Off", "10", "Infinite"},
+        ---@param setting Setting
+        set_action = function(setting)
+            local value = PipeNetworkViewReach[setting.value]
+            print_info("set PipeNetworkView "..value)
+            engine.pipe_network_view = value
+            engine:apply()
+        end,
+        label = "PipeNetworkView",
+    })
 
     Setting.reg("AutosavePeriod", {
         category = "Game",
