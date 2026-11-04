@@ -1,13 +1,13 @@
 local ev01 = {}
 
-local sound_root = "/Game/Audio/Voice/EV01/EN/VO_EV01_"
+local sound_root = "/Game/Audio/Voice/EV01/VO_EV01_"
 
 local intro_handler_id = nil
 
 function ev01.say(name, opts)
    local spec = {
       id = "ev01." .. name,
-      sound = sound_root .. name .. "_EN",
+      sound = sound_root .. name,
       text = Loc.new("EV01" .. name, "voice"),
       speaker = "EV-01",
    }
