@@ -120,4 +120,5 @@ return function()
     Vlib.FillBlockCustom({"CopperConnector"}, require('./cable'))
 
     Vlib.FillBlockCustom({"Stairs", "Corner", "Beam", "Scaffold", "Chair", "Table", "Ladder", "Fence", "Column", "Floor"}, require('./designable'))
+    Vlib.FillBlockCustom({"AncientGate", "AncientAltar", "AncientStele", "AncientPillar"}, require('./designable'))
 end
