@@ -435,13 +435,10 @@ return function()
             end
 
             local limit_value = engine.limit_texture_pool_to_vram and 1 or 0
-            Console.run("r.TextureStreaming 1")
             Console.run("r.Streaming.LimitPoolSizeToVRAM "..limit_value)
             Console.run("r.Streaming.PoolSize "..engine.texture_pool_size_mb)
             Console.run("r.Streaming.MaxTempMemoryAllowed "..engine.texture_max_temp_memory_mb)
             Console.run("r.Streaming.MipBias "..engine.texture_mip_bias)
-            Console.run("r.Streaming.UsePerTextureBias 1")
-            Console.run("r.Streaming.DefragDynamicBounds 1")
             Console.run("r.RenderTargetPoolMin "..engine.render_target_pool_min_mb)
             engine:apply()
         end,
