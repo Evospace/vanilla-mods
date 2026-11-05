@@ -1,3 +1,4 @@
+#asm
 ; FIELD LOG
 ; Three pages of text; arrows or Enter turn them.
 
