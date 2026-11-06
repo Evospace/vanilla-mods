@@ -56,21 +56,6 @@ local function build(ctx, kit)
          cell(x, y, z, nil)
       end
    end
-   local function rim(x, y)
-      local top = surface(x, y)
-      for i = math.max(x - 1, 0), math.min(x + 1, W - 1) do
-         for j = math.max(y - 1, 0), math.min(y + 1, D - 1) do
-            top = math.max(top, surface(i, j))
-         end
-      end
-      return top + 1
-   end
-   local function wall(x, y, base)
-      column(x, y, base)
-      for z = base + 1, rim(x, y) do
-         cell(x, y, z, kit.masonry_cut)
-      end
-   end
 
    local cx = math.floor(W / 2) - 1
    local x0 = cx - 3
@@ -128,7 +113,7 @@ local function build(ctx, kit)
          clear(x, y, k - 1, math.max(k + TUNNEL, surface(x, y)))
       end
       for _, x in ipairs({ cx - 1, cx + 2 }) do
-         wall(x, y, k)
+         column(x, y, math.max(k, surface(x, y)))
       end
    end
 
@@ -140,7 +125,7 @@ local function build(ctx, kit)
          clear(x, y, F, math.max(F + (bay and GATE or TUNNEL), surface(x, y)))
       end
       for _, x in ipairs({ left - 1, right + 1 }) do
-         wall(x, y, F)
+         column(x, y, math.max(F, surface(x, y)))
       end
       if not bay and ctx:fraction() < 0.25 then
          prop(cx + ctx:random(2), y, F, 1, 1, ctx:random(4), Vaults.MOSS[1 + ctx:random(#Vaults.MOSS)])
@@ -166,8 +151,8 @@ local function build(ctx, kit)
    end
    if portal < hub then
       for x = cx - 1, cx + 2 do
-         for z = F + TUNNEL + 1, rim(x, portal) do
-            cell(x, portal, z, kit.masonry_cut)
+         for z = F + TUNNEL + 1, surface(x, portal) do
+            cell(x, portal, z, kit.masonry)
          end
       end
    end

@@ -36,7 +36,6 @@ end
 function Vaults.kit()
    local kit = {
       masonry = StaticBlock.find("AncientMasonry"),
-      masonry_cut = StaticBlock.find("AncientMasonryCut"),
       tiles = StaticBlock.find("StoneTiles"),
    }
    for _, name in ipairs({
