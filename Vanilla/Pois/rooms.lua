@@ -66,6 +66,11 @@ function Piece:fraction()
    return self.ctx:fraction()
 end
 
+function Rooms.opening(door)
+   local side = STEPS[(door[3] + 1) % 4 + 1]
+   return { { door[1], door[2] }, { door[1] + side[1], door[2] + side[2] } }
+end
+
 function Rooms.define(name)
    pools[name] = { rooms = {} }
 end
@@ -97,6 +102,9 @@ function Rooms.assemble(ctx, name, startName, limits)
                end
             end
          end
+      end
+      if limits.fits and not limits.fits(room, x, y, sx, sy) then
+         return false
       end
       if room.kind == "path" then
          for i = x, x + sx - 1 do
@@ -135,7 +143,8 @@ function Rooms.assemble(ctx, name, startName, limits)
 
    local function attach(room, door)
       local need = (door.dir + 2) % 4
-      local tx, ty = door.x + STEPS[door.dir + 1][1], door.y + STEPS[door.dir + 1][2]
+      local step, side = STEPS[door.dir + 1], STEPS[(door.dir + 1) % 4 + 1]
+      local tx, ty = door.x + step[1] + side[1], door.y + step[2] + side[2]
       for index, own in ipairs(room.doors) do
          if own[4] == door.tag and not own[5] then
             local r = (need - own[3]) % 4
@@ -155,14 +164,28 @@ function Rooms.assemble(ctx, name, startName, limits)
       return false
    end
 
+   for _, rect in ipairs(limits.taken or {}) do
+      local blocker = { room = { kind = "taken" } }
+      for i = rect[1], rect[1] + rect[3] - 1 do
+         for j = rect[2], rect[2] + rect[4] - 1 do
+            occupied[key(i, j)] = blocker
+         end
+      end
+   end
+
    for _, room in ipairs(rooms) do
       if room.name == startName then
-         local r = ctx:random(4)
+         local start = limits.start
+         local r = start and start.r or ctx:random(4)
          local sx, sy = room.size[1], room.size[2]
          if r % 2 == 1 then
             sx, sy = sy, sx
          end
-         place(room, math.floor((width - sx) / 2), math.floor((depth - sy) / 2), r, sx, sy, 0, 0)
+         if start then
+            place(room, start.x, start.y, r, sx, sy, 0, start.door or 0)
+         else
+            place(room, math.floor((width - sx) / 2), math.floor((depth - sy) / 2), r, sx, sy, 0, 0)
+         end
       end
    end
 

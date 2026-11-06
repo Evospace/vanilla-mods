@@ -20,6 +20,7 @@ function vanilla_mod.init()
    require('@self/Pois/ancient_shrine')()
    require('@self/Pois/ancient_village')()
    require('@self/Pois/ancient_crypt')()
+   require('@self/Pois/ancient_rock_tomb')()
 
    local ss = StaticStructure.reg("StartPlatform")
 
