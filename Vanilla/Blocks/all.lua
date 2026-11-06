@@ -104,7 +104,6 @@ return function()
     Vlib.FillBlock("IndustrialGenerator", require('./industrial_generator'))
 
     Vlib.FillBlock("FusionReactor", require('./fusion_reactor'))
-    Vlib.FillBlock("Portal", require('./portal'))
     Vlib.FillBlockCustom({"Portal"}, require('./portal_project'))
     Vlib.FillBlockCustom({"RocketPad"}, require('./rocket_pad'))
     Vlib.FillBlockCustom({"SatelliteAntenna"}, require('./satellite_antenna'))
