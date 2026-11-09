@@ -708,9 +708,25 @@ function VanillaQuestsMod.init()
          Loc.new("ElectrolysisDesc3", "quests"),
       },
       context = { "SteelElectrolyzer", "AluminiumOxideDust", "AluminiumDust", "Oxygen", "CopperPump", "CopperDestroyer", "CopperLoader", "SteelSorter", "CopperItemRack" },
+      unlocks = { "ProcessorResearch" },
       objectives = {
          qb.produce_item({ "AluminiumDust" }, 12,
             { label = Loc.new("ObjProduceAluminiumDust", "quests") }),
+      },
+   })
+
+   qb.quest("ProcessorResearch", {
+      chapter = "Aluminium",
+      label = Loc.new("ProcessorResearch", "quests"),
+      description = {
+         Loc.new("ProcessorResearchDesc1", "quests"),
+         Loc.new("ProcessorResearchDesc2", "quests"),
+      },
+      context = { "AluminiumComputer", "Processor", "Capacitor", "AdvancedCircuit" },
+      objectives = {
+         qb.research("AluminiumComputer", { label = Loc.new("ObjResearchAluminiumComputer", "quests") }),
+         qb.consume_item({ "Processor" }, 3,
+            { label = Loc.new("ObjBoostProcessor", "quests") }),
       },
    })
 
