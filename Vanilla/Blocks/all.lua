@@ -108,9 +108,7 @@ return function()
     Vlib.FillBlockCustom({"RocketPad"}, require('./rocket_pad'))
     Vlib.FillBlockCustom({"SatelliteAntenna"}, require('./satellite_antenna'))
     Vlib.FillBlockCustom({"AntimatterCollector"}, require('./antimatter_collector'))
-    for _, laboratory in ipairs({ "ElectronicsLaboratory", "EngineeringLaboratory", "ChemicalLaboratory" }) do
-        Vlib.FillBlock(laboratory, require('./research_laboratory')(laboratory))
-    end
+    Vlib.FillBlock("ResearchLaboratory", require('./research_laboratory'))
     Vlib.FillBlock("SmallSolarPanel", require('./small_solar_panel'))
     Vlib.FillBlock("SolarPanel", require('./solar_panel'))
     Vlib.FillBlock("WindTurbine", require('./wind_turbine'))

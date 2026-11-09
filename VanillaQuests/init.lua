@@ -454,7 +454,7 @@ function VanillaQuestsMod.init()
    qb.chapter("Steel", {
       label = Loc.new("SteelChapter", "quests"),
       requires = { "BoostResearch" },
-      research = { "EngineeringLaboratory" },
+      research = { "ResearchLaboratory" },
    })
 
    qb.quest("BuildEngineeringLaboratory", {
@@ -464,13 +464,13 @@ function VanillaQuestsMod.init()
          Loc.new("BuildEngineeringLaboratoryDesc1", "quests"),
          Loc.new("BuildEngineeringLaboratoryDesc2", "quests"),
       },
-      context = { "CopperEngineeringLaboratory" },
+      context = { "CopperResearchLaboratory" },
       unlocks = { "RunSteelExperiments" },
       objectives = {
-         qb.research("EngineeringLaboratory", { label = Loc.new("ObjResearchEngineeringLaboratory", "quests") }),
-         qb.craft_item({ "CopperEngineeringLaboratory" }, 1,
+         qb.research("ResearchLaboratory", { label = Loc.new("ObjResearchEngineeringLaboratory", "quests") }),
+         qb.craft_item({ "CopperResearchLaboratory" }, 1,
             { label = Loc.new("ObjCraftEngineeringLaboratory", "quests") }),
-         qb.build_block({ "CopperEngineeringLaboratory" }, 1,
+         qb.build_block({ "CopperResearchLaboratory" }, 1,
             { label = Loc.new("ObjBuildEngineeringLaboratory", "quests") }),
       },
    })
@@ -482,7 +482,7 @@ function VanillaQuestsMod.init()
          Loc.new("RunSteelExperimentsDesc1", "quests"),
          Loc.new("RunSteelExperimentsDesc2", "quests"),
       },
-      context = { "CopperEngineeringLaboratory", "Triod", "CopperPipe", "CopperConveyor", "CopperBlastFurnace" },
+      context = { "CopperResearchLaboratory", "Triod", "CopperPipe", "CopperConveyor", "CopperBlastFurnace" },
       unlocks = { "SmeltSteel" },
       objectives = {
          qb.consume_item({ "CopperConveyor" }, 25,
@@ -562,7 +562,7 @@ function VanillaQuestsMod.init()
          Loc.new("RunSteamExperimentsDesc1", "quests"),
          Loc.new("RunSteamExperimentsDesc2", "quests"),
       },
-      context = { "CopperEngineeringLaboratory", "CopperPump", "SteelPipe" },
+      context = { "CopperResearchLaboratory", "CopperPump", "SteelPipe" },
       unlocks = { "SteamIndustry" },
       objectives = {
          qb.consume_item({ "CopperPump" }, 25,
@@ -578,28 +578,10 @@ function VanillaQuestsMod.init()
          Loc.new("SteamIndustryDesc2", "quests"),
       },
       context = { "SteelBoiler", "SteelSteamEngine", "Steam" },
-      unlocks = { "BuildResearchLaboratory" },
+      unlocks = { "RunExperiments" },
       objectives = {
          qb.research("Boiler", { label = Loc.new("ObjResearchBoiler", "quests") }),
          qb.research("SteamEngine", { label = Loc.new("ObjResearchSteamEngine", "quests") }),
-      },
-   })
-
-   qb.quest("BuildResearchLaboratory", {
-      chapter = "Steel",
-      label = Loc.new("BuildResearchLaboratory", "quests"),
-      description = {
-         Loc.new("BuildResearchLaboratoryDesc1", "quests"),
-         Loc.new("BuildResearchLaboratoryDesc2", "quests"),
-      },
-      context = { "CopperElectronicsLaboratory", "CopperConstructor" },
-      unlocks = { "RunExperiments" },
-      objectives = {
-         qb.research("ElectronicsLaboratory", { label = Loc.new("ObjResearchLaboratory", "quests") }),
-         qb.craft_item({ "CopperElectronicsLaboratory" }, 1,
-            { label = Loc.new("ObjCraftLaboratory", "quests") }),
-         qb.build_block({ "CopperElectronicsLaboratory" }, 1,
-            { label = Loc.new("ObjBuildLaboratory", "quests") }),
       },
    })
 
@@ -610,7 +592,7 @@ function VanillaQuestsMod.init()
          Loc.new("RunExperimentsDesc1", "quests"),
          Loc.new("RunExperimentsDesc2", "quests"),
       },
-      context = { "CopperElectronicsLaboratory", "Circuit", "CopperWire", "Resistor" },
+      context = { "CopperResearchLaboratory", "Circuit", "CopperWire", "Resistor" },
       unlocks = { "AdvancedCircuits" },
       objectives = {
          qb.research("Resistor", { label = Loc.new("ObjResearchResistor", "quests") }),
@@ -642,7 +624,7 @@ function VanillaQuestsMod.init()
          Loc.new("RunElectricityExperimentsDesc1", "quests"),
          Loc.new("RunElectricityExperimentsDesc2", "quests"),
       },
-      context = { "CopperEngineeringLaboratory", "SteelBoiler", "SteelSteamEngine", "BasicCoil" },
+      context = { "CopperResearchLaboratory", "SteelBoiler", "SteelSteamEngine", "BasicCoil" },
       unlocks = { "ResearchAluminium" },
       objectives = {
          qb.consume_item({ "SteelBoiler" }, 25,
@@ -679,7 +661,7 @@ function VanillaQuestsMod.init()
          Loc.new("RunAluminiumExperimentsDesc1", "quests"),
          Loc.new("RunAluminiumExperimentsDesc2", "quests"),
       },
-      context = { "CopperEngineeringLaboratory", "SteelElectrolyzer", "SteelSeparator" },
+      context = { "CopperResearchLaboratory", "SteelElectrolyzer", "SteelSeparator" },
       unlocks = { "Electrolysis" },
       objectives = {
          qb.consume_item({ "SteelElectrolyzer" }, 30,
