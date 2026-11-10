@@ -325,7 +325,7 @@ return function()
       type = "Key",
       key_binding = "SwitchCreativeMode",
       label = "SwitchCreativeMode",
-      default_key = "Shift+F",
+      default_key = "Semicolon",
    })
    Setting.reg("ThrowItem", {
       category = "Controls",
