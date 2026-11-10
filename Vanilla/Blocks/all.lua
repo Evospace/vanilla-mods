@@ -115,6 +115,7 @@ return function()
     Vlib.FillBlock("Riteg", require('./riteg'))
 
     Vlib.FillBlockCustom({"CopperConnector"}, require('./cable'))
+    Vlib.FillBlockCustom({"PowerPole", "PowerTower"}, require('./power_pole'))
 
     Vlib.FillBlockCustom({"Stairs", "Corner", "Beam", "Scaffold", "Chair", "Table", "Ladder", "Fence", "Column", "Floor"}, require('./designable'))
     Vlib.FillBlockCustom({"AncientGate", "AncientAltar", "AncientStele", "AncientPillar"}, require('./designable'))
