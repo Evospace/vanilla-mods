@@ -25,6 +25,7 @@ return function(name, tier, level)
         pole.channel = "Electricity"
         pole.reach = spec.reach
         pole.wire_cover = StaticCover.get("PowerWire")
+        pole.head_cover = StaticCover.get(name .. "Head")
         for _, point in ipairs(spec.points) do
             pole:add_wire_point(point)
         end
