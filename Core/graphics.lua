@@ -149,22 +149,25 @@ return function()
         label = "SpotlightShadows",
     })
 
+    local window_modes = {"Fullscreen", "WindowedFullscreen", "Windowed"}
+
     Setting.reg("Fullscreen", {
         category = "Graphics",
         type = "String",
         default = "WindowedFullscreen",
-        options = {"Fullscreen", "WindowedFullscreen", "Windowed"},
+        options = window_modes,
+        ---@param setting Setting
+        get_action = function(setting)
+            return window_modes[engine:get_window_mode() + 1]
+        end,
         ---@param setting Setting
         set_action = function(setting)
-           local function option3_to_int(value)
-               local preset = 0
-               if value == "WindowedFullscreen" then preset = 1 end
-               if value == "Windowed" then preset = 2 end
-               return preset
+           for index, mode in ipairs(window_modes) do
+               if mode == setting.value then
+                   engine.window_mode = index - 1
+               end
            end
-           engine.window_mode = option3_to_int(setting.value)
            engine:show_confirmation()
-           engine:apply()
         end,
         label = "Fullscreen",
     })
@@ -175,49 +178,42 @@ return function()
         default = Game.get_desktop_resolution(),
         options = Game.get_supported_resolutions(),
         ---@param setting Setting
+        get_action = function(setting)
+            return engine:get_resolution()
+        end,
+        ---@param setting Setting
         set_action = function(setting)
             local width, height = string.match(setting.value, "^(%d+)x(%d+)$")
             engine.res_x, engine.res_y = tonumber(width), tonumber(height)
-            print_info("resolution set "..width.."x"..height)
             engine:show_confirmation()
-            engine:apply()
         end,
         label = "Resolution",
     })
 
-    local function generate_setting_on_off(name, command)
-        Setting.reg(name, {
-            category = "Graphics",
-            type = "String",
-            default = "Off",
-            options = {"Off", "On"},
-            ---@param setting Setting
-            set_action = function(setting)
-                local value = (setting.value == "On") and 1 or 0
-                Console.run(command.." "..value)
-            end,
-            label = name,
-        })
-    end
+    local quality_levels = {"Low", "Medium", "High", "Epic"}
 
-    local function generate_setting(name, command)
+    local function generate_quality(name, group)
         Setting.reg(name, {
             category = "Graphics",
             type = "String",
             default = "High",
-            options = {"Low", "Medium", "High", "Epic"},
+            options = quality_levels,
+            ---@param setting Setting
+            get_action = function(setting)
+                return quality_levels[math.min(engine:get_quality(group), 3) + 1]
+            end,
             ---@param setting Setting
             set_action = function(setting)
-                Console.run(command.." "..option4_to_int(setting.value))
+                engine:set_quality(group, option4_to_int(setting.value))
             end,
             label = name,
         })
     end
 
-    generate_setting("ShadowQuality", "sg.ShadowQuality")
-    generate_setting("TextureQuality", "sg.TextureQuality")
-    generate_setting("EffectsQuality", "sg.EffectsQuality")
-    generate_setting("PostProcessQuality", "sg.PostProcessQuality")
+    generate_quality("ShadowQuality", "Shadow")
+    generate_quality("TextureQuality", "Texture")
+    generate_quality("EffectsQuality", "Effects")
+    generate_quality("PostProcessQuality", "PostProcess")
 
     Setting.reg("Transparency", {
         category = "Graphics",
@@ -400,9 +396,12 @@ return function()
         default = "60",
         options = fps_options,
         ---@param setting Setting
+        get_action = function(setting)
+            return tostring(engine:get_fps_limit())
+        end,
+        ---@param setting Setting
         set_action = function(setting)
-           engine.fps = tonumber(setting.value)
-           engine:apply()
+            engine:set_fps_limit(tonumber(setting.value))
         end,
         label = "MaxFps",
     })
@@ -445,7 +444,21 @@ return function()
         label = "VramBudget",
     })
 
-    generate_setting_on_off("VSync", "r.Vsync")
+    Setting.reg("VSync", {
+        category = "Graphics",
+        type = "String",
+        default = "Off",
+        options = {"Off", "On"},
+        ---@param setting Setting
+        get_action = function(setting)
+            return engine:get_vsync() and "On" or "Off"
+        end,
+        ---@param setting Setting
+        set_action = function(setting)
+            engine:set_vsync(setting.value == "On")
+        end,
+        label = "VSync",
+    })
 
     if steam_deck then
         for _, entry in ipairs(preset_values("SteamDeck")) do
