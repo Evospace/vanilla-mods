@@ -1,48 +1,15 @@
 return function()
     local steam_deck = Game.is_steam_deck()
 
-    local function option4_to_int(value)
-        local preset = 0
-        if value == "Medium" then preset = 1 end
-        if value == "High" then preset = 2 end
-        if value == "Epic" then preset = 3 end
-        return preset
-    end
+    local quality_levels = {"Low", "Medium", "High", "Epic"}
 
-    local function preset_values(preset)
-        local deck = preset == "SteamDeck"
-        local level = deck and "High" or preset
-        local scalability = option4_to_int(level)
-        local function pick(values)
-            return values[scalability + 1]
+    local function level_of(value, legacy)
+        for index, name in ipairs(quality_levels) do
+            if name == value then
+                return index - 1
+            end
         end
-
-        local values = {
-            {"ShadowQuality", deck and "Medium" or level},
-            {"TextureQuality", level},
-            {"EffectsQuality", level},
-            {"PostProcessQuality", level},
-            {"GlobalIllumination", pick({"Disable", "Disable", "ScreenSpace", "Lumen"})},
-            {"Reflection", pick({"Disable", "ScreenSpace", "ScreenSpace", "Lumen"})},
-            {"ReflectionQuality", pick({"Low", "Low", "High", "High"})},
-            {"MaterialQuality", pick({"Low", "Medium", "High", "High"})},
-            {"GrassRenderingRange", pick({30, 70, 100, 100})},
-            {"DecorationsQuality", pick({2, 5, 9, 10})},
-            {"LoadingRange", pick({15, 18, 25, 27})},
-            {"AntiAliasingMethod", pick({"FXAA", "FXAA", "TAA", "TAA"})},
-            {"ScreenPersentage", "100%"},
-            {"DetailShadows", (deck or scalability <= 1) and "Off" or "On"},
-            {"SpotlightShadows", scalability <= 1 and "Off" or "On"},
-            {"Transparency", pick({"Low", "Medium", "High", "High"})},
-            {"CloudsQuality", pick({"Off", "Simple", "Volumteric", "Volumteric"})},
-            {"WindAnimation", pick({"Off", "Minimal", "Full", "Full"})},
-            {"WeatherParticles", pick({"Low", "High", "High", "High"})},
-            {"VramBudget", pick({"Low", "Medium", "High", "High"})},
-        }
-        if deck then
-            table.insert(values, {"MaxFps", "40"})
-        end
-        return values
+        return legacy and legacy[value]
     end
 
     local preset_options = {"Low", "Medium", "High", "Epic"}
@@ -58,95 +25,20 @@ return function()
         options = preset_options,
         ---@param setting Setting
         set_action = function(setting)
-            for _, entry in ipairs(preset_values(setting.value)) do
-                local set = Setting.find(entry[1])
-                set.value = entry[2]
-                set:set_action()
+            if setting.value == "SteamDeck" then
+                engine:set_overall_quality(2)
+                engine:set_quality("Shadow", 1)
+                engine:set_fps_limit(40)
+            else
+                local level = level_of(setting.value)
+                if level then
+                    engine:set_overall_quality(level)
+                end
             end
-
             Setting.update_widgets()
         end,
 
         label = "ScalabilityPreset",
-    })
-
-    Setting.reg("CloudsQuality", {
-        category = "Graphics",
-        type = "String",
-        default = "Simple",
-        options = {"Off", "Simple", "Volumteric"},
-        ---@param setting Setting
-        set_action = function(setting)
-           local function option3_to_int(value)
-               local preset = 0
-               if value == "Simple" then preset = 1 end
-               if value == "Volumteric" then preset = 2 end
-               return preset
-           end
-           engine.cloud_preset = option3_to_int(setting.value)
-           engine:apply()
-        end,
-        label = "CloudsQuality",
-    })
-
-    Setting.reg("WeatherParticles", {
-        category = "Graphics",
-        type = "String",
-        default = "High",
-        options = {"Off", "Low", "High"},
-        ---@param setting Setting
-        set_action = function(setting)
-            local preset = 0
-            if setting.value == "Low" then preset = 1 end
-            if setting.value == "High" then preset = 2 end
-            engine.weather_particles = preset
-            engine:apply()
-        end,
-        label = "WeatherParticles",
-    })
-
-    Setting.reg("WindAnimation", {
-        category = "Graphics",
-        type = "String",
-        default = "Full",
-        options = {"Off", "Minimal", "Full"},
-        ---@param setting Setting
-        set_action = function(setting)
-            local value = 1.0
-            if setting.value == "Off" then value = 0.0 end
-            if setting.value == "Minimal" then value = 0.25 end
-            engine.wind_animation = value
-            engine:apply()
-        end,
-        label = "WindAnimation",
-    })
-
-    Setting.reg("DetailShadows", {
-        category = "Graphics",
-        type = "String",
-        default = "On",
-        options = {"Off", "On"},
-        ---@param setting Setting
-        set_action = function(setting)
-            local enabled = (setting.value == "On")
-            engine.detail_shadows = enabled
-            engine:apply()
-        end,
-        label = "DetailShadows",
-    })
-
-    Setting.reg("SpotlightShadows", {
-        category = "Graphics",
-        type = "String",
-        default = "On",
-        options = {"Off", "On"},
-        ---@param setting Setting
-        set_action = function(setting)
-            local enabled = (setting.value == "On")
-            engine.spotlight_shadows = enabled
-            engine:apply()
-        end,
-        label = "SpotlightShadows",
     })
 
     local window_modes = {"Fullscreen", "WindowedFullscreen", "Windowed"}
@@ -190,13 +82,11 @@ return function()
         label = "Resolution",
     })
 
-    local quality_levels = {"Low", "Medium", "High", "Epic"}
-
-    local function generate_quality(name, group)
+    local function generate_quality(name, group, default, legacy)
         Setting.reg(name, {
             category = "Graphics",
             type = "String",
-            default = "High",
+            default = default,
             options = quality_levels,
             ---@param setting Setting
             get_action = function(setting)
@@ -204,83 +94,26 @@ return function()
             end,
             ---@param setting Setting
             set_action = function(setting)
-                engine:set_quality(group, option4_to_int(setting.value))
+                local level = level_of(setting.value, legacy)
+                if level then
+                    engine:set_quality(group, level)
+                end
             end,
             label = name,
         })
     end
 
-    generate_quality("ShadowQuality", "Shadow")
-    generate_quality("TextureQuality", "Texture")
-    generate_quality("EffectsQuality", "Effects")
-    generate_quality("PostProcessQuality", "PostProcess")
+    local legacy_methods = {Disable = 0, ScreenSpace = 2, Lumen = 3}
 
-    Setting.reg("Transparency", {
-        category = "Graphics",
-        type = "String",
-        default = "High",
-        options = {"Low", "Medium", "High"},
-        ---@param setting Setting
-        set_action = function(setting)
-            engine.transparency_preset = option4_to_int(setting.value)
-        end,
-        label = "TransparencyQuality",
-    })
-
-    Setting.reg("MaterialQuality", {
-        category = "Graphics",
-        type = "String",
-        default = "High",
-        options = {"Low", "Medium", "High"},
-        ---@param setting Setting
-        set_action = function(setting)
-            local preset = 0
-            if setting.value == "Low" then preset = 0 end
-            if setting.value == "Medium" then preset = 2 end
-            if setting.value == "High" then preset = 1 end
-
-            Console.run("R.MaterialQualityLevel "..preset)
-        end,
-        label = "MaterialQuality",
-    })
-
-    local function generate_reflection(name, command, field)
-        Setting.reg(name, {
-            category = "Graphics",
-            type = "String",
-            default = "ScreenSpace",
-            options = {"Disable", "ScreenSpace", "Lumen"},
-            ---@param setting Setting
-            set_action = function(setting)
-                local preset = 0
-                if setting.value == "Lumen" then preset = 1 end
-                if setting.value == "ScreenSpace" then preset = 2 end
-
-                Console.run(command.." "..preset)
-
-                engine[field] = preset
-                engine:apply()
-            end,
-            label = name,
-        })
-    end
-    generate_reflection("GlobalIllumination", "r.DynamicGlobalIlluminationMethod", "gi_preset")
-    generate_reflection("Reflection", "r.ReflectionMethod", "reflection_preset")
-
-    Setting.reg("ReflectionQuality", {
-        category = "Graphics",
-        type = "String",
-        default = "High",
-        options = {"Low", "High"},
-        ---@param setting Setting
-        set_action = function(setting)
-            local preset = 3
-            if setting.value == "Low" then preset = 1 end
-
-            Console.run("r.SSR.Quality "..preset)
-        end,
-        label = "ReflectionQuality",
-    })
+    generate_quality("ShadowQuality", "Shadow", steam_deck and "Medium" or "High")
+    generate_quality("TextureQuality", "Texture", "High")
+    generate_quality("EffectsQuality", "Effects", "High")
+    generate_quality("PostProcessQuality", "PostProcess", "High")
+    generate_quality("GlobalIllumination", "GlobalIllumination", "High", legacy_methods)
+    generate_quality("Reflection", "Reflection", "High", legacy_methods)
+    generate_quality("MaterialQuality", "Shading", "High")
+    generate_quality("DecorationsQuality", "Foliage", "High")
+    generate_quality("LoadingRange", "ViewDistance", "High")
 
     Setting.reg("ScreenPersentage", {
         category = "Graphics",
@@ -316,58 +149,19 @@ return function()
         label = "AntiAliasingMethod",
     })
 
-    Setting.reg("DecorationsQuality", {
+    Setting.reg("Fog", {
         category = "Graphics",
         type = "Slider",
-        max = 10,
-        min = 1,
-        default = 10,
+        max = 100,
+        min = 0,
+        default = 100,
         ---@param setting Setting
         set_action = function(setting)
-           local value = setting.value / 10.0
-           engine.props_quality = value
-           print_info("set DecorationsQuality "..value)
+           engine.fog = setting.value / 100.0
            engine:apply()
         end,
-        label = "DecorationsQuality",
+        label = "Fog",
     })
-
-    Setting.reg("LoadingRange", {
-        category = "Graphics",
-        type = "Slider",
-        max = 30,
-        min = 6,
-        default = 22,
-        ---@param setting Setting
-        set_action = function(setting)
-           local value = setting.value
-           engine.loading_range = value
-           print_info("set LoadingRange "..value)
-           engine:apply()
-        end,
-        label = "LoadingRange",
-    })
-
-    local function generate_slider(name, variable)
-        Setting.reg(name, {
-            category = "Graphics",
-            type = "Slider",
-            max = 100,
-            min = 0,
-            default = 100,
-            ---@param setting Setting
-            set_action = function(setting)
-               local value = setting.value / 100.0
-               engine[variable] = value
-               print_info("set "..variable.." "..value)
-               engine:apply()
-            end,
-            label = name,
-        })
-    end
-
-    generate_slider("GrassRenderingRange", "props_mul")
-    generate_slider("Fog", "fog")
 
     Setting.reg("Fov", {
         category = "Graphics",
@@ -377,9 +171,7 @@ return function()
         default = 80,
         ---@param setting Setting
         set_action = function(setting)
-           local value = setting.value
-           engine.fov = value
-           print_info("set ".."Fov".." "..value)
+           engine.fov = setting.value
            engine:apply()
         end,
         label = "Fov",
@@ -393,7 +185,7 @@ return function()
     Setting.reg("MaxFps", {
         category = "Graphics",
         type = "String",
-        default = "60",
+        default = steam_deck and "40" or "60",
         options = fps_options,
         ---@param setting Setting
         get_action = function(setting)
@@ -404,44 +196,6 @@ return function()
             engine:set_fps_limit(tonumber(setting.value))
         end,
         label = "MaxFps",
-    })
-
-    Setting.reg("VramBudget", {
-        category = "Graphics",
-        type = "String",
-        default = "Medium",
-        options = {"Low", "Medium", "High"},
-        ---@param setting Setting
-        set_action = function(setting)
-            if setting.value == "Low" then
-                engine.limit_texture_pool_to_vram = true
-                engine.texture_pool_size_mb = 768
-                engine.texture_max_temp_memory_mb = 96
-                engine.texture_mip_bias = 2
-                engine.render_target_pool_min_mb = 256
-            elseif setting.value == "High" then
-                engine.limit_texture_pool_to_vram = true
-                engine.texture_pool_size_mb = 1536
-                engine.texture_max_temp_memory_mb = 192
-                engine.texture_mip_bias = 0
-                engine.render_target_pool_min_mb = 400
-            else
-                engine.limit_texture_pool_to_vram = true
-                engine.texture_pool_size_mb = 1200
-                engine.texture_max_temp_memory_mb = 128
-                engine.texture_mip_bias = 1
-                engine.render_target_pool_min_mb = 300
-            end
-
-            local limit_value = engine.limit_texture_pool_to_vram and 1 or 0
-            Console.run("r.Streaming.LimitPoolSizeToVRAM "..limit_value)
-            Console.run("r.Streaming.PoolSize "..engine.texture_pool_size_mb)
-            Console.run("r.Streaming.MaxTempMemoryAllowed "..engine.texture_max_temp_memory_mb)
-            Console.run("r.Streaming.MipBias "..engine.texture_mip_bias)
-            Console.run("r.RenderTargetPoolMin "..engine.render_target_pool_min_mb)
-            engine:apply()
-        end,
-        label = "VramBudget",
     })
 
     Setting.reg("VSync", {
@@ -459,12 +213,4 @@ return function()
         end,
         label = "VSync",
     })
-
-    if steam_deck then
-        for _, entry in ipairs(preset_values("SteamDeck")) do
-            local set = Setting.find(entry[1])
-            set.default = entry[2]
-            set.value = entry[2]
-        end
-    end
 end
