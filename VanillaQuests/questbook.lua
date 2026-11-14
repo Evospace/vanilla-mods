@@ -295,23 +295,22 @@ local function make_chain(name, steps)
    end
 
    function chain.remember(found)
-      if name == nil or storage == nil then
+      if name == nil then
          return
       end
       local positions = {}
       for i, block in ipairs(found) do
          positions[i] = block.pos
       end
-      storage.chains = storage.chains or {}
-      storage.chains[name] = positions
+      quests:remember_chain(name, positions)
    end
 
    function chain.recall()
-      if name == nil or storage == nil or storage.chains == nil or dim == nil then
+      if name == nil or dim == nil then
          return nil
       end
-      local positions = storage.chains[name]
-      if positions == nil or #positions ~= #steps then
+      local positions = quests:chain(name)
+      if #positions ~= #steps then
          return nil
       end
       local found = {}
@@ -589,26 +588,44 @@ local function build_objectives(quest, def)
          obj.required = spec.required
          obj.current = done and spec.required or 0
          obj.completed = done or (spec.required <= 0)
+         for _, skipped in ipairs(spec.skips or {}) do
+            obj:add_skip(skipped.id)
+         end
       end
    end
 end
 
-local function objectives_done(quest, def)
-   if #def.objectives == 0 then
-      return false
-   end
+local personal_kinds = {
+   open_gui = true,
+   close_all_gui = true,
+   search_item = true,
+   view_recipes = true,
+   hotbar_item = true,
+   return_home = true,
+}
+
+local work_kinds = {
+   collect_item = true,
+   craft_item = true,
+   produce_item = true,
+   consume_item = true,
+   build_block = true,
+   build_stack = true,
+   build_chain = true,
+   chain_running = true,
+}
+
+local function is_personal(def)
+   local teaches = false
    for _, spec in ipairs(def.objectives) do
-      local obj = quest:find_objective_by_id(spec.id)
-      local done = obj ~= nil and obj.completed
-      if def.any then
-         if done then
-            return true
-         end
-      elseif not done then
+      if work_kinds[spec.kind] then
          return false
       end
+      if personal_kinds[spec.kind] then
+         teaches = true
+      end
    end
-   return not def.any
+   return teaches
 end
 
 local function same_set(a, b)
@@ -638,22 +655,6 @@ local function link_skips(def)
    end
 end
 
-local function skip_steps(quest, def)
-   for _, spec in ipairs(def.objectives) do
-      if spec.skips ~= nil then
-         local obj = quest:find_objective_by_id(spec.id)
-         if obj ~= nil and obj.completed then
-            for _, skipped in ipairs(spec.skips) do
-               local target = quest:find_objective_by_id(skipped.id)
-               if target ~= nil and not target.completed then
-                  target:set_progress(skipped.required, skipped.required, skipped.show_progress)
-               end
-            end
-         end
-      end
-   end
-end
-
 local function build_events_table(def)
    link_skips(def)
    local by_event = {}
@@ -669,20 +670,8 @@ local function build_events_table(def)
       events[event] = function(ctx, quest)
          for _, spec in ipairs(specs) do
             if spec.match(ctx) then
-               local obj = quest:find_objective_by_id(spec.id)
-               if obj ~= nil and not obj.completed then
-                  local inc = spec.amount(ctx) or 0
-                  local newcur = obj.current + inc
-                  if newcur > spec.required then
-                     newcur = spec.required
-                  end
-                  obj:set_progress(newcur, spec.required, spec.show_progress)
-               end
+               quest:advance(spec.id, spec.amount(ctx) or 0)
             end
-         end
-         skip_steps(quest, def)
-         if objectives_done(quest, def) then
-            quest:complete()
          end
       end
    end
@@ -693,29 +682,16 @@ local function poll_tick()
    for _, def in ipairs(poll_defs) do
       local quest = StaticQuest.find(def.name)
       if quest ~= nil and quest.state == defines.quest_state.active then
-         local advanced = false
-
          for _, spec in ipairs(def.objectives) do
-            local obj = nil
             if spec.poll ~= nil then
-               obj = quest:find_objective_by_id(spec.id)
-            end
-            if obj ~= nil and not obj.completed then
-               local now = spec.poll()
-               if now ~= nil then
-                  if now > spec.required then
-                     now = spec.required
-                  end
-                  if now > obj.current then
-                     obj:set_progress(now, spec.required, spec.show_progress)
-                     advanced = true
+               local obj = quest:find_objective_by_id(spec.id)
+               if obj ~= nil and not obj.completed then
+                  local now = spec.poll()
+                  if now ~= nil and now > obj.current then
+                     quest:raise(spec.id, now)
                   end
                end
             end
-         end
-
-         if advanced and objectives_done(quest, def) then
-            quest:complete()
          end
       end
    end
@@ -742,25 +718,10 @@ end
 
 function qb.advance(quest_name, objective_id, amount)
    local q = StaticQuest.find(quest_name)
-   local def = quest_by_name[quest_name:lower()]
-   if q == nil or def == nil then
+   if q == nil or quest_by_name[quest_name:lower()] == nil then
       return
    end
-   if q.state ~= defines.quest_state.active then
-      return
-   end
-   local obj = q:find_objective_by_id(objective_id)
-   if obj == nil or obj.completed then
-      return
-   end
-   local newcur = obj.current + (amount or 1)
-   if newcur > obj.required then
-      newcur = obj.required
-   end
-   obj:set_progress(newcur, obj.required, obj.show_progress)
-   if objectives_done(q, def) then
-      q:complete()
-   end
+   q:advance(objective_id, amount or 1)
 end
 
 local function resolve_relations(defs)
@@ -804,6 +765,7 @@ function qb.build()
          label = def.label,
          description_parts = def.description or {},
          any_objective = (def.any == true),
+         personal = is_personal(def),
          events = build_events_table(def),
          on_unlock = def.on_unlock,
          on_complete = def.on_complete,
