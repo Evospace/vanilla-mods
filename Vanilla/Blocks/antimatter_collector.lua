@@ -4,12 +4,6 @@ local logic = function(self)
     crafter.speed = 100
     crafter.load_independent = true
 
-    local acc = ResourceAccessor.new(crafter, "rai")
-    acc.side, acc.pos = Vec3i.front, Vec3i.zero
-    acc.is_input = true
-    acc.channel = "Fluid"
-    acc.cover = StaticCover.get("FluidInput")
-
     local inv = ResourceInventory.new(crafter, "rio")
     crafter.energy_output_inventory = inv
 
