@@ -1,5 +1,5 @@
 local TEMPERATE = {
-   "PlainsBiome", "RedPlainsBiome", "WhitePlainsBiome", "YellowPlainsBiome",
+   "PlainsBiome", "RedPlainsBiome", "WhitePlainsBiome", "YellowPlainsBiome", "ForestSteppeBiome",
    "ForestBiome", "PineForestBiome", "FertileForestBiome", "BushlandBiome", "DipteroBiome",
    "HillsBiome", "HillsForestBiome",
 }
