@@ -404,6 +404,13 @@ return function()
       label = "Ping",
       default_key = "Z",
    })
+   Setting.reg("Zoom", {
+      category = "Controls",
+      type = "Key",
+      key_binding = "Zoom",
+      label = "Zoom",
+      default_key = "ThumbMouseButton",
+   })
    Setting.reg("SelectToolMultitool", {
       category = "Controls",
       type = "Key",
