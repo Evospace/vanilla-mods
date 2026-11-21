@@ -103,17 +103,79 @@ return function()
         })
     end
 
+    local function generate_choice(name, knob, choices, default, label)
+        local options = {}
+        for _, choice in ipairs(choices) do
+            table.insert(options, choice[1])
+        end
+        Setting.reg(name, {
+            category = "Graphics",
+            type = "String",
+            default = default,
+            options = options,
+            ---@param setting Setting
+            get_action = function(setting)
+                local value = engine:get_quality_value(knob)
+                local nearest, distance = choices[1][1], math.huge
+                for _, choice in ipairs(choices) do
+                    if math.abs(choice[2] - value) < distance then
+                        nearest, distance = choice[1], math.abs(choice[2] - value)
+                    end
+                end
+                return nearest
+            end,
+            ---@param setting Setting
+            set_action = function(setting)
+                for _, choice in ipairs(choices) do
+                    if choice[1] == setting.value then
+                        engine:set_quality_value(knob, choice[2])
+                    end
+                end
+            end,
+            label = label or name,
+        })
+    end
+
+    local function generate_range(name, knob, min, max, default, scale)
+        Setting.reg(name, {
+            category = "Graphics",
+            type = "Slider",
+            min = min,
+            max = max,
+            default = default,
+            ---@param setting Setting
+            get_action = function(setting)
+                return math.floor(engine:get_quality_value(knob) * scale + 0.5)
+            end,
+            ---@param setting Setting
+            set_action = function(setting)
+                engine:set_quality_value(knob, setting.value / scale)
+            end,
+            label = name,
+        })
+    end
+
+    local on_off = {{"Off", 0}, {"On", 1}}
     local legacy_methods = {Disable = 0, ScreenSpace = 2, Lumen = 3}
 
     generate_quality("ShadowQuality", "Shadow", steam_deck and "Medium" or "High")
+    generate_choice("DetailShadows", "detailshadows", on_off, steam_deck and "Off" or "On")
+    generate_choice("SpotlightShadows", "spotlightshadows", on_off, steam_deck and "Off" or "On")
     generate_quality("TextureQuality", "Texture", "High")
+    generate_choice("VramBudget", "vram", {{"Low", 0}, {"Medium", 1}, {"High", 2}}, "High")
     generate_quality("EffectsQuality", "Effects", "High")
+    generate_choice("Transparency", "transparency", {{"Low", 0}, {"Medium", 1}, {"High", 2}}, "High", "TransparencyQuality")
+    generate_choice("CloudsQuality", "clouds", {{"Off", 0}, {"Simple", 1}, {"Volumteric", 2}}, "Volumteric")
+    generate_choice("WeatherParticles", "weatherparticles", {{"Off", 0}, {"Low", 1}, {"High", 2}}, "High")
     generate_quality("PostProcessQuality", "PostProcess", "High")
     generate_quality("GlobalIllumination", "GlobalIllumination", "High", legacy_methods)
     generate_quality("Reflection", "Reflection", "High", legacy_methods)
+    generate_choice("ReflectionQuality", "ssr", {{"Low", 1}, {"High", 3}}, "High")
     generate_quality("MaterialQuality", "Shading", "High")
-    generate_quality("DecorationsQuality", "Foliage", "High")
-    generate_quality("LoadingRange", "ViewDistance", "High")
+    generate_range("GrassRenderingRange", "grassrange", 0, 100, 100, 100)
+    generate_range("DecorationsQuality", "decorations", 1, 10, 9, 10)
+    generate_choice("WindAnimation", "wind", {{"Off", 0}, {"Minimal", 0.25}, {"Full", 1}}, "Full")
+    generate_range("LoadingRange", "loadingrange", 6, 30, 25, 1)
 
     Setting.reg("ScreenPersentage", {
         category = "Graphics",
