@@ -84,7 +84,7 @@ function qb.craft_item(names, count, opts)
    }
 end
 
-local function surface_count(kind, prefix, read, names, count, opts)
+local function session_count(kind, prefix, read, names, count, opts)
    opts = opts or {}
    local list = to_list(names)
    local items = nil
@@ -95,7 +95,8 @@ local function surface_count(kind, prefix, read, names, count, opts)
       show_progress = true,
       label = opts.label,
       poll = function()
-         if dim == nil then
+         local session = GameSessionData.get()
+         if session == nil then
             return nil
          end
          if items == nil then
@@ -111,7 +112,7 @@ local function surface_count(kind, prefix, read, names, count, opts)
          end
          local total = 0
          for _, item in ipairs(items) do
-            total = total + read(item)
+            total = total + read(session, item)
          end
          return total
       end,
@@ -119,11 +120,11 @@ local function surface_count(kind, prefix, read, names, count, opts)
 end
 
 function qb.produce_item(names, count, opts)
-   return surface_count("produce_item", "produce_", function(item) return dim:get_produced(item) end, names, count, opts)
+   return session_count("produce_item", "produce_", function(session, item) return session:get_produced(item) end, names, count, opts)
 end
 
 function qb.consume_item(names, count, opts)
-   return surface_count("consume_item", "consume_", function(item) return dim:get_consumed(item) end, names, count, opts)
+   return session_count("consume_item", "consume_", function(session, item) return session:get_consumed(item) end, names, count, opts)
 end
 
 function qb.build_block(names, count, opts)
@@ -156,15 +157,15 @@ function qb.build_stack(top_names, bottom_names, opts)
       show_progress = false,
       label = opts.label,
       match = function(ctx)
-         if ctx.block == nil or ctx.position == nil then
+         if ctx.block == nil or ctx.position == nil or ctx.surface == nil then
             return false
          end
          if top[ctx.block.name:lower()] then
-            local under = dim:get_cell(ctx.position + Vec3i.down)
+            local under = ctx.surface:get_cell(ctx.position + Vec3i.down)
             return under ~= nil and bottom[under.name:lower()] == true
          end
          if bottom[ctx.block.name:lower()] then
-            local over = dim:get_cell(ctx.position + Vec3i.up)
+            local over = ctx.surface:get_cell(ctx.position + Vec3i.up)
             return over ~= nil and top[over.name:lower()] == true
          end
          return false
@@ -275,14 +276,14 @@ local function make_chain(name, steps)
    local chain = { name = name, steps = steps }
 
    function chain.find_built(ctx)
-      if ctx.block == nil or ctx.position == nil then
+      if ctx.block == nil or ctx.position == nil or ctx.surface == nil then
          return nil
       end
       local built = ctx.block.name:lower()
       local block = nil
       for i = 1, #steps do
          if blocks[i][built] then
-            block = block or dim:get_block(ctx.position)
+            block = block or ctx.surface:get_block(ctx.position)
             if block ~= nil then
                local found = through(i, block)
                if found ~= nil then
@@ -306,7 +307,9 @@ local function make_chain(name, steps)
    end
 
    function chain.recall()
-      if name == nil or dim == nil then
+      local player = Player.get()
+      local surface = player and player:surface()
+      if name == nil or surface == nil then
          return nil
       end
       local positions = quests:chain(name)
@@ -315,7 +318,7 @@ local function make_chain(name, steps)
       end
       local found = {}
       for i, pos in ipairs(positions) do
-         local block = dim:get_block(pos)
+         local block = surface:get_block(pos)
          if not is_step(i, block) then
             return nil
          end
@@ -500,11 +503,11 @@ function qb.return_home(opts)
    local radius = opts.radius or 12
    local function at_home()
       local player = Player.get()
-      if player == nil or dim == nil then
+      if player == nil then
          return nil
       end
       local cell = player:cell()
-      local spawn = dim:spawn_point()
+      local spawn = player:spawn_point()
       local dx = cell.x - spawn.x
       local dy = cell.y - spawn.y
       return dx * dx + dy * dy <= radius * radius
